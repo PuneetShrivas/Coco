@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Season Detector</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #uploadedImage {
+            max-width: 100%;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        select {
+            padding: 8px;
+            margin-bottom: 15px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #f8f8f8;
+            color: #555;
+        }
+        #seasonText {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .loading {
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Season Detector</h1>
+        <input type="file" id="uploadInput" accept="image/*">
+        <button onclick="uploadImage()">Detect Season</button>
+        <div id="uploadedImageContainer">
+            <img id="uploadedImage" src="#" alt="Uploaded Image">
+            <div id="selectionContainer">
+                <label for="undertoneSelect">Select Undertone:</label>
+                <select id="undertoneSelect">
+                    <option value="neutral">Neutral</option>
+                    <option value="warm">Warm</option>
+                    <option value="cool">Cool</option>
+                </select>
+                <label for="irisColorSelect">Select Iris Color:</label>
+                <select id="irisColorSelect">
+                    <option value="blue">Blue</option>
+                    <option value="dark brown">Dark Brown</option>
+                    <option value="light brown">Light Brown</option>
+                    <option value="gray">Gray</option>
+                    <option value="green">Green</option>
+                    <option value="black">Black</option>
+                </select>
+                <label for="hairColorSelect">Select Hair Color:</label>
+                <select id="hairColorSelect">
+                    <option value="black">Black</option>
+                    <option value="brown black">Brown Black</option>
+                    <option value="brown">Brown</option>
+                    <option value="blonde">Blonde</option>
+                    <option value="gray">Gray</option>
+                    <option value="red">Red</option>
+                </select>
+                <label for="skinColorSelect">Select Skin Color:</label>
+                <select id="skinColorSelect">
+                    <option value="fair">Fair</option>
+                    <option value="white">White</option>
+                    <option value="golden">Golden</option>
+                    <option value="brown">Brown</option>
+                    <option value="beige">Beige</option>
+                    <option value="dark brown">Dark Brown</option>
+                </select>
+                <button onclick="detectSeasonWithSelections()">Detect Season with Selections</button>
+            </div>
+        </div>
+        <div id="infoContainer">
+            <p id="seasonText" class="loading">Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        async function uploadImage() {
+            const input = document.getElementById('uploadInput');
+            const file = input.files[0];
+
+            if (!file) {
+                alert("Please select an image file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://localhost:8000/detect_season/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                // Display the uploaded image
+                const uploadedImage = document.getElementById('uploadedImage');
+                uploadedImage.style.display = 'block';
+                uploadedImage.src = URL.createObjectURL(file);
+                
+                // Set dropdown values based on detected data
+                const undertoneSelect = document.getElementById('undertoneSelect');
+                const irisColorSelect = document.getElementById('irisColorSelect');
+                const hairColorSelect = document.getElementById('hairColorSelect');
+                const skinColorSelect = document.getElementById('skinColorSelect');
+
+                undertoneSelect.value = data.undertone.toLowerCase();
+                irisColorSelect.value = data.iris_color.toLowerCase();
+                hairColorSelect.value = data.hair_color.toLowerCase();
+                skinColorSelect.value = data.skin_color.toLowerCase();
+
+                // Display the detected season and additional information
+                const seasonText = document.getElementById('seasonText');
+                seasonText.innerText = `Detected Season: ${data.season}`;
+                seasonText.classList.remove('loading');
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Error detecting season.");
+            }
+        }
+
+        async function detectSeasonWithSelections() {
+    const undertoneSelect = document.getElementById('undertoneSelect');
+    const irisColorSelect = document.getElementById('irisColorSelect');
+    const hairColorSelect = document.getElementById('hairColorSelect');
+    const skinColorSelect = document.getElementById('skinColorSelect');
+
+    const undertone = undertoneSelect.value;
+    const irisColor = irisColorSelect.value;
+    const hairColor = hairColorSelect.value;
+    const skinColor = skinColorSelect.value;
+
+    try {
+        const response = await fetch('http://localhost:8000/detect_season_with_selections/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                undertone: undertone,
+                iris_color: irisColor,
+                hair_color: hairColor,
+                skin_color: skinColor
+            })
+        });
+
+        const data = await response.json();
+        
+        // Display the detected season and additional information
+        const seasonText = document.getElementById('seasonText');
+        seasonText.innerText = `Detected Season: ${data.season}`;
+        seasonText.classList.remove('loading');
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Error detecting season with selections.");
+    }
+}
+    </script>
+</body>
+</html>

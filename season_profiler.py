@@ -1,5 +1,23 @@
 import cv2
 import numpy as np
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+from tempfile import NamedTemporaryFile
+
+app = FastAPI()
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this according to your requirements
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Mount static directory for serving HTML files
+
 def detect_undertones(image):
     # Load the pre-trained face detector from OpenCV
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -240,30 +258,82 @@ def detect_hair_color(image):
                 return closest_color
     return None
 
-def define_season(undertone, iris_color, hair_color):
+def detect_skin_color(image):
+    # Load the face cascade classifier
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+    # Convert the image to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Detect faces in the image
+    faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    
+    if len(faces) == 0:
+        return None  # No faces detected
+    
+    # Select the largest face as the region of interest (ROI)
+    largest_face = max(faces, key=lambda face: face[2] * face[3])
+    x, y, w, h = largest_face
+    
+    # Define a smaller portion of the face rectangle as the refined ROI
+    roi_margin = 0.2  # Margin to leave around the face rectangle
+    roi_x = int(x + roi_margin * w)
+    roi_y = int(y + roi_margin * h)
+    roi_w = int(w * (1 - 2 * roi_margin))
+    roi_h = int(h * (1 - 2 * roi_margin))
+    
+    face_roi = image[roi_y:roi_y+roi_h, roi_x:roi_x+roi_w]
+    
+    # Calculate the average BGR color of the skin region
+    average_bgr_color = np.mean(face_roi, axis=(0, 1))
+    print(average_bgr_color)
+    
+    # Define color ranges for each category (in BGR format)
+    color_ranges = {
+        "Fair": (177, 204, 234),   # Light beige to pale pink
+        "White": (205, 216, 228),  # Off-white to cream
+        "Golden": (131, 180, 207), # Warm beige to honey
+        "Brown": (73, 148, 123),   # Tan to cocoa
+        "Beige": (137, 185, 186),  # Medium beige to taupe
+        "Dark Brown": (53, 102, 90) # Deep brown to mahogany
+    }
+    
+    # Calculate the closest color based on Euclidean distance
+    closest_color = None
+    min_distance = float('inf')
+    for category, target_color in color_ranges.items():
+        distance = np.linalg.norm(average_bgr_color - target_color)
+        if distance < min_distance:
+            min_distance = distance
+            closest_color = category
+    
+    return closest_color
+
+def define_season(undertone, iris_color, hair_color, skin_color):
     # Define the rules for each season based on undertone, iris color, and hair color
     seasons = {
-    "Clear Spring": ("warm", {"blue", "green", "light_brown"}, {"blonde", "brown","brown_black"}),#B
-    "Warm Spring": ("warm", {"brown", "light_brown", "green",}, {"brown", "blonde", "red"}),#B
-    "Clear Winter": ("cool", {"blue", "green", "gray"}, {"black", "brown", "brown_black"}),#B
-    "Warm Autumn": ("warm", {"dark_brown", "light_brown", "green"}, {"brown", "brown_black", "red"}),
-    "Deep Autumn": ("warm", {"dark_brown", "gray", "black"}, {"black", "brown_black", "brown", "red"}),
-    "Soft Autumn": ("warm", {"light_brown", "gray", "black"}, {"black", "brown_black", "brown", "red"}),
-    "Cool Winter": ("cool", {"blue", "gray", "light_brown"}, {"blonde", "gray, brown_black", "black"}), #B
-    "Soft Summer": ("neutral", {"light_brown", "gray", "black"}, {"black", "brown", "gray"}),
-    "Cool Summer": ("cool", {"dark_brown", "gray", "black"}, {"black", "brown_black", "brown"}),
-    "Light Summer": ("neutral", {"blue", "gray", "green"}, {"blonde", "gray"}),#B
-    "Light Spring": ("warm", {"blue", "green", "light_brown"}, {"blonde", "brown"}),#B
-    "Deep Winter": ("cool", {"dark_brown", "gray", "black"}, {"black", "brown_black"}) #B
+    "Clear Spring": ("warm", {"blue", "green", "light_brown"}, {"blonde", "brown","brown_black"},{"fair","white","golden"}),#B
+    "Warm Spring": ("warm", {"brown", "light_brown", "green",}, {"brown", "blonde", "red"},{"fair","golden","beige","brown"}),#B
+    "Clear Winter": ("cool", {"blue", "green", "gray"}, {"black", "brown", "brown_black"},{"fair","white","golden","brown","beige","dark_brown"}),#B
+    "Warm Autumn": ("warm", {"dark_brown", "light_brown", "green"}, {"brown", "brown_black", "red"},{"fair","white","golden","brown"}),#B
+    "Deep Autumn": ("warm", {"blue", "green", "gray", "black"}, {"black", "brown_black", "brown", "red"},{"brown","beige","golden","dark_brown"}),#B
+    "Soft Autumn": ("warm", {"light_brown", "green"}, {"blonde", "brown", "red"},{"fair","white","golden","brown"}), #B
+    "Cool Winter": ("cool", {"blue", "gray", "light_brown"}, {"blonde", "gray, brown_black", "black"},{"fair","white","golden","brown","beige","dark_brown"}), #B
+    "Soft Summer": ("neutral", {"light_brown", "gray", "blue"}, {"brown_black", "brown", "gray"},{"brown","beige","dark_brown"}),#B
+    "Cool Summer": ("cool", {"dark_brown", "gray", "black"}, {"black", "brown_black", "brown"},{"brown","beige","dark_brown"}), #B
+    "Light Summer": ("neutral", {"blue", "gray", "green"}, {"blonde", "gray"},{"fair","white","golden"}),#B
+    "Light Spring": ("warm", {"blue", "green", "light_brown"}, {"blonde", "brown"},{"fair","white","golden"}),#B
+    "Deep Winter": ("cool", {"dark_brown", "gray", "black"}, {"black", "brown_black"},{"fair","white","golden","brown","beige","dark_brown"}) #B
 }
     
+    season_final = None
     # Iterate over the seasons and check if the individual matches any of the rules
-    for season, (season_undertone, season_iris_colors, season_hair_colors) in seasons.items():
-        if undertone in (season_undertone, "neutral") and iris_color in season_iris_colors and hair_color in season_hair_colors:
+    for season, (season_undertone, season_iris_colors, season_hair_colors, skin_colors) in seasons.items():
+        if undertone in (season_undertone, "neutral") and iris_color in season_iris_colors and hair_color in season_hair_colors and skin_color in skin_colors:
             print("your season could be: ", season)
-    
+            season_final = season    
     # If no matching season is found, return None
-    return None
+    return season_final
 
 def process_image(image_path):
     image = cv2.imread(image_path)
@@ -279,8 +349,47 @@ def process_image(image_path):
     print("Iris Color: ",iris_color)
     hair_color = detect_hair_color(image)
     print("Hair Color: ",hair_color)
+    skin_color = detect_skin_color(image)
+    print("Skin Color: ", skin_color)
 
-    season = define_season(undertone.lower().replace(" ", "_"),iris_color.lower().replace(" ", "_"),hair_color.lower().replace(" ", "_"))
-    print("Season: ", season)
+    season = define_season(undertone.lower().replace(" ", "_"),iris_color.lower().replace(" ", "_"),hair_color.lower().replace(" ", "_"), skin_color.lower().replace(" ", "_"))
+    return undertone, iris_color, hair_color, skin_color, season
 
-process_image('images/face_image21.jpg')
+# process_image('images/face_image2.jpg')
+
+@app.post("/detect_season/")
+async def detect_season(file: UploadFile = File(...)):
+    # Save the uploaded file temporarily
+    with NamedTemporaryFile(delete=False) as temp_image:
+        temp_image.write(await file.read())
+        temp_image_path = temp_image.name
+    
+    # Process the image and get the detected season
+    undertone, iris_color, hair_color, skin_color, season = process_image(temp_image_path)
+    
+    # Delete the temporary file
+    import os
+    os.unlink(temp_image_path)
+    
+    return {
+        "season": season, 
+        "undertone": undertone,
+        "iris_color": iris_color,
+        "hair_color": hair_color,
+        "skin_color": skin_color
+            }
+
+@app.post("/detect_season_with_selections/")
+async def detect_season_with_selections(undertone: str, iris_color: str, hair_color: str, skin_color: str):
+    # Call the define_season function with the selected values
+    print("chosen undertone: ", undertone)
+    print("chosen iris color: ", iris_color)
+    print("chosen hair color: ", hair_color)
+    print("chosen skin color: ", skin_color)
+    
+    season = define_season(undertone, iris_color, hair_color, skin_color)
+    return {"season": season}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
