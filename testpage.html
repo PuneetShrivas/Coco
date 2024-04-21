@@ -18,6 +18,9 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1 {
             text-align: center;
@@ -43,15 +46,24 @@
         button:hover {
             background-color: #45a049;
         }
-        #uploadedImage {
-            max-width: 100%;
+        #uploadedImageContainer {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
             margin-bottom: 20px;
+        }
+        #uploadedImage {
+            max-width: 50%;
+            margin-right: 20px;
             border-radius: 5px;
+        }
+        #selectionContainer {
+            display: flex;
+            flex-direction: column;
         }
         select {
             padding: 8px;
             margin-bottom: 15px;
-            width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
@@ -61,20 +73,39 @@
         #seasonText {
             text-align: center;
             margin-top: 20px;
-            font-size: 18px;
+            font-size: 24px;
+            font-weight: bold;
             color: #333;
         }
-        .loading {
-            font-style: italic;
-            color: #666;
+        #buttonContainer {
+            margin-top: 20px;
+        }
+        #buttonContainer button {
+            margin-right: 10px;
+        }
+        .colorPalette {
+            display: flex;
+            justify-content: space-between;
+            width: 60%;
+            margin-top: 20px;
+        }
+        .colorCircle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .colorCircle:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Season Detector</h1>
-        <input type="file" id="uploadInput" accept="image/*">
-        <button onclick="uploadImage()">Detect Season</button>
         <div id="uploadedImageContainer">
             <img id="uploadedImage" src="#" alt="Uploaded Image">
             <div id="selectionContainer">
@@ -114,9 +145,14 @@
                 <button onclick="detectSeasonWithSelections()">Detect Season with Selections</button>
             </div>
         </div>
-        <div id="infoContainer">
-            <p id="seasonText" class="loading">Loading...</p>
+        <input type="file" id="uploadInput" accept="image/*">
+        <button onclick="uploadImage()">Detect Season</button>
+        <p id="seasonText" class="loading"></p>
+        <div id="buttonContainer">
+            <button onclick="uploadAnotherImage()">Upload Another Image</button>
+            <button onclick="proceedToRecommendations()">Get Recommendations</button>
         </div>
+        <div class="colorPalette" id="colorPalette"></div>
     </div>
 
     <script>
@@ -156,10 +192,13 @@
                 hairColorSelect.value = data.hair_color.toLowerCase();
                 skinColorSelect.value = data.skin_color.toLowerCase();
 
-                // Display the detected season and additional information
+                // Show the loading text
                 const seasonText = document.getElementById('seasonText');
                 seasonText.innerText = `Detected Season: ${data.season}`;
                 seasonText.classList.remove('loading');
+
+                // Show the color palette
+                displayColorPalette(data.suggested_colors);
             } catch (error) {
                 console.error('Error:', error);
                 alert("Error detecting season.");
@@ -167,41 +206,69 @@
         }
 
         async function detectSeasonWithSelections() {
-    const undertoneSelect = document.getElementById('undertoneSelect');
-    const irisColorSelect = document.getElementById('irisColorSelect');
-    const hairColorSelect = document.getElementById('hairColorSelect');
-    const skinColorSelect = document.getElementById('skinColorSelect');
+            const undertoneSelect = document.getElementById('undertoneSelect');
+            const irisColorSelect = document.getElementById('irisColorSelect');
+            const hairColorSelect = document.getElementById('hairColorSelect');
+            const skinColorSelect = document.getElementById('skinColorSelect');
 
-    const undertone = undertoneSelect.value;
-    const irisColor = irisColorSelect.value;
-    const hairColor = hairColorSelect.value;
-    const skinColor = skinColorSelect.value;
+            const undertone = undertoneSelect.value;
+            const irisColor = irisColorSelect.value;
+            const hairColor = hairColorSelect.value;
+            const skinColor = skinColorSelect.value;
 
-    try {
-        const response = await fetch('http://localhost:8000/detect_season_with_selections/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                undertone: undertone,
-                iris_color: irisColor,
-                hair_color: hairColor,
-                skin_color: skinColor
-            })
-        });
+            try {
+                console.log(typeof(undertone))
+                const response = await fetch('http://localhost:8000/detect_season_with_selections/', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        undertone: undertone,
+        iris_color: irisColor,
+        hair_color: hairColor,
+        skin_color: skinColor
+    })
+});
 
-        const data = await response.json();
-        
-        // Display the detected season and additional information
-        const seasonText = document.getElementById('seasonText');
-        seasonText.innerText = `Detected Season: ${data.season}`;
-        seasonText.classList.remove('loading');
-    } catch (error) {
-        console.error('Error:', error);
-        alert("Error detecting season with selections.");
-    }
-}
+                const data = await response.json();
+                
+                // Display the detected season and additional information
+                const seasonText = document.getElementById('seasonText');
+                seasonText.innerText = `Detected Season: ${data.season}`;
+                seasonText.classList.remove('loading');
+                
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Error detecting season with selections.");
+            }
+        }
+
+        function displayColorPalette(colors) {
+            const colorPalette = document.getElementById('colorPalette');
+            colorPalette.innerHTML = '';
+
+            colors.forEach(color => {
+                const colorCircle = document.createElement('div');
+                colorCircle.classList.add('colorCircle');
+                colorCircle.style.backgroundColor = color;
+                colorPalette.appendChild(colorCircle);
+            });
+        }
+
+        function uploadAnotherImage() {
+            // Reset the form to upload another image
+            document.getElementById('uploadInput').value = '';
+            document.getElementById('uploadedImage').style.display = 'none';
+            document.getElementById('seasonText').innerText = '';
+            document.getElementById('colorPalette').innerHTML = '';
+        }
+
+        function proceedToRecommendations() {
+            // Redirect to the recommendations page
+            window.location.href = 'recommendations.html';
+        }
     </script>
 </body>
 </html>

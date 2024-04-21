@@ -1,9 +1,9 @@
 Hosting
--Pricing of 16 GB gpu
--How people are doing for a half baked product
--Website hosting
--domain
+- Pricing of 16 GB gpu
+- How people are doing for a half baked product
+- Website hosting
+- domain
 
 Seasons
--Add skin tone detection for seasons
--Do multi image extraction instead of single image
+- Do multi image extraction instead of single image
+- Color palletes for each seasons
