@@ -13,7 +13,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 client = OpenAI(
-    api_key="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"
+    api_key=""
 )
 
 import pandas as pd
