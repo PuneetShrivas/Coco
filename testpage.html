@@ -86,7 +86,7 @@
         .colorPalette {
             display: flex;
             justify-content: space-between;
-            width: 60%;
+            width: 80%;
             margin-top: 20px;
         }
         .colorCircle {
@@ -142,6 +142,14 @@
                     <option value="beige">Beige</option>
                     <option value="dark brown">Dark Brown</option>
                 </select>
+                <label for="fitSelect">Select Fit:</label>
+                <select id="fitSelect">
+                    <option value="s">S</option>
+                    <option value="m">M</option>
+                    <option value="l">L</option>
+                    <option value="xl">XL</option>
+                </select>
+
                 <button onclick="detectSeasonWithSelections()">Detect Season with Selections</button>
             </div>
         </div>
@@ -152,6 +160,7 @@
             <button onclick="uploadAnotherImage()">Upload Another Image</button>
             <button onclick="proceedToRecommendations()">Get Recommendations</button>
         </div>
+        
         <div class="colorPalette" id="colorPalette"></div>
     </div>
 
@@ -247,7 +256,7 @@
 
         function displayColorPalette(colors) {
             const colorPalette = document.getElementById('colorPalette');
-            colorPalette.innerHTML = '';
+            colorPalette.innerHTML = '<i>Your Colors</i><br>';
 
             colors.forEach(color => {
                 const colorCircle = document.createElement('div');
@@ -266,8 +275,11 @@
         }
 
         function proceedToRecommendations() {
-            // Redirect to the recommendations page
-            window.location.href = 'recommendations.html';
+            const seasonName = document.getElementById('seasonText').innerText;
+            const fitPreference = document.getElementById('fitSelect').value;
+            
+            // Redirect to recommendations page with color season name and fit preference
+            window.location.href = `recommendations.html?season=${seasonName}&fit=${fitPreference}`;
         }
     </script>
 </body>

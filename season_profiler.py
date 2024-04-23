@@ -309,6 +309,66 @@ def detect_skin_color(image):
     
     return closest_color
 
+def softmax(x):
+    """Compute softmax values for each sets of scores in x."""
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
+
+
+def detect_gender_and_age(image):
+    # Load pre-trained Caffe models for gender and age detection
+    gender_net = cv2.dnn.readNetFromCaffe('data/deploy_age.prototxt','data/age_net.caffemodel'
+		)
+    age_net = cv2.dnn.readNetFromCaffe('data/deploy_gender.prototxt','data/gender_net.caffemodel'
+		)    
+    # Load pre-trained Haar cascade classifier for face detection
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+    # Convert the image to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+   # Detect faces in the image
+    faces = face_cascade.detectMultiScale(image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    
+    age_list = ['(0, 2)', '(4, 6)', '(8, 12)', '(15, 20)', '(25, 32)', '(38, 43)', '(48, 53)', '(60, 100)']
+    gender_list = ['Male', 'Female']
+    
+    for (x, y, w, h) in faces:
+        cv2.rectangle(image, (x, y), (x+w, y+h), (255, 255, 0), 2)
+
+        # Get Face 
+        face_img = image[y:y+h, x:x+w].copy()
+        MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+        blob = cv2.dnn.blobFromImage(face_img, 1, (227, 227), MODEL_MEAN_VALUES, swapRB=False)
+
+        # Predict Gender
+        gender_net.setInput(blob)
+        gender_preds = gender_net.forward()
+        gender_softmax = softmax(gender_preds[0])
+        gender_index = np.argmax(gender_softmax)
+        gender = gender_list[gender_index]
+        gender_accuracy = gender_softmax[gender_index] * 100
+        print("Gender: {}, Accuracy: {:.2f}%".format(gender, gender_accuracy))
+
+        # Predict Age
+        age_net.setInput(blob)
+        age_preds = age_net.forward()
+        age_softmax = softmax(age_preds[0])
+        age_index = np.argmax(age_softmax)
+        age_range = age_list[age_index]
+        age_accuracy = age_softmax[age_index] * 100
+        print("Age Range: {}, Accuracy: {:.2f}%".format(age_range, age_accuracy))
+
+        # Draw text for gender and age prediction
+        cv2.putText(image, "Gender: {}, Accuracy: {:.2f}%".format(gender, gender_accuracy), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 1)
+        cv2.putText(image, "Age Range: {}, Accuracy: {:.2f}%".format(age_range, age_accuracy), (x, y+h+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 1)
+
+    # Display the image with predictions
+    cv2.imshow("Gender and Age Detection", image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    return gender, age_range
+
 def define_season(undertone, iris_color, hair_color, skin_color):
     # Define the rules for each season based on undertone, iris color, and hair color
     seasons = {
@@ -351,7 +411,7 @@ def process_image(image_path):
     print("Hair Color: ",hair_color)
     skin_color = detect_skin_color(image)
     print("Skin Color: ", skin_color)
-
+    # gender, age = detect_gender_and_age(image)
     season = define_season(undertone.lower().replace(" ", "_"),iris_color.lower().replace(" ", "_"),hair_color.lower().replace(" ", "_"), skin_color.lower().replace(" ", "_"))
     return undertone, iris_color, hair_color, skin_color, season
 
@@ -373,6 +433,9 @@ def get_suggested_colors(season_name):
     }
     
     return suggested_colors.get(season_name, [])
+
+
+
 
 
 @app.post("/detect_season/")

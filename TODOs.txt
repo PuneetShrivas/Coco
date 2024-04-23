@@ -6,4 +6,31 @@ Hosting
 
 Seasons
 - Do multi image extraction instead of single image
-- Color palletes for each seasons
+- selecting correct season from multiple seasons
+- give outputs on image annotations
+
+Colab hosting for try on
+- ngrok and fastapi setup
+- interface for clothes try on
+
+Recommendations | Myntra scraping
+- Scraper for categories
+- Scraper for myntra clothes
+
+Recommendations | recommendation generation
+- body type detect/ enter
+- generate recommendation from clothes, colors, body type
+- suggest combinations based on color theory and season
+- suggestions from wardrobe combinations
+
+Pattern size, type, and distribution
+- pattern
+
+
+
+- 
+Dataset recommendations color and fit
+Wardrobe combinations 
+Combinations of clothing items
+Frontend for the try on
+LLM text recommendations

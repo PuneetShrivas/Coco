@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Comparison</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0; /* Light gray background */
+        }
+        .image-container {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+        }
+        .image-container img {
+            max-height: 300px; /* Set maximum height for images */
+            width: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <div class="title">Your Image</div>
+            <img src="your_image.jpg" alt="Your Image">
+        </div>
+        <div class="image-container">
+            <div class="title">Apparel</div>
+            <img src="apparel_image.jpg" alt="Apparel">
+        </div>
+        <div class="image-container">
+            <div class="title">Try on Output</div>
+            <img src="tryon_output_image.jpg" alt="Try on Output">
+        </div>
+    </div>
+</body>
+</html>
