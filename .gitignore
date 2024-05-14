@@ -4,3 +4,4 @@ YC_demo/data
 YC_demo/python_scripts/.env
 esdata/
 chromadb/
+firestore_key.json
