@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
+import dotenv
+dotenv.load_dotenv()
 from pydantic import BaseModel
 from openai import OpenAI
 import re
@@ -25,10 +26,7 @@ import pandas as pd
 password = 'ZoKdYJsOhbAWAFTQVnSV4xBe'
 
 # Connect to Elasticsearch cluster
-es = Elasticsearch(
-    cloud_id='cocoai:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvJGY3N2U5ZWNlZmU4MTQ1ODU5MzAxMTNhNTg0Njg4OWE2JDk0ODYxNTc3ZDhhMDQxZTdiMjU1ODcwZTA4YmU1Zjg4',
-    basic_auth=("elastic", password)
-)
+es = Elasticsearch("http://localhost:9200")
 
 # Function to search for clothing items in Elasticsearch
 def search_clothing(es, search_terms, colors):

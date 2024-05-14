@@ -1,0 +1,17 @@
+version: "3.3"
+services:    
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    volumes:
+      - ./esdata:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+
+volumes:
+  esdata:

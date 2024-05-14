@@ -1,3 +1,6 @@
 YC_demo/images/
 YC_demo/test_scripts.ipynb
 YC_demo/data
+YC_demo/python_scripts/.env
+esdata/
+chromadb/
