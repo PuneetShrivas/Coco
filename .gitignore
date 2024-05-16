@@ -6,3 +6,4 @@ esdata/
 chromadb/
 firestore_key.json
 pilot/site-coco/site-coco/.env
+.vercel
