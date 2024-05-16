@@ -1,15 +1,10 @@
-0. add system prompts ✅
-0.5 add json tooling ✅
-0.55 make it an agent ✅
-0.7 streaming output ✅
-0.8 expand recommendation schema ✅
-0.9 connect to local elasticsearch ✅
-1. store blog vectors as db ✅ Chromadb
-2. store user preferences as vectors in db ✅
-3. test output from both combined ✅
-4. create different categories of blog dbs 
-7. add chat history ✅
-8. host as an api ✅
-8.5 populate old es data for testing ✅
-9. create scraping scripts for myntra and push to elasticsearch 
-10. create google sheets database for blogs and scripts to create vectorstore databases ✅
+expand recommendation schema 
+create different categories of blog dbs 
+create scraping scripts for myntra and push to elasticsearch 
+evaluate langserve
+learn react 
+adding wardrobe database
+adding wardrobe reccomendation prompt
+adding budget consideration workflow
+connecting api to chat frontend
+
