@@ -7,7 +7,7 @@ import { httpBatchLink } from "@trpc/client"
 
 const Providers = ({ children }: PropsWithChildren) => {
     const [queryClient] = useState(() => new QueryClient())
-    const siteURL = process.env.SITE_URL
+    const siteURL = process.env.REACT_APP_SITE_URL
     const [trpcClient] = useState(() => trpc.createClient({
         links: [
             httpBatchLink({

@@ -7,9 +7,9 @@ const middleware = t.middleware
 const isAuth = middleware(async (opts) => {
   const { getUser } = getKindeServerSession()
   const user = await getUser()
-
+  console.log("in trcpc.ts")
   if (!user || !user.id) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
+    throw new TRPCError({  code: "UNAUTHORIZED", message: "Unauthorized" })
   }
 
   return opts.next({

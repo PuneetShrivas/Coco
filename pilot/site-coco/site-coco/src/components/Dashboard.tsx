@@ -1,3 +1,5 @@
+"use client"
+
 import { DashboardFromV } from "./component/dashboard-from-v"
 
 const Dashboard = () => {

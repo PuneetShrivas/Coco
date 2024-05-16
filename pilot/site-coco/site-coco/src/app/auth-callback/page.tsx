@@ -13,6 +13,7 @@ const PageContent = () => {
   trpc.authCallback.useQuery(undefined, {
     onSuccess: ({ success }) => {
       if (success) {
+        console.log("pushing from useQuery")
         router.push(origin ? `/${origin}` : '/dashboard');
       }
     },

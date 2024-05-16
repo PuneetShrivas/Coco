@@ -5,11 +5,12 @@ import { db } from '@/db';
 
 export const appRouter = router({
     authCallback: publicProcedure.query(async ()=>{
+        console.log("inside trpc autcallback")
         const {getUser} = getKindeServerSession()
         const user = await getUser()
 
         if(!user?.id || !user?.email) 
-            throw new TRPCError({code:"UNAUTHORIZED"})
+            throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" })
         const dbUser = await db.user.findFirst({
             where:{
                 id: user.id
@@ -17,6 +18,8 @@ export const appRouter = router({
         })
 
         if(!dbUser){
+        console.log("creating user")
+
             await db.user.create({
             data:{
                 id: user.id,
