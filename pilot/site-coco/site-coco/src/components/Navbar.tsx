@@ -5,7 +5,7 @@ import { buttonVariants } from "./ui/button"
 import { LoginLink, RegisterLink, } from "@kinde-oss/kinde-auth-nextjs/components"
 import { ArrowRight } from "lucide-react"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
-import UserAccountNav from "./UserAccountNav"
+// import UserAccountNav from "./UserAccountNav"
 import MobileNav from "./MobileNav"
 
 const Navbar = async () => {
