@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
+import { Analytics } from "@vercel/analytics/react"
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,7 +27,9 @@ export default function RootLayout({
         inter.className 
       )}>
         <Navbar/>
-        {children}</body>
+        {children}
+        <Analytics/>
+        </body>
         </Providers>
     </html>
   );
