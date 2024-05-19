@@ -38,6 +38,7 @@ const AskCoco = ({
                 <div className={workSansFont.className}>
                 <h2 className="text-large font-semibold dark:text-white">Ask Coco</h2>
                 </div>
+                
 
                 <div className="flex flex-col gap-2 items-stretch">
                   {["Am I ready to go?", "Give me outfit ideas."].map((suggestion) => (
