@@ -4,26 +4,37 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { redirect } from "next/navigation"
 
 const Page = async () => {
-    const {getUser } = getKindeServerSession()
+    const { getUser } = getKindeServerSession()
     const user = await getUser();
 
-    if(!user || !user.id) {
+    if (!user || !user.id) {
         console.log("couldn't get user")
         redirect('/auth-callback?origin=dashboard')
     }
 
     const dbUser = await db.user.findFirst({
-        where:{
+        where: {
             id: user.id
         }
-    })    
+    })
 
     if (!dbUser) {
         console.log("user not in db")
-        redirect('/auth-callback?origin=dashboard')}
+        redirect('/auth-callback?origin=dashboard')
+    }
     return (
-    <Dashboard  user = {user}/>
-)
+        <div
+            aria-hidden="true"
+            style={{
+                minHeight: "100vh",
+            }}
+        >
+            <div className="min-h-screen font-sans antialias grainy-gradient flex flex-col">
+
+                <Dashboard user={user} />
+            </div>
+        </div>
+    )
 }
 
 export default Page

@@ -5,10 +5,7 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
 import { Analytics } from "@vercel/analytics/react"
-import localFont from "next/font/local";
-import { Glass_Antiqua, Work_Sans } from "next/font/google";
-import BottomNavbar from "@/components/BottomNavbar";
-import { NextUIProvider } from "@nextui-org/react";
+import { ChakraProvider } from '@chakra-ui/react'
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -33,9 +30,9 @@ export default function RootLayout({
         )}>
           <Navbar />
           <main className="flex-grow">
-            <NextUIProvider>
+          <ChakraProvider>
           {children}
-          </NextUIProvider>
+          </ChakraProvider>
           <Analytics />
           </main>
            {/* <BottomNavbar/> */}
