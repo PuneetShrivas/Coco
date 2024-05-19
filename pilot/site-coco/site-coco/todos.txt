@@ -1,0 +1,4 @@
+TODO
+1. finish landing page
+2. make chat component
+3. make rest of the store

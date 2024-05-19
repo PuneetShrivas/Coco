@@ -142,13 +142,13 @@ export function DashboardFromV() {
             </div>
           </div>
         </div>
-        <nav className="border-t bg-white dark:bg-gray-900 p-4">
+        {/* <nav className="border-t bg-white dark:bg-gray-900 p-4">
           <div className="flex justify-around">
             <HomeIcon className="h-6 w-6 text-gray-700 dark:text-gray-300" />
             <SquareIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
             <HeartIcon className="h-6 w-6 text-gray-700 dark:text-gray-300" />
           </div>
-        </nav>
+        </nav> */}
       </div>
     </div>
   )

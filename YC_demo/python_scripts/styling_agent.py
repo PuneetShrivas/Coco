@@ -229,10 +229,9 @@ following is the previous message history {1}. Now answer continuing to this con
 
 def reply_conversation(query, chat_history, user_id):
     conversational_prompt = ChatPromptTemplate.from_messages([
-        ("system", """You are an experienced stylist in India in 2024. Answer the user's questions to the best of your ability using the context provided. Do not explicitly quote or mention the context, only use it for your reference.
-information about the user: 
-{0}
-following is the previous message history {1}. Now answer continuing to this conversation: """.format(get_user_docstrings(user_id), format_chat_history(chat_history))),
+        ("system", """You are an experienced stylist in India in 2024. Answer the user's questions to the best of your ability using the context provided. Do not explicitly quote or mention the context, only use it for your reference. Remember to keep your response crisp and to the point as is asked by the user.
+
+following is the previous message history {0}. Now answer continuing to this conversation: """.format( format_chat_history(chat_history))),
         # MessagesPlaceholder(variable_name="history"),
         ("user", "{question}"),
         ("user", "{context}"),

@@ -1,0 +1,72 @@
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Adjust as needed */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.inputField {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.sendButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sendButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.message {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.userMessage {
+  align-self: flex-end; /* Align user messages to the right */
+  background-color: #007bff;
+  color: #fff;
+}
+
+.botMessage {
+  align-self: flex-start; /* Align bot messages to the left */
+  background-color: #f0f0f0;
+}
+
+.recommendation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.recommendation img {
+  max-width: 30%;
+  border-radius: 5px;
+}
