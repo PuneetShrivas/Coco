@@ -31,11 +31,11 @@ const MobileNav = ({ user, isAuth }: { user: KindeUser | null, isAuth: boolean }
     <div className='sm:hidden'>
       <Flex flexDir="row" height="100%" alignItems="center" className='z-50 relative'> {/* Add alignItems="center" to center vertically */}
 
-        <Button className="rounded-full h-8 w-8 aspect-square bg-slate-400 border border-gray-200"> {/* Add border */}
+        <Button className="rounded-full h-8 w-8 aspect-square bg-slate-400 border-2 border-purple-500" style={{borderRadius: '30px', overflow: 'hidden'}}> {/* Add border */}
           <Avatar className="relative w-8 h-8">
             {imageUrl ? (
               <div className="relative aspect-square h-full w-full">
-                <Image fill src={imageUrl} alt="profile picture" referrerPolicy="no-referrer" />
+                <Image fill src={imageUrl} alt="profile picture" referrerPolicy="no-referrer" layout='fill' objectFit='cover' />
               </div>
             ) : (
               <AvatarFallback>
@@ -48,7 +48,7 @@ const MobileNav = ({ user, isAuth }: { user: KindeUser | null, isAuth: boolean }
 
         <ChevronDown
           onClick={toggleOpen}
-          className="h-5 w-5 text-zinc-700 ml-2" // Add margin for spacing
+          className="h-5 w-5 text-zinc-700 ml-1" // Add margin for spacing
         />
 
       </Flex>
