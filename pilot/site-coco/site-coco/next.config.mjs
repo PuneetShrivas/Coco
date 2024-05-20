@@ -1,5 +1,12 @@
 
 /** @type {import('next').NextConfig} */
+import withPWAInit from "next-pwa"
+const withPWA = withPWAInit({
+  dest: "public",
+  register: "true",
+  scope: "/",
+  skipWaiting: true
+})
 const nextConfig = ({
   async redirects() {
     return [
@@ -32,4 +39,4 @@ const nextConfig = ({
   },
 });
 
-export default nextConfig;
+export default withPWA(nextConfig);
