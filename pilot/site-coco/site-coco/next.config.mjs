@@ -25,6 +25,11 @@ const nextConfig = ({
         destination: "/api/auth/logout",
         permanent: true,
       },
+      {
+        source: "/",
+        destination: "/Coco.html",
+        permanent:true,
+      }
     ];
   },
   images: {
