@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   title: "Coco AI",
   description: "AI styling App",
 };
+const siteURL = process.env.REACT_APP_SITE_URL
+
 
 export default function RootLayout({
   children,
