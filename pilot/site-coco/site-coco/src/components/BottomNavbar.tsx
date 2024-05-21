@@ -1,7 +1,6 @@
 'use client';
 import { Navigation, MessageCircleCode, CircleUser } from 'lucide-react';
 import { HStack, Button, Icon, Text, Box, useColorModeValue } from '@chakra-ui/react';
-import {motion} from 'framer-motion'
 
 interface BottomNavbarProps {
   onSectionChange: (section: string) => void;
@@ -39,7 +38,7 @@ const BottomNavbar = ({ onSectionChange, activeSection }: BottomNavbarProps) => 
           const isActive = activeSection === link.name;
 
           return (
-            <motion.div key={link.name} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+            <div key={link.name} >
               <Button
                 variant="ghost"
                 onClick={() => onSectionChange(link.name)}
@@ -51,7 +50,7 @@ const BottomNavbar = ({ onSectionChange, activeSection }: BottomNavbarProps) => 
                 <Icon as={IconComponent} strokeWidth={1.1} boxSize={isActive ? 5 : 4} color={isActive ? "black" : "gray.500"} mr={isActive ? 2 : 0} /> 
                 {isActive && <Text fontSize="sm">{link.name}</Text>}
               </Button>
-            </motion.div>
+            </div>
           );
         })}
       </HStack>

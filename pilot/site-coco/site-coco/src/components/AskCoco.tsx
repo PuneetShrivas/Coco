@@ -74,16 +74,16 @@ const AskCoco = ({
   return (
 
 
-    <MaxWidthWrapper >
-      <div className="mt-2 ">
-        <div className='mx-4 mt-4 mb-1'>
+    <MaxWidthWrapper className='grainy' >
+      <div className="mt-[70px] h-screen">
+        <div className='mx-4 mt-2 mb-1'>
           <h1 className="text-base font-normal text-[#190F38] dark:text-white font-display" style={{ fontFamily: 'Inter' }}>
             {greeting}, <span className='font-bold'>{user?.given_name}!</span>
           </h1>
         </div>
 
 
-        <Box className="relative w-full card-shadow bg-[#CCE5E3]" p={3} borderRadius="20px" mx="auto" maxW="container.lg" shadow={"2xl"}>
+        <Box className="relative w-full card-shadow bg-[#CCE5E3] " p={3} borderRadius="20px" mx="auto" maxW="container.lg" shadow={"2xl"}>
           <Flex flexDir="row" style={{ fontFamily: 'Inter' }} className='px-4 mt-[16px] absolute inset-0 z-20' mr="4px" maxHeight={"22px"} justifyContent={"space-between"} height={"full"}>
             <p className='text-large font-bold'>
               Styled For Today?
@@ -205,7 +205,7 @@ const AskCoco = ({
               ))}
             </HStack>
           </Box>
-          <div className="flex flex-row mt-2 mb-1 mx-5 justify-between" >
+          <div className="flex flex-row mt-2 mx-5 justify-between" >
             <span className='text-large font-bold mx-3 antialiased' style={{ fontFamily: 'Inter' }}> Outfit Calendar</span>
             {/* <div className='flex flex-col'> <span className='text-xs inline-block align-middle font-bold'> Streak </span> <span className='text-xs inline-block align-middle text-gray-500'> 5 days </span></div> */}
             <Button className='flex flex-col' bgColor={"#CCE5E3"} variant={"solid"} size="sm">

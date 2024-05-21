@@ -33,6 +33,7 @@ const Page = async () => {
 
                 <Dashboard user={user} />
             </div>
+            
         </div>
     )
 }
