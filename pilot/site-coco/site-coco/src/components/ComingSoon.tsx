@@ -33,7 +33,7 @@ const ComingSoon: React.FC = () => {
                                 {features.map((feature) => {
                                     const IconComponent = feature.icon
                                     return (
-                                        <div className="w-[45px] text-center">
+                                        <div className="w-[45px] text-center" key={feature.title}>
                                             <Button
                                                 variant="ghost"
                                                 bgColor={feature.iconcolor}
@@ -67,7 +67,7 @@ const ComingSoon: React.FC = () => {
                             <div className=" flex flex-col ml-auto h-full mt-2 w-10/12">
                                 {features.map((feature) => {
                                     return (
-                                        <div className="w-full">
+                                        <div className="w-full" key={feature.title}>
                                             <Box
                                                 key={feature.title}
                                                 p={4}
