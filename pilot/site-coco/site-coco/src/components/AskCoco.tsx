@@ -72,8 +72,6 @@ const AskCoco = ({
 
 
   return (
-
-
     <MaxWidthWrapper className='grainy' >
       <div className="mt-[70px] h-screen">
         <div className='mx-4 mt-2 mb-1'>
@@ -81,15 +79,12 @@ const AskCoco = ({
             {greeting}, <span className='font-bold'>{user?.given_name}!</span>
           </h1>
         </div>
-
-
         <Box className="relative w-full card-shadow bg-[#CCE5E3] " p={3} borderRadius="20px" mx="auto" maxW="container.lg" shadow={"2xl"}>
           <Flex flexDir="row" style={{ fontFamily: 'Inter' }} className='px-4 mt-[16px] absolute inset-0 z-20' mr="4px" maxHeight={"22px"} justifyContent={"space-between"} height={"full"}>
             <p className='text-large font-bold'>
               Styled For Today?
             </p>
             <IconButton isRound={true} aria-label="Ask Coco" className='rounded-full bg-white' height={"40px"} width={"fit-content"} icon={<ArrowRight size={"16px"} />} />
-
           </Flex>
           <Flex gap={4} className='mt-[36px]'>
             <Flex flexDir="row">
@@ -97,7 +92,6 @@ const AskCoco = ({
                 {/* Background Div for the Upload Icon */}
                 <div className="bg-[#BBE2CD] h-40 w-[35vw] rounded-lg flex flex-col ">
                   {/* Upload Icon */}
-
                   <div className='items-center justify-center flex flex-col h-full'>
                     <Camera height={25} width={25} color="gray" />
                     {/* Upload Image Text */}
@@ -107,15 +101,12 @@ const AskCoco = ({
                   </div>
                 </div>
               </Box>
-
               <Flex ml={4} flexDir="column" alignItems="left" justifyContent="space-between" width="1/2">
-
                 <div className={cn(workSansFont.className, 'mt-2 mb-2 ml-1 h-full flex items-end text-base font-bold')}>
                   <CheckCircle className="inline-block align-text-bottom mr-1 text-dark-circle-color" strokeWidth={0.75} />
                   <span className='inline-block align-text-bottom'>Ask Coco</span>
                 </div>
                 <Flex flexDir="column" gap={2} alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="8px" >
-
                   {["Am I ready to go?", "Accessorize this", "Suggest footwear"].map((suggestion) => (
                     <Button
                       key={suggestion}
@@ -136,14 +127,11 @@ const AskCoco = ({
                     </Button>
                   ))}
                 </Flex>
-
               </Flex>
-
-
             </Flex>
           </Flex>
-          <div>
-            <InputGroup mt={2} mb={1} size="md" borderRadius="2xl" backgroundColor="#EDF2F7">
+          <div className='shadow-inner rounded-2xl'>
+            <InputGroup mt={2} mb={1} size="md" borderRadius="2xl" backgroundColor="#EDF2F7"  >
               <InputLeftElement pointerEvents='none'>
                 <Search color='black' size={20} />
               </InputLeftElement>
@@ -160,30 +148,13 @@ const AskCoco = ({
             </InputGroup>
           </div>
         </Box>
-
-
-
-        {/* New Outfit Calendar Section */}
-        {/* <Flex flexDir="row" justifyContent="space-between" alignItems="center" mt={5}>
-            <Heading
-              size="sm"
-              className={`mb-2 ml-2 text-left ${interFont.className}`}
-              fontWeight="normal"
-              color="#160F33"
-            >
-              📅 Outfit Calendar
-            </Heading>
-            <div className='mr-2 mb-2 text-xs underline underline-offset-2 font-normal dark:text-white text-purple-700'>
-              <Link href="#"> See All</Link>
-            </div>
-          </Flex> */}
         <Box
           className="w-full card-shadow bg-[#FFFFFF] h-[250px]" mt={5} borderRadius="30px" mx="auto" maxW="container.lg"
           overflowX="auto" shadow={"xl"}
         >
           <Box className="w-full card-shadow bg-[#2F2F2F] h-[200px] noscrollbar" mt={0} p={3} borderRadius="30px" mx="auto" maxW="container.lg"
             overflowX="auto" overflowY="hidden" shadow={"xl"} >
-            <HStack spacing={-10} shouldWrapChildren={true} mx={1}  height="full">
+            <HStack spacing={-10} shouldWrapChildren={true} mx={1} height="full">
               {images.map((image, index) => (
                 <Box
                   key={index}
@@ -200,7 +171,7 @@ const AskCoco = ({
                   justifyItems="center"
                   className=' ring-1 ring-inset '
                 >
-                  <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '> <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt = "" width={120} height={300} style={{ filter: 'contrast(1.1) saturate(1.1)'}}/></div>
+                  <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '> <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width={120} height={300} style={{ filter: 'contrast(1.1) saturate(1.1)' }} /></div>
                 </Box>
               ))}
             </HStack>
@@ -217,12 +188,9 @@ const AskCoco = ({
               </span>
             </Button>
           </div>
-
         </Box>
       </div >
-
     </MaxWidthWrapper>
-
   );
 };
 

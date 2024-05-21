@@ -1,9 +1,19 @@
 "use client"
+
+import { Box } from "@chakra-ui/react";
+import MaxWidthWrapper from "./MaxWidthWrapper";
+
 const Profile = () => {
     return (
-        <div className='mt-28 ml-4'>
-           Profile
+        <MaxWidthWrapper className="grainy">
+            <div className="mt-[70px] h-screen">
+                <div>
+                    <Box className="bg-white">
+                        Profile
+                    </Box>
+                </div>
             </div>
-    )
+        </MaxWidthWrapper>
+    );
 }
 export default Profile

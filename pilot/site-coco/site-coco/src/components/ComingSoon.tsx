@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 const interFont = Inter({ subsets: ['latin'] });
 const ComingSoon: React.FC = () => {
     const features = [
-        { title: "Virtual Try Ons", iconcolor: "#000000", strokecolor: "#FFFFFF", icon: Shirt, bgcolor: "#EEDEF6" },
-        { title: "Shopping Assistant", iconcolor: "#C9E3E1", strokecolor: "#000000", icon: BotMessageSquare, bgcolor: "#C9E3E1" },
-        { title: "Digital Wardrobe", iconcolor: "#E2E2E2", strokecolor: "#000000", icon: Backpack, bgcolor: "#FEE1B6" }
+        { image: "/tryon.png", title: "Virtual Try Ons", iconcolor: "#000000", strokecolor: "#FFFFFF", icon: Shirt, bgcolor: "#EEDEF6", description: "See how it looks before you buy! Experiment with styles and find your perfect fit." },
+        { image: "/shoppingassistant.png", title: "Shopping Assistant", iconcolor: "#C9E3E1", strokecolor: "#000000", icon: BotMessageSquare, bgcolor: "#C9E3E1", description: "Your personal AI shopper. Tailored recommendations to grow your wardrobe effortlessly." },
+        { image: "/wardrobe.png", title: "Digital Wardrobe", iconcolor: "#E2E2E2", strokecolor: "#000000", icon: Backpack, bgcolor: "#FEE1B6", description: "Organize your closet, create outfits, and get great styling inspirations quickly." }
     ];
 
     return (
@@ -70,18 +70,35 @@ const ComingSoon: React.FC = () => {
                                         <div className="w-full" key={feature.title}>
                                             <Box
                                                 key={feature.title}
-                                                p={4}
+                                                py={4}
+                                                pl={4}
                                                 height="160px"
                                                 width="full"
                                                 borderRadius="25px"
                                                 shadow="2xl"
                                                 mb="30px"
                                                 bgColor={feature.bgcolor}>
-                                                <Text fontSize="base" fontWeight="bold" className={interFont.className}>
-                                                    <div className="text-gray-800">
-                                                        {feature.title}
-                                                    </div>
-                                                </Text>
+                                                <Flex flexDir="column" className="justify-between">
+                                                    <Text fontSize="base" fontWeight="bold" className={interFont.className}>
+                                                        <div className="text-gray-800 ">
+                                                            {feature.title}
+                                                        </div>
+                                                    </Text>
+                                                    <Flex flexDir="row" overflowX="clip" my={1} className="w-full noscrollbar" >
+                                                        <div className="text-xs leading-snug w-8/12 pr-2 text-gray-600 text-justify">
+                                                            <Flex flexDir="row">
+                                                            <div className="items-center py-2 justify-center px-[2px]"> <Box className="w-[65px] h-[2px] rounded-full bg-gray-700 "/> </div>
+                                                            <div className="items-center py-2 justify-center px-[2px]"> <Box className="w-[40px] h-[2px] rounded-full bg-gray-500 "/> </div>
+                                                            <div className="items-center py-2 justify-center px-[2px]"> <Box className="w-[25px] h-[2px] rounded-full bg-gray-300 "/> </div>
+                                                            </Flex>
+                                                            {feature.description}
+                                                        </div>
+                                                        <div className="w-5/12">
+                                                            <Box  className="w-[100px] h-[100px] p-5 ml-2 bg-slate-50 rounded-xl shadow-md" backgroundImage={feature.image} backgroundPosition="right" backgroundRepeat="no-repeat" backgroundSize="cover">
+                                                            </Box>
+                                                        </div>
+                                                    </Flex>
+                                                </Flex>
                                             </Box>
                                         </div>
                                     );
@@ -90,12 +107,8 @@ const ComingSoon: React.FC = () => {
                         </Flex>
                     </Box>
                 </MaxWidthWrapper>
-
             </div>
-
         </div>
-
-
     );
 };
 
