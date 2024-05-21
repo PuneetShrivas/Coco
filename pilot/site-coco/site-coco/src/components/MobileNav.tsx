@@ -1,7 +1,7 @@
 'use client'
 
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types'
-import { ArrowRight, Menu, User, ChevronDown } from 'lucide-react'
+import { AudioLines, ArrowRight, Menu, User, ChevronDown } from 'lucide-react'
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -29,10 +29,17 @@ const MobileNav = ({ user, isAuth }: { user: KindeUser | null, isAuth: boolean }
 
   return (
     <div className='sm:hidden'>
-      <Flex flexDir="row" height="100%" alignItems="center" className='z-50 relative'> {/* Add alignItems="center" to center vertically */}
+      <Flex flexDir="row" height="100%" alignItems="center" className='z-50 relative '> {/* Add alignItems="center" to center vertically */}
+        <Button className='rounded-full h-12 w-24 bg-[#E8D2F6] border-2 border-[#a591b1]  mx-2' variant='outline'>
+          <div>
+          <AudioLines height={15} color='#383D41'/>
+          </div>
+          <span className='text-xs text-[#383D41] '> Ask Coco </span>
+          
+        </Button>
 
-        <Button className="rounded-full h-8 w-8 aspect-square bg-slate-400 border-2 border-purple-500" style={{borderRadius: '30px', overflow: 'hidden'}}> {/* Add border */}
-          <Avatar className="relative w-8 h-8">
+        <Button className="rounded-full h-12 w-12 aspect-square bg-slate-400 " style={{borderRadius: '30px', overflow: 'hidden'}}> {/* Add border */}
+          <Avatar className="relative w-12 h-12" onClick={toggleOpen}>
             {imageUrl ? (
               <div className="relative aspect-square h-full w-full">
                 <Image fill src={imageUrl} alt="profile picture" referrerPolicy="no-referrer" layout='fill' objectFit='cover' />

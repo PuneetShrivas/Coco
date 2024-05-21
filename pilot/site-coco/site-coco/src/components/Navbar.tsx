@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 // import UserAccountNav from "./UserAccountNav"
 import MobileNav from "./MobileNav"
+import { cn } from "@/lib/utils"
 const ahsingFont = localFont({ src: '../fonts/Ahsing-Regular.otf' })
 const youngSerifFont = Young_Serif({ weight: '400', subsets: ['latin'] })
 const Navbar = async () => {
@@ -16,11 +17,11 @@ const Navbar = async () => {
 
 
     return (
-        <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b  transition-all">
+        <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full  transition-all">
             <MaxWidthWrapper>
-                <div className="flex h-14 items-center justify-between border-b border-zinc-200">
-                    <Link href='/' className="flex z-40 text-2xl">
-                        <span className={ahsingFont.className}>
+                <div className="flex h-14 items-center justify-between ">
+                    <Link href='/' className="flex z-40 text-[12px] w-12 h-12 rounded-full items-center tracking-wider justify-center bg-white text-center">
+                        <span className={cn(ahsingFont.className)}>
                             COCO
                         </span>
                     </Link>

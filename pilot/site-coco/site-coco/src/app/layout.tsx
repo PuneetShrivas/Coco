@@ -62,7 +62,7 @@ export default function RootLayout({
       </head>
       <Providers>
         <body className={cn(
-          'min-h-screen font-sans antialias grainy flex flex-col',
+          'min-h-screen font-sans antialias grainy flex flex-col noscrollbar',
           inter.className
         )}>
           <Navbar />
