@@ -93,3 +93,8 @@
 .noscrollbar::-webkit-scrollbar{
   display: none;
 }
+
+.textiscentered{
+  display: inline-flex;
+  align-items: center;
+}

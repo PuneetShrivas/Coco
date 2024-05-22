@@ -17,7 +17,7 @@ const Dashboard = ({user}:{user:KindeUser | null}) => {
       case 'Ask Coco':
         return <AskCoco user={user}/>;
       case 'Profile':
-        return <Profile />;
+        return <Profile user={user}/>;
       default:
         return null; 
     }

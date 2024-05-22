@@ -18,7 +18,7 @@ const Navbar = async () => {
 
     return (
         <nav className="absolute h-14 inset-x-0 top-0 z-30 w-full  transition-all pt-2">
-            <MaxWidthWrapper>
+            <MaxWidthWrapper className="fixed">
                 <div className="flex h-14 items-center justify-between ">
                     <Link href='/' className="flex z-40 text-[12px] w-12 h-12 rounded-full items-center tracking-wider justify-center bg-white text-center">
                         <span className={cn(ahsingFont.className)}>

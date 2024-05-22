@@ -13,10 +13,10 @@ const ComingSoon: React.FC = () => {
     ];
 
     return (
-        <div className="bg-[#000000]">
+        <div className="bg-[#2F2F2F]">
             <div>
                 <MaxWidthWrapper>
-                    <Heading className=" mb-30 bg-[#000000]">-</Heading>
+                    <Heading className=" mb-30 bg-[#2F2F2F]">-</Heading>
                     <Box className=" bg-white mt-20 mx-32 h-1 mb-2 rounded-full"></Box>
                     <Box className=" bg-white rounded-[30px] shadow-inner" height={700} pt={18}>
                         <div className="mb-6 mx-4 flex flex-row justify-between items-end">

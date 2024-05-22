@@ -23,8 +23,8 @@ const BottomNavbar = ({ onSectionChange, activeSection }: BottomNavbarProps) => 
         <Box 
           position="absolute"
           top={-4}       // Adjust to create a border-like effect
-          left={-4}
-          right={-4}
+          left={-3}
+          right={-3}
           bottom={-4}   // Adjust to create a border-like effect
           bgColor={ellipsisBg}
           mx={5}
