@@ -84,7 +84,7 @@ const Profile = ({
                         <Flex flexDir="row" flexWrap="wrap" gap="2" className=" mb-3 mx-5">
                             {seasonColors.map((seasoncolor) => {
                                 return (
-                                    <div className="h-6 w-6 rounded-full border-1 border-gray-700" style={{ backgroundColor: `${seasoncolor.color}` }} />
+                                    <div key={seasoncolor.color} className="h-6 w-6 rounded-full border-1 border-gray-700" style={{ backgroundColor: `${seasoncolor.color}` }} />
                                 );
                             })}
                         </Flex>
