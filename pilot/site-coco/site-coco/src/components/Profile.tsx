@@ -52,7 +52,8 @@ const Profile = ({
                                 </div>
                                 <div className="text-xs">
                                     Body Type
-
+                                    <div className="bg-[#ceefdc] rounded-md mt-1 mb-3 h-[25px] text-sm w-fit px-2 align-middle"> Oval - Blige Skin </div>
+                    
                                 </div>
                                 
                             </Flex>
@@ -76,6 +77,8 @@ const Profile = ({
                                 </div>
                                 <div className="text-xs">
                                     Fit Type
+                                    <div className="bg-[#daddf3] rounded-md mt-1 mb-3 h-[25px] text-sm w-fit px-2 align-middle"> Regular - Relaxed </div>
+
                                 </div>
                             </Flex>
                         </Flex>
@@ -108,14 +111,30 @@ const Profile = ({
                             <p className='text-large font-bold'>
                                 Wardrobe
                             </p>
+                            
                         </Flex>
+                        <Flex flexDir="row">
+                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 ml-5 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
+                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
+                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
+                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
+                                
+                                
+                            </Flex>
                     </div>
                     <div className="mx-auto w-11/12 mt-5 rounded-2xl bg-[#EEDEF6] h-[15vh] shadow-xl">
                         <Flex flexDir="row" mx="20px" pt="10px">
                             <p className='text-large font-bold'>
                                 Preferences
                             </p>
+                            
                         </Flex>
+                        <Flex flexDir="column">
+                                <div className="bg-[#696969] rounded-sm h-3 w-60 ml-5 my-2 text-[#696969] border-1 border-gray-500"> . </div>
+                                <div className="bg-[#696969] rounded-sm h-3 w-40 ml-5 my-2 text-[#696969] border-1 border-gray-500"> . </div>
+                                
+                                
+                            </Flex>
                     </div>
                 </div>
             </MaxWidthWrapper>

@@ -149,29 +149,29 @@ const AskCoco = ({
           </div>
         </Box>
         <Box
-          className="w-full card-shadow bg-[#FFFFFF] h-[250px]" mt={5} borderRadius="30px" mx="auto" maxW="container.lg"
+          className="w-full card-shadow bg-[#FFFFFF] h-[230px]" mt={5} borderRadius="30px" mx="auto" maxW="container.lg"
           overflowX="auto" shadow={"xl"}
         >
-          <Box className="w-full card-shadow bg-[#2F2F2F] h-[200px] noscrollbar" mt={0} p={3} borderRadius="30px" mx="auto" maxW="container.lg"
+          <Box className="w-full card-shadow bg-[#2F2F2F] h-[180px] noscrollbar" mt={0} p={3} borderRadius="30px" mx="auto" maxW="container.lg"
             overflowX="auto" overflowY="hidden" shadow={"xl"} >
-            <HStack spacing={-10} shouldWrapChildren={true} mx={1} height="full">
+            <HStack spacing={1} shouldWrapChildren={true} mx={1} height="full">
               {images.map((image, index) => (
                 <Box
                   key={index}
-                  boxSize="120px" // Fixed width for the container
-                  height="175px"
+                  boxSize="96px" // Fixed width for the container
+                  height="140px"
                   overflow="clip"  // Clip overflowing content
                   borderRadius="2xl"  // Apply border radius to the container
                   position="relative"
                   border="2px"
                   zIndex={images.length - index}
-                  ml={index === 0 ? 0 : -10}
+                  ml={index === 0 ? 0 : 1}
                   bgColor="#E8D2F6"
                   alignItems="center"
                   justifyItems="center"
                   className=' ring-1 ring-inset '
                 >
-                  <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '> <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width={120} height={300} style={{ filter: 'contrast(1.1) saturate(1.1)' }} /></div>
+                  <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '> <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width={96} height={240} style={{ filter: 'contrast(1.1) saturate(1.1)' }} /></div>
                 </Box>
               ))}
             </HStack>
