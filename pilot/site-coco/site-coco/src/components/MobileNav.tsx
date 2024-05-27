@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { CircleUser } from "lucide-react";
 import { Button } from './ui/button'
 import { Flex } from '@chakra-ui/react'
+import {Spinner} from "@nextui-org/spinner";
 import { LoginLink, RegisterLink, } from "@kinde-oss/kinde-auth-nextjs/components"
 import { Manrope } from "next/font/google"
 import Image from 'next/image'
@@ -21,6 +22,7 @@ const MobileNav = ({ user, isAuth }: { user: KindeUser | null, isAuth: boolean }
   const pathname = usePathname()
   const imageUrl = user?.picture
   const name = user?.given_name
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (isOpen) toggleOpen()
   }, [pathname])
@@ -28,8 +30,14 @@ const MobileNav = ({ user, isAuth }: { user: KindeUser | null, isAuth: boolean }
   const closeOnCurrent = (href: string) => {
     if (pathname === href) {
       toggleOpen()
+    } else {
+      setIsLoading(true);
     }
-  }
+  };
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [pathname]);
 
   return (
     <div className='sm:hidden'>
@@ -85,67 +93,64 @@ const MobileNav = ({ user, isAuth }: { user: KindeUser | null, isAuth: boolean }
           {/* Refined Gradient Backdrop */}
           <div className="absolute inset-0 bg-gradient-to-b from-zinc-700 via-black/40 to-transparent backdrop-blur-[2px] sm:backdrop-blur-[4px] md:backdrop-blur-[8px] transition-all duration-300"></div>
 
-            {/* Restyled Menu List */}
-            <ul className="absolute right-10 top-20 flex flex-col items-end gap-2">
-              {!isAuth ? (
-                <>
-                  <li className='mt-[5px]'>
-                    <Link
-                      onClick={() => closeOnCurrent('/sign-up')}
-                      className="bg-[#D2BEE0] rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
-                      href="/sign-up"
-                    >
-                      Get started
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </li>
-                  <li className='mt-[5px]'>
-                    <Link
-                      onClick={() => closeOnCurrent('/sign-in')}
-                      className="bg-[#D2BEE0] rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
-                      href="/sign-in"
-                    >
-                      Sign in
-                      <LogIn className="ml-2 h-5 w-5" />
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <>
-                <li className='mt-[5px]'>
-                    <Link
-                      onClick={() => closeOnCurrent('/dashboard')}
-                      className="bg-[#D2BEE0] text-base rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
-                      href="/profile"
-                    >
-                      Profile
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center z-50">
+              <Spinner size='lg' color='secondary'/>
+            </div>
+          )}
 
-                      <UserCircle className="ml-2 h-5 w-5" />
-                    </Link>
-                  </li>
-                  <li className='mt-[5px]'>
-                    <Link
-                      onClick={() => closeOnCurrent('/dashboard')}
-                      className="bg-[#D2BEE0] text-base rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
-                      href="/dashboard"
-                    >
-                      Dashboard
-                      <LayoutDashboard className="ml-2 h-5 w-5" />
-                    </Link>
-                  </li>
-                  
-                  <li className='mt-[5px]'>
-                    <Link
-                      className="bg-[#D2BEE0] text-base rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
-                      href="/sign-out"
-                    >
-                      Sign out
-                      <LogOut className="ml-2 h-5 w-5" />
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
+
+          {/* Restyled Menu List */}
+          <ul className="absolute right-10 top-20 flex flex-col items-end gap-2">
+            {!isAuth ? (
+              <>
+                <li className='mt-[5px]'>
+                  <Link
+                    onClick={() => closeOnCurrent('/sign-up')}
+                    className="bg-[#D2BEE0] rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
+                    href="/sign-up"
+                  >
+                    Sign Up
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </li>
+                <li className='mt-[5px]'>
+                  <Link
+                    onClick={() => closeOnCurrent('/sign-in')}
+                    className="bg-[#D2BEE0] rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
+                    href="/sign-in"
+                  >
+                    Sign In
+                    <LogIn className="ml-2 h-5 w-5" />
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                
+                <li className='mt-[5px]'>
+                  <Link
+                    onClick={() => closeOnCurrent('/dashboard')}
+                    className="bg-[#D2BEE0] text-base rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
+                    href="/dashboard"
+                  >
+                    Dashboard
+                    <LayoutDashboard className="ml-2 h-5 w-5" />
+                  </Link>
+                </li>
+
+                <li className='mt-[5px]'>
+                  <Link
+                    className="bg-[#D2BEE0] text-base rounded-full px-6 py-3 text-gray-800 shadow-md flex items-center font-semibold hover:bg-gray-100 transition duration-300 ease-in-out"
+                    href="/sign-out"
+                  >
+                    Sign out
+                    <LogOut className="ml-2 h-5 w-5" />
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
 
         </div>
       ) : null}

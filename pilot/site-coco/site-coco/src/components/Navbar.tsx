@@ -14,8 +14,6 @@ const youngSerifFont = Young_Serif({ weight: '400', subsets: ['latin'] })
 const Navbar = async () => {
 const { getUser } = getKindeServerSession()
 const user = await getUser()
-
-
     return (
         <nav className="absolute h-14 inset-x-0 top-0 z-30 w-full  transition-all pt-2">
             <MaxWidthWrapper className="fixed">

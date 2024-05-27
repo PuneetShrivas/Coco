@@ -1,5 +1,6 @@
+
 // import { Card, CardHeader, CardBody, CardFooter, Image } from '@nextui-org/react';
-import { Box, Flex, Text, Heading, Button, InputGroup, InputLeftElement, Input, IconButton, HStack, Textarea, Icon } from '@chakra-ui/react'; // Import from Chakra UI
+import { Box, Flex, Text, Heading, Button, InputGroup, InputLeftElement, Input, IconButton, HStack, Textarea, Icon, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerBody } from '@chakra-ui/react'; // Import from Chakra UI
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
 import { Upload, Sparkles, Star, Search, Camera, ChevronRight, CircleArrowRight, ArrowRight, CheckCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -8,7 +9,9 @@ import { PiQuestionMark, PiCheckCircleLight, PiArrowRight } from "react-icons/pi
 import MaxWidthWrapper from './MaxWidthWrapper';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CldUploadWidget } from "next-cloudinary"
 import { cn } from '@/lib/utils';
+import FileUpload from './FileUpload';
 const glassAntiquaFont = Glass_Antiqua({ weight: '400', subsets: ['latin'] })
 const workSansFont = Work_Sans({ weight: '600', subsets: ['latin'] })
 const manrope = Manrope({ weight: '400', subsets: ["latin"] });
@@ -46,6 +49,7 @@ const AskCoco = ({
   const [inputValue, setInputValue] = useState('');
   const [currentEvent, setCurrentEvent] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     const randomEvent = events[Math.floor(Math.random() * events.length)];
@@ -67,10 +71,15 @@ const AskCoco = ({
   }, []);
 
   const handleFocus = () => {
-    setInputValue(placeholderText);
+    // setInputValue(placeholderText);
   };
 
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
+  const handleImageUpload = (file: File | null) => {
+    setUploadedImage(file);
+    onClose();
+  };
 
   return (
     <MaxWidthWrapper className='' >
@@ -87,19 +96,48 @@ const AskCoco = ({
         <Box className="relative w-full card-shadow bg-white " px={3} borderRadius="20px" mx="auto" maxW="container.lg" >
           <Flex gap={4}>
             <Flex flexDir="row" className="h-[30vh]">
-              <Box width="1/3" justifyContent="center" ml="5px" alignItems="center" display="flex" flexDir="column" rounded={"10px"} >
-                {/* Background Div for the Upload Icon */}
-                <div className=" my-2 bg-[#EAECEF] h-full  w-[36vw] rounded-lg flex flex-col ">
-                  {/* Upload Icon */}
-                  <div className='items-center justify-center flex flex-col h-full'>
-                    <Camera height={25} width={25} color="gray" />
-                    {/* Upload Image Text */}
-                    <Text className="font-normal" mt={2} fontSize="sm" color="gray" paddingRight={5} paddingLeft={5} align="center" >
-                      Upload Outfit
-                    </Text>
-                  </div>
-                </div>
-              </Box>
+              <Button onClick={onOpen} height="30vh" bgColor="#EAECEF">
+                <Box width="1/3" justifyContent="center" ml="5px" alignItems="center" display="flex" flexDir="column" rounded={"10px"} >
+                  {/* Background Div for the Upload Icon */}
+                  {uploadedImage ? (
+                    <div className=" my-2 h-full  w-[36vw] rounded-lg items-center justify-center object-cover overflow-hidden" >
+                      {/* <img src={URL.createObjectURL(uploadedImage)} alt="Uploaded" className='h-full w-full' /> */}
+                      <Image src={URL.createObjectURL(uploadedImage)} alt="Uploaded" className='h-full w-full object-cover overflow-hidden' layout="fill" objectFit="cover" />
+                    </div>
+                  ) : (
+                    <div className=" my-2 bg-[#EAECEF] h-full  w-[36vw] rounded-lg flex flex-col ">
+                      {/* Upload Icon */}
+                      <div className='items-center justify-center flex flex-col h-full'>
+                        <Camera height={25} width={25} color="gray" />
+                        {/* Upload Image Text */}
+                        <Text className="font-normal" mt={2} fontSize="sm" color="gray" paddingRight={5} paddingLeft={5} align="center" >
+                          Upload Outfit
+                        </Text>
+                      </div>
+                    </div>)}
+
+                </Box>
+              </Button>
+
+              <Drawer placement='bottom' onClose={onClose} isOpen={isOpen}>
+                <DrawerOverlay>
+                  <DrawerContent>
+                    <DrawerHeader borderBottomWidth="1px">Upload Image</DrawerHeader>
+                    <DrawerBody>
+                      {/* <CldUploadWidget uploadPreset="aqlje7r5">
+                        {({ open }) => {
+                          return (
+                            <button onClick={() => open()}>
+                              Upload an Image
+                            </button>
+                          );
+                        }}
+                      </CldUploadWidget> */}
+                      <FileUpload onImageUpload={handleImageUpload} />
+                    </DrawerBody>
+                  </DrawerContent>
+                </DrawerOverlay>
+              </Drawer>
               <Flex ml={4} flexDir="column" alignItems="left" justifyContent="space-between" width="1/2">
                 <Flex flexDir="column">
                   <InputGroup my={2} mb={1} borderRadius="xl" height="11vh" backgroundColor="#EDF2F7">
@@ -165,9 +203,11 @@ const AskCoco = ({
           <p className={cn('text-[20px]', LexendFont.className)}>
             Outfit Calendar
           </p>
+          <Link href="/dashboard/ootd/calendar">
           <Button variant="ghost">
             <PiArrowRight strokeWidth="1.3" size="24px" height="20px" />
           </Button>
+          </Link>
         </Flex>
         <Box
           className="w-full card-shadow bg-[#FFFFFF] h-[27vh]" mx="auto" maxW="container.lg"
@@ -177,14 +217,16 @@ const AskCoco = ({
             overflowX="auto" overflowY="hidden" >
             <HStack spacing={-5} shouldWrapChildren={true} mx={1} height="full">
               {images.map((image, index) => (
+                    <Link key={index} href="/dashboard/ootd">
                 <Box
-                  key={index}
+                  
                   boxSize="14vh" // Fixed width for the container
                   height="21vh"
                   overflow="clip"  // Clip overflowing content
                   borderRadius="2xl"  // Apply border radius to the container
                   position="relative"
                   border="2px"
+                  
                   zIndex={images.length - index}
                   ml={index === 0 ? 0 : -5}
                   bgColor="#E8D2F6"
@@ -196,6 +238,7 @@ const AskCoco = ({
                     <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width={120} height={300} style={{ filter: 'contrast(1.1) saturate(1.1)' }} />
                   </div>
                 </Box>
+                </Link>
               ))}
             </HStack>
           </Box>

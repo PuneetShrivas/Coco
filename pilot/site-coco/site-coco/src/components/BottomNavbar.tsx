@@ -51,7 +51,7 @@ const BottomNavbar = ({ onSectionChange, activeSection }: BottomNavbarProps) => 
               w="12"
               h="12"
               justifyContent="center"
-              _hover={{ transform: "scale(1.1)", bg: inactiveBg }}
+              // _hover={{ transform: "scale(1.1)", bg: inactiveBg }}
             >
               <Icon
                 as={IconComponent}

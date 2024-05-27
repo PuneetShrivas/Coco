@@ -9,7 +9,6 @@ import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
 
 const Dashboard = ({user}:{user:KindeUser | null}) => {
   const [activeSection, setActiveSection] = useState('Ask Coco'); // Start with dashboard active
-
   const renderContent = () => {
     switch (activeSection) {
       case 'Coming Soon':
