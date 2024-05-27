@@ -14,7 +14,7 @@ const FileUpload = ({ onImageUpload }: FileUploadProps) => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) {
+    if (file && file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024) {
       setSelectedFile(file);
     } else {
       toast({
