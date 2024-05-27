@@ -2,133 +2,90 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Glass_Antiqua, Work_Sans } from "next/font/google";
+import { Glass_Antiqua, Work_Sans, Inter, Montserrat } from "next/font/google";
 import { buttonVariants } from "@/components/ui/button";
 import WhyAIStyling from "@/components/WhyAIStyling";
+import { Box, Flex } from "@chakra-ui/react";
+import { cn } from "@/lib/utils";
 const glassAntiquaFont = Glass_Antiqua({ weight: '400', subsets: ['latin'] })
+const interFontBold = Inter({ weight: '700', subsets: ['latin'] })
+const interFont = Inter({ weight: '500', subsets: ['latin'] })
+const interFontfour = Inter({ weight: '400', subsets: ['latin'] })
+const interFontseven = Inter({ weight: '700', subsets: ['latin'] })
+const monsterratFont = Montserrat({ weight: '700', subsets: ['latin'] })
 const workSansFont = Work_Sans({ weight: '400', subsets: ['latin'] })
-
+var htmlcontent = '<form action="https://submit-form.com/EXPDo1BX9"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="Email" required="" /></textarea><button type="submit">Send</button></form>';
 
 export default function Home() {
   return (
     <>
-      <MaxWidthWrapper className="mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center">
-        <div className="mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md background-blur transition-all hover:border-gray-300 hover:bg-white/50">
-          <p className="text-sm font-semibold text-gray-700">
-            Coco is now public!
-          </p>
-        </div >
-        <div className={glassAntiquaFont.className}>
-        <h1 className="max-w-4xl text-6xl font-bold md:text-7xl lg:text-7xl" >
-          Behind every confident, charming person <span className="text-blue-600">is knowing they look great.</span>
-        </h1>
+      <div className="mt-[90px]">
+        <div className="sm:flex lg:flex lg:flex-row sm:flex-col">
+          <div className="lg:w-1/2 sm:w-full lg:h-[875px] h-[400px] overflow-hidden">
+            <img src="/banner_hero.jpeg" alt="hero" width="100%" style={{}} />
+          </div>
+          <div className="bg-[#7E43AB] lg:w-1/2 lg:h-[875px] sm:w-full sm:h-[400px] md:p-40 p-[20px] items-center align-middle justify-center ">
+            <Flex flexDir="column" gap="20px">
+              <h1 className={cn(interFontBold.className, " text-wrap text-white font-normal text-[50px] text-left leading-[60px] tracking-[-2px] mr-10")}>
+                Behind every <span className="text-[#C4EB5F]"> confident person </span> is … <br />
+                knowing they look <span className="text-[#C4EB5F]" >GREAT.</span>
+              </h1>
+              <h2 className={cn(interFont.className, "text-[#88878B] text-[24px] leading-[36px]")}>
+                Dress for success every day with Coco.
+              </h2>
+              <h1 className={cn(monsterratFont.className, "text-[41px] text-[#C4EB5F] text-left leading-[49.2px]")}>
+                JOIN THE WAITLIST!
+              </h1>
+              <div>
+              <form action="https://submit-form.com/EXPDo1BX9" className="h-[50px] w-full">
+                <input className="h-[50px] rounded-md p-3 w-7/12" type="email" id="email" name="email" placeholder="Your email ID" required={true} />
+                <button className="h-[50px] bg-[#DE0E0B] w-1/3 text-[14px] text-white px-5 py-auto align-middle items-center rounded-md mx-2" type="submit">Join Waitlist</button>
+              </form>
+              </div>
+            </Flex>
+          </div>
         </div>
-        <div className={workSansFont.className}>
-        <p className="mt-5 max-w-prose text-zinc-800 sm:text-2xl lg:text-2xl">
-          Look sharp, feel confident - dress for success, every day with COCO AI
-        </p>
-        </div>
-        <Link className={buttonVariants(
-          {
-            size: 'lg',
-            className: 'mt-5'
-          }
-        )} href="/dashboard" target='blank' >
-          Try Coco AI <ArrowRight className="ml-2 h-5 w-5" />
-        </Link>
-      </MaxWidthWrapper>
-
-      {/*value prop*/}
-      <div>
-        <div className="relative isolate">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-            <div
-              style={{
-                clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-              }}
-              className='relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]'
-            />
+        <div className=" bg-[#C4EB5F] flex flex-col gap-[60px] lg:py-[80px] lg:px-[40px] py-[60px] px-[20px]">
+          <div className="text-left lg:text-center ">
+            <h2 className={cn(interFontseven.className,"text-[25px] leading-[37.5px]")}>
+              Imagine having someone who knows your tastes, <br /> likes, dislikes & is available 24/7!
+            </h2>
+            <h3 className={cn(interFontfour.className,"text-[26px] leading-[39px]")}>
+              Well, no need to imagine, welcome to Coco AI :)
+            </h3>
           </div>
           <div>
-            <div className="mx-auto max-w-6xl px-6 lg:px-8">
-              <div className="mt-16 flow-root sm:mt-24">
-                <div className="-m-2 rounded-xl bg-gray-900/5 ring-1 ring-inset ring-gray-900/10 lg:rounded-2xl lg:p-4">
-                  <Image src="/dashboard-preview.jpg" width={1364} alt="product preview" height={866} quality={100} className="rounded-md bg-white p-2 sm:p-8 md:p-20 shadow-2xl ring-1 ring-gray-900/10" />
-                </div>
-              </div>
+            <div className="flex flex-col gap-[20px] align-middle items-center justify-center lg:flex-row">
+              <Box rounded="2xl" className="h-[360px] w-[320px] bg-white object-cover overflow-hidden">
+                <Flex flexDir="column" className="object-cover">
+                  <div className="h-[250px] object-cover"><img src="/feature-1.webp" alt="feature-1" /></div>
+                  <div className={cn(monsterratFont.className,"text-[25px] leading-[30px] bg-white font-bold text-wrap p-[30px]")}>Understand Your Unique Style</div>
+                </Flex>
+              </Box>
+              <Box rounded="2xl" className="h-[360px] w-[320px] bg-white object-cover overflow-hidden">
+              <Flex flexDir="column" className="object-cover">
+                  <div className="h-[250px] object-cover"><img src="/feature-2.webp" alt="feature-2" /></div>
+                  <div className={cn(monsterratFont.className,"text-[25px] leading-[30px] bg-white font-bold text-wrap p-[30px]")}>Outfit Calendar &  Digital Wardrobe</div>
+                </Flex>
+              </Box>
+              <Box rounded="2xl" className="h-[360px] w-[320px] bg-white object-cover overflow-hidden">
+              <Flex flexDir="column" className="object-cover">
+                  <div className="h-[250px] object-cover"><img src="/feature-3.webp" alt="feature-3" /></div>
+                  <div className={cn(monsterratFont.className,"text-[25px] leading-[30px] bg-white font-bold text-wrap p-[30px]")}>AI-Powered Personal Shopper</div>
+                </Flex>
+              </Box>
             </div>
           </div>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-            <div
-              style={{
-                clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-              }}
-              className='relative left-[calc(50%-13rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-36rem)] sm:w-[72.1875rem]'
-            />
+          <div className=" text-left lg:text-center">
+            <h2 className={cn(interFontseven.className,"leading-[37.5px] text-[25px]")}>JOIN THE  <span className="text-[#F20C0C]">300+</span> PEOPLE IN THE <span className="text-[#F20C0C]"> FASHION REVOLUTION! </span></h2>
           </div>
         </div>
-      </div>
-      {/* Feature Section */}
-      <div className="mx-auto mb-32 mt-32 max-w-5xl sm:mt-56">
-        <div className="mb-12 px-6 lg:px-8">
-          
+        <div className=" bg-[#7E43AB] py-[40px] px-[20px] text-center align-middle justify-center">
+          <h3 className={cn(workSansFont.className,"text-[#FFD6E0]")}>©2024 COCO AI</h3>
         </div>
-        <div>
-        <WhyAIStyling/>
-        </div>
-
-        {/* Steps */}
-        <ol className="my-8 space-y-4 pt-8 md:flex md:space-x-12 md:space-y-0">
-          <li className="md-flex-1">
-            <div className="flex flex-col">
-            <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-              <span className="text-sm font-medium text-blue-600"> Step 1 </span>
-              <span className="text-xl font-semibold">Discover Your Signature Style</span>
-              <span className="mt-2 text-zinc-7000">
-                We&apos;ll analyze your photos to understand your body type, personal features, and style preferences. Discover what truly looks best on you.
-              </span>
-            </div>
-            {/* <div>
-              <div className="mx-auto max-w-6xl px-6 lg:px-8">
-                <Image src="" alt="" height={100} width={100} className="rounded-md bg-white p-2 sm:p-8 md:p-20 shadow-2xl ring-1 ring-gray-900/10"/>
-              </div>
-            </div> */}
-            </div>
-          </li>
-          <li className="md-flex-1">
-            <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-              <span className="text-sm font-medium text-blue-600"> Step 2 </span>
-              <span className="text-xl font-semibold">AI-Powered Outfit Inspiration</span>
-              <span className="mt-2 text-zinc-7000">
-                Get personalized outfit recommendations for any occasion, big or small.Need something specific? Just ask, and our AI will find the perfect look.
-                </span>
-            </div>
-          </li>
-          <li className="md-flex-1">
-            <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-              <span className="text-sm font-medium text-blue-600"> Step 3 </span>
-              <span className="text-xl font-semibold">Virtually Try Before You Buy</span>
-              <span className="mt-2 text-zinc-7000">
-              Experiment with different styles and see how outfits look on you before you even step into a store. Try on clothes virtually, risk-free!
-                </span>
-            </div>
-          </li>
-        </ol>
-        <div className="mx-auto max-w-6xl px-6 lg:px-8">
-              <div className="mt-16 flow-root sm:mt-24">
-                <div className="-m-2 rounded-xl bg-gray-900/5 ring-1 ring-inset ring-gray-900/10 lg:rounded-2xl lg:p-4">
-                  <Image src="/try-on-preview.jpg" width={1364} alt="try-on-preview" quality={100} height={866} className="rounded-md bg-white p-2 sm:p-8 md:p-20 shadow-2xl ring-1 ring-gray-900/10" />
-                </div>
-              </div>
-            </div>
-
       </div>
+
+
     </>
   )
 }

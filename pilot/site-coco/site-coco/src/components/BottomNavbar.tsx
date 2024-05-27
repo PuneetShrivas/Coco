@@ -1,6 +1,8 @@
 'use client';
-import { Navigation, MessageCircleCode, CircleUser } from 'lucide-react';
-import { HStack, Button, Icon, Text, Box, useColorModeValue } from '@chakra-ui/react';
+import { PiChatTeardropDots, PiNavigationArrow } from "react-icons/pi";
+import { HStack, Button, Icon, Box, useColorModeValue } from '@chakra-ui/react';
+import { CircleUser } from "lucide-react";
+import { useState, useEffect } from 'react';
 
 interface BottomNavbarProps {
   onSectionChange: (section: string) => void;
@@ -8,49 +10,55 @@ interface BottomNavbarProps {
 }
 
 const BottomNavbar = ({ onSectionChange, activeSection }: BottomNavbarProps) => {
+  const [clickedSection, setClickedSection] = useState<string | null>(null);
+
   const navLinks = [
-    { name: 'Coming Soon', icon: Navigation },
-    { name: 'Ask Coco', icon: MessageCircleCode },
+    { name: 'Coming Soon', icon: PiNavigationArrow },
+    { name: 'Ask Coco', icon: PiChatTeardropDots },
     { name: 'Profile', icon: CircleUser },
   ];
-  const activeBg = useColorModeValue("#EAD8F8", "#EAD8F8");
-  const inactiveBg = useColorModeValue("gray.100", "gray.600");
-  const ellipsisBg = useColorModeValue("#2F2F2F", "#2F2F2F");
+
+  const activeBg = useColorModeValue("#FFFFFF", "#FFFFFF");
+  const inactiveBg = useColorModeValue("#7E43AB", "#7E43AB");
+
+  const handleInteraction = (linkName: string) => {
+    onSectionChange(linkName);
+    setClickedSection(linkName);
+  };
+
+  useEffect(() => {
+    setClickedSection(null);
+  }, [activeSection]);
 
   return (
-    <Box position="fixed" bottom={0} left={0} right={0} zIndex={30} p={4} overflowX="hidden"> 
-      <HStack justifyContent="space-around" position="relative"> {/* Make HStack relative */}
-        <Box 
-          position="absolute"
-          top={-4}       // Adjust to create a border-like effect
-          left={-3}
-          right={-3}
-          bottom={-4}   // Adjust to create a border-like effect
-          bgColor={ellipsisBg}
-          mx={5}
-          my={2}
-          borderRadius="full"
-          zIndex={-1}    // Behind the buttons
-          pointerEvents="none" // Prevent click interactions
-        />
+    <Box position="fixed" bottom={0} left={0} right={0} zIndex={30} px={10}  py={2} bg={activeBg} shadow="md">
+      <HStack justifyContent="space-around" alignItems="center" spacing={4} mb={3}>
         {navLinks.map((link) => {
           const IconComponent = link.icon;
-          const isActive = activeSection === link.name;
+          const isActive = link.name === clickedSection || link.name === activeSection;
 
           return (
-            <div key={link.name} >
-              <Button
-                variant="ghost"
-                onClick={() => onSectionChange(link.name)}
-                bgColor={inactiveBg} 
-                borderRadius="full"
-                justifyContent={isActive ? "start" : "center"}
-                px={isActive ? 3 : 2} 
-              >
-                <Icon as={IconComponent} strokeWidth={1.1} boxSize={isActive ? 5 : 4} color={isActive ? "black" : "gray.500"} mr={isActive ? 2 : 0} /> 
-                {isActive && <Text fontSize="sm">{link.name}</Text>}
-              </Button>
-            </div>
+            <Button
+              key={link.name}
+              variant="ghost"
+              onClick={() => handleInteraction(link.name)}
+              onTouchStart={(e) => {
+                e.preventDefault(); // Prevent potential ghost clicks
+                handleInteraction(link.name);
+              }}
+              bgColor={isActive ? activeBg : inactiveBg}
+              borderRadius="full"
+              w="12"
+              h="12"
+              justifyContent="center"
+              _hover={{ transform: "scale(1.1)", bg: inactiveBg }}
+            >
+              <Icon
+                as={IconComponent}
+                boxSize={isActive ? 14 : 7}
+                color={isActive ? "#C4EB5F" : "#FFFFFF"}
+              />
+            </Button>
           );
         })}
       </HStack>

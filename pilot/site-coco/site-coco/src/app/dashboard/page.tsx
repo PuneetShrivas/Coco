@@ -29,7 +29,7 @@ const Page = async () => {
                 minHeight: "100vh",
             }}
         >
-            <div className="min-h-screen font-sans antialias bg-[#F2F2F2] grainy flex flex-col">
+            <div className="min-h-screen font-sans antialias bg-[#FFFFFF] flex flex-col">
 
                 <Dashboard user={user} />
             </div>

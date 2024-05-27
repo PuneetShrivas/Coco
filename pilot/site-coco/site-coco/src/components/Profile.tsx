@@ -4,17 +4,26 @@ import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { User } from "lucide-react";
-import {IN} from 'country-flag-icons/react/3x2'
-import { Inter } from "next/font/google";
+import { IN } from 'country-flag-icons/react/3x2'
+import { Inter, Lexend, Manrope, Montserrat } from "next/font/google";
+import { CircleUser } from "lucide-react";
+
 import config from './../../tailwind.config';
+import { cn } from "@/lib/utils";
+import CircularImageWithRing from './CircularImageWithRing';
+import { PiPencilSimpleLineLight } from "react-icons/pi";
 const interFont = Inter({ subsets: ['latin'] });
+const LexendFont = Lexend({ weight: '700', subsets: ['latin'] })
+const manrope = Manrope({ weight: '400', subsets: ["latin"] })
+const manropeBold = Manrope({ weight: '800', subsets: ["latin"] })
+const MonsterratFont = Montserrat({ weight: '400', subsets: ["latin"] })
+
+
 const seasonColors = [
     { color: "#87CEEB" },
     { color: "#ADD8E6" },
     { color: "#87CEFA" },
     { color: "#B0E0E6" },
-    { color: "#F0F8FF" },
-    { color: "#E6E6FA" },
 ]
 const Profile = ({
     user,
@@ -23,121 +32,57 @@ const Profile = ({
 }) => {
     const imageUrl = user?.picture
     return (
-        <div className="relative">
-            <Box className="bg-[#2F2F2F] h-[33vh] absolute top-0 w-full" style={{ borderBottomLeftRadius: "30px", borderBottomRightRadius: "30px" }} >
-                <div className=" mx-auto mt-[10vh] w-9/12">
-                    <span className="text-white text-xl font-bold" style={{ font: "Inter" }}>Hello {user?.given_name},</span> <br />
-                    <span className="text-white text-base font-thin tracking-wider" style={{ font: "Inter" }}>Welcome to your personal profile</span>
+        <div className="bg-[#FFFFFF] ">
+            <h1 className={cn(LexendFont.className, "text-[28px] font-bold text-left text-[#7e43ab] ml-[5vw] mt-[12vh]")}>Hey, {user?.given_name}</h1>
+            <h2 className={cn(LexendFont.className, "text-[20px] font-bold text-left text-[#171A1F] ml-[5vw] mt-[5px] tracking-tight")}>Welcome to your personal profile</h2>
+            <Flex flexDir="row">
+                <div className="ml-[8.5vw] mt-[6.4vh]">
+                <CircularImageWithRing src={user ? user?.picture : "/image1.jpg" } alt="userimage" ringColor="#C4EB5F55" ringSize={5}/>
                 </div>
-            </Box>
-            <MaxWidthWrapper>
-                <div className="relative top-0 justify-center items-center">
-                    <span>-</span>
-                    <div className="relative mt-[22vh] mx-auto h-[30vh] w-11/12 rounded-2xl bg-white shadow-xl"> {/* Box container */}
-                        <Flex flexDir="row" justify="space-between" className="mx-5 pt-[10px]">
-                            <div className="text-gray-800 pt-1 font-bold text-large " style={{ fontFamily: "Inter" }}>
-                                Profile
-                            </div>
-                            <div>
-                                <Button mt="3px" variant="outline" borderColor="#2F2F2F" height="26px" size="sm" background="#f1f1f1"> <span className="textiscentered"> Update </span> </Button>
-                            </div>
+                <div>
+                    <Flex flexDir="column" className="ml-[6.4vw] mt-[7.1vh]">
+                        <Flex flexDir="row">
+                            <span className={cn(LexendFont.className,"font-bold text-[20px]")}>{user?.given_name}</span>
+                            <PiPencilSimpleLineLight className="ml-[6.4vw] size-5" strokeWidth={2} color="#171A1FFF"/>
                         </Flex>
-                        <Flex flexDir="row" className="mx-5 pt-[8px]">
-                            <Flex flexDir="column" className="w-6/12">
-                                <div>
-                                <div className="text-xs">
-                                    Your Season
-                                </div>
-                                <div className="bg-[#D1E2FE] rounded-md mt-1 mb-3 h-[25px] text-sm w-fit px-2 align-middle"> Warm Autumn </div>
-                                </div>
-                                <div className="text-xs">
-                                    Body Type
-                                    <div className="bg-[#ceefdc] rounded-md mt-1 mb-3 h-[25px] text-sm w-fit px-2 align-middle"> Oval - Blige Skin </div>
-                    
-                                </div>
-                                
-                            </Flex>
-                            <Flex flexDir="column" className="w-6/12"   >
-                                
-                                <div  className="mb-3">
-                                    <Flex flexDir="row" gap="1" justify="space-between">
-                                        <Flex flexDir="column" align="center">
-                                            <div className="text-xs">Age</div>
-                                            <div className="bg-teal-200/50 mt-1 rounded h-[25px] w-fit px-1"> 25</div>
-                                        </Flex>
-                                        <Flex flexDir="column"  align="center">
-                                            <div className="text-xs">Gender</div>
-                                            <div className="bg-purple-200/50 mt-1 rounded h-[25px] w-fit px-1"> M</div>
-                                        </Flex>
-                                        <Flex flexDir="column"  align="center">
-                                            <div className="text-xs">Ethnicity</div>
-                                            <div > <IN className="rounded overflow-hidden mt-1 "  title="India" height="25px" width="40px" /> </div>
-                                        </Flex>
-                                    </Flex>
-                                </div>
-                                <div className="text-xs">
-                                    Fit Type
-                                    <div className="bg-[#daddf3] rounded-md mt-1 mb-3 h-[25px] text-sm w-fit px-2 align-middle"> Regular - Relaxed </div>
+                        <div className="flex flex-col">
+                        <span className={cn(manrope.className,"font-thin text-[16px] text-[#7D5F95]")}>25,Male</span>
+                        <span className={cn(manrope.className,"font-thin text-[16px] text-[#7D5F95]")}>Ethnicity: Indian</span>
+                        </div>
+                    </Flex>
+                </div>
+            </Flex>
 
-                                </div>
-                            </Flex>
+            <Box className=" mx-[6.9vw] bg-white h-[32.8vh] mt-[6.4vh]" shadow="base">
+            <Flex flexDir="column" >
+                        <Flex flexDir="row" className="ml-[5.3vw] mr-[10.5vw] mt-[1.7vh]" justify="space-between" alignItems="baseline">
+                            <span className={cn(LexendFont.className,"font-bold text-[18px]")}>Profile</span>
+                            <PiPencilSimpleLineLight className="ml-[6.4vw]" size={22} strokeWidth={2} color="#171A1FFF"/>
                         </Flex>
-                        <div className="absolute bottom-0">
-                        <div className="text-xs mb-1 mx-5">Colors that suit you</div>
-                        <Flex flexDir="row" flexWrap="wrap" gap="2" className=" mb-3 mx-5">
+                        <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="2.5vh" alignContent="center" alignItems="center">
+                            <span className={cn(MonsterratFont.className," text-[16px] text-[#171A1FFF] h-[22px]")}>Your Season</span> 
+                            <Button variant="solid" width="35.89vw" height="4vh" bgColor="#E6F6BE" color="#485F0C" rounded={50}><span className={cn(manropeBold.className," text-[14px]")}> Warm Autumn</span> </Button>
+                        </Flex>
+                        <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
+                            <span className={cn(MonsterratFont.className," text-[16px] text-[#171A1FFF] h-[22px]")}>Body Type</span> 
+                            <Button variant="solid" width="35.89vw" height="4vh" bgColor="#FBEBEB" color="#DE0E0B" rounded={50}><span className={cn(manropeBold.className," text-[14px]")}> Pear Shaped</span> </Button>
+                        </Flex>
+                        <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
+                            <span className={cn(MonsterratFont.className," text-[16px] text-[#171A1FFF] h-[22px]")}>Fit Type</span> 
+                            <Button variant="solid" width="35.89vw" height="4vh" bgColor="#C6ADDA" color="#7E43AB" rounded={50}><span className={cn(manropeBold.className," text-[14px]")}> Relaxed Fit</span> </Button>
+                        </Flex>
+                        <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
+                            <span className={cn(MonsterratFont.className," text-[16px] text-[#575c66] h-[22px]")}>Your Colors</span> 
+                            <Flex flexDir="row" flexWrap="wrap" gap="3" className=" mb-3 mx-1">
                             {seasonColors.map((seasoncolor) => {
                                 return (
                                     <div key={seasoncolor.color} className="h-6 w-6 rounded-full border-1 border-gray-700" style={{ backgroundColor: `${seasoncolor.color}` }} />
                                 );
                             })}
                         </Flex>
-                        </div>
-                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"> {/* Circle container */}
-                            <div className="overflow-hidden rounded-full w-24 h-24 border-4 border-white "> {/* Circular image clipping */}
-                                {imageUrl ? (
-                                    <img
-                                        src={imageUrl} // Replace with your image path
-                                        alt="Profile"
-                                        className="object-cover w-full h-full"
-                                    />
-                                ) : (
-                                    <User className="h-12 w-5 text-zinc-900" />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mx-auto w-11/12 mt-5 rounded-2xl bg-[#CCE5E3] h-[15vh] shadow-xl">
-                        <Flex flexDir="row" mx="20px" pt="10px">
-                            <p className='text-large font-bold'>
-                                Wardrobe
-                            </p>
-                            
                         </Flex>
-                        <Flex flexDir="row">
-                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 ml-5 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
-                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
-                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
-                                <div className="bg-[#BBE2CD] rounded-sm h-10 w-10 mx-2 my-2 text-[#BBE2CD] border-1 border-gray-500"> . </div>
-                                
-                                
-                            </Flex>
-                    </div>
-                    <div className="mx-auto w-11/12 mt-5 rounded-2xl bg-[#EEDEF6] h-[15vh] shadow-xl">
-                        <Flex flexDir="row" mx="20px" pt="10px">
-                            <p className='text-large font-bold'>
-                                Preferences
-                            </p>
-                            
                         </Flex>
-                        <Flex flexDir="column">
-                                <div className="bg-[#696969] rounded-sm h-3 w-60 ml-5 my-2 text-[#696969] border-1 border-gray-500"> . </div>
-                                <div className="bg-[#696969] rounded-sm h-3 w-40 ml-5 my-2 text-[#696969] border-1 border-gray-500"> . </div>
-                                
-                                
-                            </Flex>
-                    </div>
-                </div>
-            </MaxWidthWrapper>
+            </Box>
         </div>
     );
 }
