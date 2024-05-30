@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,11 +8,81 @@ datasource db {
 }
 
 model User {
-  id    String @id @unique
-  email String @unique
+  id                     String            @id @unique
+  email                  String            @unique
+  stripeCustomerId       String?           @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?           @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?           @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime?         @map(name: "stripe_current_period_end")
+  isOnboarded            Boolean           @default(false)
+  baseImageURL           String?
+  meta                   User_Meta?        @relation(fields: [metaId], references: [id], onDelete: Cascade)
+  prefs                  User_Pref?        @relation(fields: [prefsId], references: [id], onDelete: Cascade)
+  images                 Image[]
+  events                 Event[]
+  chatSessions           UserChatSession[]
+  metaId                 String?           @unique
+  prefsId                String?           @unique
+}
 
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+model User_Meta {
+  id            String   @id @unique
+  height        String?
+  hairColor     String?
+  dressingSize  String?
+  seasonColors  String[]
+  age           String?
+  skinTone      String?
+  stylingSeason String?
+  irisColor     String?
+  ethnicity     String?
+  bodyType      String?
+  genderFemale  Boolean?
+
+  user User?
+}
+
+model User_Pref {
+  id       String @id @unique
+  dislikes Json?
+  likes    Json?
+
+  user User?
+}
+
+// New models for events, images, and chat
+model Event {
+  id     String   @id @unique @default(uuid())
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  date   DateTime
+  name   String
+  images Image[]
+  people Json
+}
+
+model Image {
+  id        String  @id @unique @default(uuid())
+  user      User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  event     Event?  @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  userId    String?
+  eventId   String?
+  url       String
+  thumbnail String
+}
+
+model UserChatSession {
+  id       String        @id @unique @default(uuid())
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id        String          @id @unique @default(uuid())
+  session   UserChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  sender    String // "user" or "assistant"
+  content   String
+  timestamp DateTime        @default(now())
 }

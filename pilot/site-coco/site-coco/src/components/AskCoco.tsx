@@ -124,20 +124,12 @@ const AskCoco = ({
                   <DrawerContent>
                     <DrawerHeader borderBottomWidth="1px">Upload Image</DrawerHeader>
                     <DrawerBody>
-                      {/* <CldUploadWidget uploadPreset="aqlje7r5">
-                        {({ open }) => {
-                          return (
-                            <button onClick={() => open()}>
-                              Upload an Image
-                            </button>
-                          );
-                        }}
-                      </CldUploadWidget> */}
                       <FileUpload onImageUpload={handleImageUpload} />
                     </DrawerBody>
                   </DrawerContent>
                 </DrawerOverlay>
               </Drawer>
+              
               <Flex ml={4} flexDir="column" alignItems="left" justifyContent="space-between" width="1/2">
                 <Flex flexDir="column">
                   <InputGroup my={2} mb={1} borderRadius="xl" height="11vh" backgroundColor="#EDF2F7">

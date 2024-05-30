@@ -22,6 +22,12 @@ const Page = async () => {
         console.log("user not in db")
         redirect('/auth-callback?origin=dashboard')
     }
+
+    if(!dbUser.isOnboarded){
+        console.log("user not onboarded")
+        redirect('/dashboard/onboarding')
+    }
+    
     return (
         <div
             aria-hidden="true"
