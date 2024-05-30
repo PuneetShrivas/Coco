@@ -37,7 +37,7 @@ const Page = async () => {
         >
             <div className="min-h-screen font-sans antialias bg-[#FFFFFF] flex flex-col">
 
-                <Dashboard user={user} />
+                <Dashboard user={user} dbUser={dbUser} />
             </div>
             
         </div>

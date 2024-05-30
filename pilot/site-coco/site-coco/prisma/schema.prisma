@@ -27,17 +27,17 @@ model User {
 
 model User_Meta {
   id            String   @id @unique
-  height        String?
-  hairColor     String?
-  dressingSize  String?
-  seasonColors  String[]
-  age           String?
-  skinTone      String?
-  stylingSeason String?
-  irisColor     String?
-  ethnicity     String?
-  bodyType      String?
-  genderFemale  Boolean?
+  height        String? //done
+  hairColor     String? //from image
+  dressingSize  String? //done
+  seasonColors  String[] //from image
+  age           String? //done
+  skinTone      String? //done
+  stylingSeason String? //from image
+  irisColor     String? //from image
+  ethnicity     String? //done
+  bodyType      String? //done
+  genderFemale  Boolean? //done
 
   user User?
 }

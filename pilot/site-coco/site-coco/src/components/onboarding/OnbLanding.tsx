@@ -17,7 +17,7 @@ import {
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { Camera } from "lucide-react";
 import { Lexend, Manrope } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { PiNumberCircleOne } from "react-icons/pi";
 import FileUpload from "../FileUpload";
 const lexendFont = Lexend({ weight: '400', subsets: ["latin"] });
@@ -25,18 +25,18 @@ const manrope = Manrope({ weight: '500', subsets: ["latin"] });
 
 const OnbLanding = ({ dbUser, user, setNextEnabled }: { dbUser: any; user: KindeUser | null, setNextEnabled: (value: boolean) => void }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [uploadedImage, setUploadedImage] = useState<File | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(dbUser?.baseImageURL ?? null); // New state to store preview URL
     
     useEffect(() => {
-        if (previewUrl) {
-          setNextEnabled(true);
-        } else if (dbUser?.baseImageURL) { // Handle the case where a base image already exists
+        const timeoutId = setTimeout(() => {
+          if (previewUrl || dbUser?.baseImageURL) {
             setNextEnabled(true);
-            setPreviewUrl(dbUser?.baseImageURL);
-        }
-      }, [previewUrl, dbUser?.baseImageURL]);
+          }
+        }, 100); // Adjust the timeout value as needed
+      
+        return () => clearTimeout(timeoutId); // Clean up the timeout on unmount
+      }, [previewUrl, dbUser?.baseImageURL]); 
     
     const handleImageUpload = async (file: File | null) => {
         if (file) {
@@ -72,7 +72,7 @@ const OnbLanding = ({ dbUser, user, setNextEnabled }: { dbUser: any; user: Kinde
         <div>
             <div className={lexendFont.className}>
                 <p className="text-white">-</p>
-                <h1 className="mt-[15vh] text-center text-[28px] text-[#171A1FFF]">
+                <h1 className="mt-[10vh] text-center text-[28px] text-[#171A1FFF]">
                     Hello {user?.given_name}!
                 </h1>
                 <h2 className="mt-[3vh] text-center text-[28px] text-[#7E43AB]">

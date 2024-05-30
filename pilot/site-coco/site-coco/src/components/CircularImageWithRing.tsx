@@ -28,19 +28,6 @@ const CircularImageWithRing: React.FC<CircularImageWithRingProps> = ({
         borderRadius="full"
         bgColor={ringInnerColor}
       />
-      {/* Ring */}
-      {/* <Box
-        position="absolute"
-        top={ringSize / 9} // Adjust position to account for ringSize
-        left={ringSize / 9} // Adjust position to account for ringSize
-        right={ringSize / 9} // Adjust position to account for ringSize
-        bottom={ringSize / 9} // Adjust position to account for ringSize
-        borderWidth={`${ringSize}px`}
-        borderStyle="solid"
-        borderColor={ringColor}
-        borderRadius="full"
-        zIndex={2} // Higher z-index for ring
-      /> */}
     </Box>
   );
 };
