@@ -2,7 +2,7 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
-import OnboardingPage from "@/components/onboarding/onBoardingPage";
+import OnboardingPage from "@/components/onboarding/OnBoardingPage";
 
 
 const Page = async () => {
