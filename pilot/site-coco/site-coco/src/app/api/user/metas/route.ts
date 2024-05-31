@@ -1,7 +1,7 @@
-// app/api/user/preferences/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { v4 as uuidv4 } from 'uuid'; 
 
 const prisma = new PrismaClient();
 
@@ -10,36 +10,41 @@ export async function POST(request: NextRequest) {
   const user = await getUser();
 
   if (!user) {
-    return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new NextResponse(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
   const formData = await request.json();
 
   try {
-    // Fetch existing user preferences
-    let existingMetas = await prisma.user_Meta.findUnique({
-      where: { id: user.id }, // Use the implicit 'userId' field
+    const existingMetas = await prisma.user.findUnique({
+      where: { id: user.id },
+      include: {
+        meta: true, // Include the User_Meta relation
+      },
     });
 
-    if (existingMetas) {
-      // Update existing Metaerences
-      existingMetas = await prisma.user_Meta.update({
-        where: { id: existingMetas.id },
+    if (existingMetas && existingMetas.meta) {
+      // User_Meta already exists, update it
+      const updatedMetas = await prisma.user_Meta.update({
+        where: { id: existingMetas.meta.id },
         data: formData,
       });
+
+      return NextResponse.json(updatedMetas);
     } else {
-      // Create new Metaerences
-      existingMetas = await prisma.user_Meta.create({
+      // User_Meta doesn't exist, create it
+      const newMetas = await prisma.user_Meta.create({
         data: {
+          id: uuidv4(),
           ...formData,
-          user: { connect: { id: user.id } }, // Associate with the user
+          user: { connect: { id: user.id } },
         },
       });
-    }
 
-    return NextResponse.json(existingMetas);
+      return NextResponse.json(newMetas);
+    }
   } catch (error) {
     console.error("Error saving metadatas:", error);
-    return new NextResponse(JSON.stringify({ error: 'Failed to save metadatas' }), { status: 500 });
+    return new NextResponse(JSON.stringify({ error: "Failed to save metadatas" }), { status: 500 });
   }
 }

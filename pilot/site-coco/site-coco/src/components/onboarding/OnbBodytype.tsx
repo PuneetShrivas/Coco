@@ -33,7 +33,7 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
   const [bodyType, setBodyType] = useState<string | null>("hourglass");
   const [skinTone, setSkinTone] = useState<string | null>("#F5E9DE"); // Lightest skin tone by default
   const [ethnicity, setEthnicity] = useState<string | null>("India"); // Default country
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   // Initialize states based on dbUser data (if available)
   useEffect(() => {
     if (dbUser && dbUser.metaId) { // Check if metaId exists

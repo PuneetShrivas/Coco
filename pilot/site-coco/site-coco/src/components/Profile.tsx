@@ -26,12 +26,7 @@ function capitalizeWord(word: string) {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-const seasonColors = [
-    { color: "#87CEEB" },
-    { color: "#ADD8E6" },
-    { color: "#87CEFA" },
-    { color: "#B0E0E6" },
-]
+
 const Profile = ({
     user, dbUser
 }: {
@@ -40,7 +35,7 @@ const Profile = ({
 }) => {
     const router = useRouter();
     const imageUrl = user?.picture
-    var [meta, setMeta] = useState({ age: "23", genderFemale: true, ethnicity: "Indian", bodyType: "hourglass" });
+    var [meta, setMeta] = useState({ age: "23", genderFemale: true, ethnicity: "Indian", bodyType: "hourglass", stylingSeason: "Warm Autumn", seasonColors:["#87CEEB","#ADD8E6","#87CEFA","#B0E0E6"], hairColor:"Black", irisColor:"Gray", skinTone:"#B0E0E6", dressingSize:"UK 14", height:"165 cm" });
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
@@ -140,33 +135,58 @@ const Profile = ({
                 </div>
             </Flex>
 
-            <Box className=" mx-[6.9vw] bg-white h-[32.8vh] mt-[6.4vh]" shadow="base">
+            <Box className=" mx-[6.9vw] bg-white h-full mt-[2vh] rounded-xl" shadow="base">
                 <Flex flexDir="column" >
                     <Flex flexDir="row" className="ml-[5.3vw] mr-[10.5vw] mt-[1.7vh]" justify="space-between" alignItems="baseline">
-                        <span className={cn(LexendFont.className, "font-bold text-[18px]")}>Profile</span>
-                        <PiPencilSimpleLineLight className="ml-[6.4vw]" size={22} strokeWidth={2} color="#171A1FFF" />
+                        <span className={cn(LexendFont.className, "font-bold text-[18px]")}>Season Profile</span>
+                        <PiPencilSimpleLineLight className="ml-[6.4vw]" size={22} strokeWidth={2} color="#171A1FFF" onClick={handleEditProfile}/>
                     </Flex>
                     <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="2.5vh" alignContent="center" alignItems="center">
                         <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Your Season</span>
-                        <Button variant="solid" width="35.89vw" height="4vh" bgColor="#E6F6BE" color="#485F0C" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> Warm Autumn</span> </Button>
+                        <Button variant="solid" width="35.89vw" height="4vh" bgColor="#E6F6BE" color="#485F0C" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> {meta.stylingSeason}</span> </Button>
+                    </Flex>
+                    <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
+                        <span className={cn(MonsterratFont.className, " text-[16px] text-black h-[22px]")}>Hair Color</span>
+                        <Button variant="solid" width="35.89vw" height="4vh" bgColor="gray.400" color="black" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> {capitalizeWord(meta.hairColor)} </span> </Button>
+                    </Flex>
+                    <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
+                        <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Eye Color</span>
+                        <Button variant="solid" width="35.89vw" height="4vh" bgColor="#C6ADDA" color="#7E43AB" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> {capitalizeWord(meta.irisColor)}</span> </Button>
+                    </Flex>
+                    <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
+                        <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Skin Tone</span>
+                        <Button variant="solid" width="35.89vw" height="4vh" bgColor={meta.skinTone} color="#7E43AB" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> </span> </Button>
+                    </Flex>
+                    <Flex flexDir="column"  mx="5.8vw" mt="1.7vh" alignContent="start" alignItems="start">
+                        <span className={cn(MonsterratFont.className, " text-[14px] text-[#171A1FFF] h-[22px] mt-[0.5vh] text-left")}>Suggested Colors To Wear </span>
+                        <Flex flexDir="row" flexWrap="wrap" gap="3" className=" mb-3 mx-1  mt-[1vh]">
+                            {meta.seasonColors.map((seasoncolor) => {
+                                return (
+                                    <div key={seasoncolor} className="h-6 w-6 rounded-full border-1 border-gray-700" style={{ backgroundColor: `${seasoncolor}` }} />
+                                );
+                            })}
+                        </Flex>
+                    </Flex>
+                </Flex>
+            </Box>
+
+            <Box className=" mx-[6.9vw] bg-white h-full mt-[2vh] mb-[10vh] rounded-xl" shadow="base">
+                <Flex flexDir="column" >
+                    <Flex flexDir="row" className="ml-[5.3vw] mr-[10.5vw] mt-[1.7vh]" justify="space-between" alignItems="baseline">
+                        <span className={cn(LexendFont.className, "font-bold text-[18px]")}>Body Profile</span>
+                        <PiPencilSimpleLineLight className="ml-[6.4vw]" size={22} strokeWidth={2} color="#171A1FFF" onClick={handleEditProfile}/>
                     </Flex>
                     <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
                         <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Body Type</span>
                         <Button variant="solid" width="35.89vw" height="4vh" bgColor="#FBEBEB" color="#DE0E0B" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> {capitalizeWord(meta.bodyType)} Shaped</span> </Button>
                     </Flex>
                     <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
-                        <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Fit Type</span>
-                        <Button variant="solid" width="35.89vw" height="4vh" bgColor="#C6ADDA" color="#7E43AB" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> Relaxed Fit</span> </Button>
+                        <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Dressing Size</span>
+                        <Button variant="solid" width="35.89vw" height="4vh" bgColor="#C6ADDA" color="#7E43AB" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> {meta.dressingSize} </span> </Button>
                     </Flex>
-                    <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="1.7vh" alignContent="center" alignItems="center">
-                        <span className={cn(MonsterratFont.className, " text-[16px] text-[#575c66] h-[22px]")}>Your Colors</span>
-                        <Flex flexDir="row" flexWrap="wrap" gap="3" className=" mb-3 mx-1">
-                            {seasonColors.map((seasoncolor) => {
-                                return (
-                                    <div key={seasoncolor.color} className="h-6 w-6 rounded-full border-1 border-gray-700" style={{ backgroundColor: `${seasoncolor.color}` }} />
-                                );
-                            })}
-                        </Flex>
+                <Flex flexDir="row" justify="space-between" mx="5.8vw" mb="1vh" mt="1.7vh" alignContent="center" alignItems="center">
+                        <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Height</span>
+                        <Button variant="solid" width="35.89vw" height="4vh" bgColor="#E6F6BE" color="#485F0C" rounded={50}><span className={cn(manropeBold.className, " text-[14px]")}> {meta.height} cm</span> </Button>
                     </Flex>
                 </Flex>
             </Box>
@@ -176,7 +196,8 @@ const Profile = ({
                     <ModalHeader>Restart Onboarding</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Do you want to take the onboarding process again?
+                        Do you want to take the onboarding process again?<br />
+                        {isSubmitting? (<span>Redirecting</span>):(<span></span>)}
                     </ModalBody>
                     <ModalFooter>
                         <Button variant="ghost" mr={3} onClick={onClose}>

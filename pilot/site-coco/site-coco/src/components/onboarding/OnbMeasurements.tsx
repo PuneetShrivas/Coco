@@ -51,9 +51,10 @@ const OnbMeasurements = ({ onMeasurementsData, dbUser, user, setNextEnabled }: O
         setDressSize(parseInt(newSize, 10));
     };
     const memoizedOnMeasurementsData = useCallback(onMeasurementsData, []);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         if (dbUser && dbUser.metaId) {
+            console.log("trying to fetch metas because they do exist")
             const fetchUserMeta = async () => {
                 setIsLoading(true);
                 try {

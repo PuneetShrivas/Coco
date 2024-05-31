@@ -56,12 +56,22 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
 
     const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
+    // Function to handle data from OnbConfirmation
+  const handleImageAnalysisData = (data: {
+    irisColor: string;
+    hairColor: string;
+    stylingSeason: string;
+    seasonColors: string[];
+  }) => {
+    setFormData({ ...formData, ...data }); // Add image analysis data to formData
+  };
+
     // Components for each step
     const steps = [
         <OnbLanding key="landing" setNextEnabled={setNextEnabled} dbUser={dbUser} user={user} />,
         <OnbMeasurements key="measurements" setNextEnabled={setNextEnabled} onMeasurementsData={handleMeasurementsData} dbUser={dbUser} user={user} />,
         <OnbBodytype key="bodytype" onBodytypeData={handleBodytypeData} setNextEnabled={setNextEnabled} dbUser={dbUser} user={user} />,
-        <OnbConfirmation key="confirmation" apiStatus={apiStatus}/>,
+        <OnbConfirmation key="confirmation" apiStatus={apiStatus} dbUser={dbUser} />,
     ];
 
     // Progress bar calculation
@@ -76,60 +86,105 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
     const handleNext = async () => {
         if (nextEnabled) {
           if (currentStep === steps.length - 2) {
-            setApiStatus('loading');
-            setCurrentStep(currentStep + 1);
-
+            setApiStatus("loading");
+            setCurrentStep(currentStep + 1); // Move to confirmation immediately
+      
             try {
-              // Add a unique ID to formData
-              const dataToSend = {
-                id: uuidv4(), // Generate a UUID for the id field
-                ...formData,
+              // Fetch image from backend
+              const imageResponse = await fetch(
+                `/api/user/images/${encodeURIComponent(
+                  dbUser?.baseImageURL.split("/").pop() ?? ""
+                )}`
+              );
+      
+              if (!imageResponse.ok) {
+                throw new Error("Failed to fetch user image.");
+              }
+      
+              const imageBlob = await imageResponse.blob();
+              const formImageData = new FormData();
+              formImageData.append("file", imageBlob, "profile_image.jpg");
+      
+              // Send image for analysis
+              const analysisResponse = await fetch(
+                "http://16.16.115.11/app/season_profiler/detect_season_from_image_openai/",
+                {
+                  method: "POST",
+                  body: formImageData,
+                }
+              );
+      
+              if (!analysisResponse.ok) {
+                throw new Error("Failed to analyze user image.");
+              }
+      
+              const imageAnalysisData = await analysisResponse.json();
+      
+              // Map API response keys to database field names
+              const convertedData = {
+                irisColor: imageAnalysisData.response.iris_color,
+                hairColor: imageAnalysisData.response.hair_color,
+                stylingSeason: imageAnalysisData.response.season,
+                seasonColors: imageAnalysisData.response.season_colors,
               };
-    
-              const response = await fetch("/api/user/metas", {
+      
+              // Combine user data, image analysis data, and converted data
+              const dataToSend = {
+                id: uuidv4(),
+                ...formData,
+                ...convertedData, // Include the converted data
+              };
+      
+              // Submit user meta (including image analysis data)
+              const metaResponse = await fetch("/api/user/metas", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify(dataToSend),
               });
-                    if (response.ok) {
-                        await fetch('/api/user/onboarded', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ isOnboarded: true }), 
-                        });
-              
-                        setApiStatus('success');
-                        toast({
-                            title: "User preferences saved successfully.",
-                            status: "success",
-                            duration: 3000,
-                            isClosable: true,
-                        });
-                    } else {
-                        setApiStatus('error');
-                        throw new Error("Failed to save user preferences.");
-                    }
-
-                } catch (error) {
-                    setApiStatus('error');
-                    console.error("Error saving user preferences:", error);
-                    toast({
-                        title: "Error saving user preferences.",
-                        description: (error as Error).message,
-                        status: "error",
-                        duration: 5000,
-                        isClosable: true,
-                    });
-                }
-            }
-
+      
+      
+              if (metaResponse.ok) {
+                // Update isOnboarded to true after successful submission
+                await fetch("/api/user/onboarded", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ isOnboarded: true }),
+                });
+      
+                setApiStatus("success");
+                toast({
+                  title: "User preferences saved successfully.",
+                  status: "success",
+                  duration: 3000,
+                  isClosable: true,
+                });
+              } else {
+                setApiStatus("error");
+                const errorData = await metaResponse.json(); // Get error details
+                throw new Error(`Failed to save user preferences: ${errorData.error || 'Unknown error'}`);
+              }
+            } catch (error) {
+              setApiStatus("error");
+              console.error("Error saving user preferences:", error);
+              toast({
+                title: "Error saving user preferences.",
+                description: (error as Error).message, 
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+              });
+            } 
+          } else {
+            // Proceed to the next step for other steps
             setCurrentStep(currentStep + 1);
+          }
         }
-    };
+      };
+      
 
     const handleBack = () => {
         setCurrentStep(currentStep - 1);
