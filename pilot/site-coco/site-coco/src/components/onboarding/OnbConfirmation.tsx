@@ -42,7 +42,7 @@ const OnbConfirmation = ({ apiStatus, dbUser }: { apiStatus: 'idle' | 'loading' 
             </Text>
 
             
-            <PiChatTeardropDots size="100px" color="#C4EB5F"  />
+            <PiChatTeardropDots height="10vh" size="100px" color="#C4EB5F"  />
             
             <Button mt={3} onClick={() => router.push("/dashboard")} className='rounded-2xl h-10 bg-[#C4EB5F] mx-2' variant='outline'>
             <span className={cn(manrope.className, ' text-[24px] text-[#485F0C]')}> Ask Coco! </span>
