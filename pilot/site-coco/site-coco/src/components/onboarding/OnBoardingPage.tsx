@@ -107,7 +107,7 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
       
               // Send image for analysis
               const analysisResponse = await fetch(
-                "https://16.16.115.11/app/season_profiler/detect_season_from_image_openai/",
+                "https://iosphere.org/app/season_profiler/detect_season_from_image_openai/",
                 {
                   method: "POST",
                   body: formImageData,
