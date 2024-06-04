@@ -23,6 +23,8 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
         bodyType: string | null;
         skinTone: string | null;
         ethnicity: string | null;
+        lat: number | null;
+        long: number | null;
     }>({
         height: null,
         dressingSize: null,
@@ -31,6 +33,8 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
         bodyType: null,
         skinTone: null,
         ethnicity: null,
+        lat:  null,
+        long: null,
     });
 
     // Function to handle data from OnbMeasurements
@@ -49,6 +53,8 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
         bodyType: string | null;
         skinTone: string | null;
         ethnicity: string | null;
+        lat: number | null;
+        long: number | null;
     }) => {
         setFormData({ ...formData, ...data }); // Merge with existing data
         setNextEnabled(true);

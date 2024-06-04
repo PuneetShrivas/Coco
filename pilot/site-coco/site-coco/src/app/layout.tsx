@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
 import { Analytics } from "@vercel/analytics/react"
 import { ChakraProvider } from '@chakra-ui/react'
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -58,7 +59,7 @@ export default function RootLayout({
         <meta property="og:site_name" content="Coco AI" />
         <meta property="og:url" content="https://coco.iosphere.org" />
         <meta property="og:image" content="https://coco.iosphere.org/icons/apple-touch-icon.png" />
-
+        <Script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwgXZ19vgx-182jLwxvEft8rzwX2yTdmY&libraries=places"></Script>
       </head>
       <Providers>
         <body className={cn(

@@ -14,7 +14,7 @@ const Dashboard = ({user, dbUser}:{user:KindeUser | null, dbUser:any}) => {
       case 'Coming Soon':
         return <ComingSoon />;
       case 'Ask Coco':
-        return <AskCoco user={user}/>;
+        return <AskCoco user={user} dbUser={dbUser}/>;
       case 'Profile':
         return <Profile user={user} dbUser={dbUser}/>;
       default:

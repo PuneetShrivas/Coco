@@ -31,6 +31,7 @@ const MobileNav = ({ user, isAuth }: { user: KindeUser | null, isAuth: boolean }
     if (pathname === href) {
       toggleOpen()
     } else {
+      console.log("starting spinner")
       setIsLoading(true);
     }
   };

@@ -37,6 +37,9 @@ const nextConfig = ({
       },
     ],
   },
+  // experimental: {
+  //   missingSuspenseWithCSRBailout: false,
+  // },
 });
 
 export default withPWA(nextConfig);

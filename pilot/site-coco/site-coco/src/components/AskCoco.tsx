@@ -9,6 +9,7 @@ import { PiQuestionMark, PiCheckCircleLight, PiArrowRight } from "react-icons/pi
 import MaxWidthWrapper from './MaxWidthWrapper';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { CldUploadWidget } from "next-cloudinary"
 import { cn } from '@/lib/utils';
 import FileUpload from './FileUpload';
@@ -37,10 +38,11 @@ const images = [
 ];
 
 const AskCoco = ({
-  user,
+  user, dbUser
 }: {
-  user: KindeUser | null;
+  user: KindeUser | null, dbUser:any;
 }) => {
+  const router = useRouter();
   const currentTime = new Date();
   const currentHour = currentTime.getHours();
   var greeting = currentHour < 12 ? "Good Morning" : (currentHour < 17 ? "Good Afternoon" : "Good Evening");
@@ -56,7 +58,7 @@ const AskCoco = ({
     const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
     setCurrentEvent(randomEvent);
     setCurrentQuestion(randomQuestion);
-    const fullPlaceholderText = `Write your own question`;
+    const fullPlaceholderText = `Ask a question about your outfit`;
 
     let i = 0;
     const intervalId = setInterval(() => {
@@ -79,6 +81,24 @@ const AskCoco = ({
   const handleImageUpload = (file: File | null) => {
     setUploadedImage(file);
     onClose();
+  };
+
+  const handleAsk = async () => {
+    if (uploadedImage) {
+      const imageDataUrl = URL.createObjectURL(uploadedImage);
+      // Pass the image data URL and the input value as query parameters
+      const response = await fetch(`/api/user/metas/${dbUser.metaId}`);
+      var lat =0
+      var long =0
+      if (response.ok){
+        const meta = await response.json();
+        lat=meta.lat
+        long=meta.long
+      }
+      router.push(
+        `/dashboard/outfit_review?imageDataUrl=${encodeURIComponent(imageDataUrl)}&queryText=${encodeURIComponent(inputValue)}&metaId=${encodeURIComponent(dbUser.metaId)}&lat=${encodeURIComponent(lat)}&long=${encodeURIComponent(long)}`
+      );
+    }
   };
 
   return (
@@ -129,7 +149,7 @@ const AskCoco = ({
                   </DrawerContent>
                 </DrawerOverlay>
               </Drawer>
-              
+
               <Flex ml={4} flexDir="column" alignItems="left" justifyContent="space-between" width="1/2">
                 <Flex flexDir="column">
                   <InputGroup my={2} mb={1} borderRadius="xl" height="11vh" backgroundColor="#EDF2F7">
@@ -161,7 +181,7 @@ const AskCoco = ({
                 </Flex>
                 <div className={cn(workSansFont.className, 'mt-2 mb-2 ml-1 h-full flex flex-row justify-between items-end text-base font-bold')}>
                   <span className={cn(LexendFont.className, 'text-sm')}>Suggestions</span>
-                  <Button width="fit-content" height="26px" backgroundColor="#7E43AB" textColor="#FFFFFF" borderRadius="xl" > Ask </Button>
+                  <Button width="fit-content" height="26px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handleAsk} borderRadius="xl" > Ask </Button>
 
                 </div>
                 <Flex flexDir="column" gap={2} alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="1vh" >
@@ -196,9 +216,9 @@ const AskCoco = ({
             Outfit Calendar
           </p>
           <Link href="/dashboard/ootd/calendar">
-          <Button variant="ghost">
-            <PiArrowRight strokeWidth="1.3" size="24px" height="20px" />
-          </Button>
+            <Button variant="ghost">
+              <PiArrowRight strokeWidth="1.3" size="24px" height="20px" />
+            </Button>
           </Link>
         </Flex>
         <Box
@@ -209,27 +229,27 @@ const AskCoco = ({
             overflowX="auto" overflowY="hidden" >
             <HStack spacing={-5} shouldWrapChildren={true} mx={1} height="full">
               {images.map((image, index) => (
-                    <Link key={index} href="/dashboard/ootd">
-                <Box
-                  
-                  boxSize="14vh" // Fixed width for the container
-                  height="21vh"
-                  overflow="clip"  // Clip overflowing content
-                  borderRadius="2xl"  // Apply border radius to the container
-                  position="relative"
-                  border="2px"
-                  
-                  zIndex={images.length - index}
-                  ml={index === 0 ? 0 : -5}
-                  bgColor="#E8D2F6"
-                  alignItems="center"
-                  justifyItems="center"
-                  className=' ring-1 ring-inset '
-                >
-                  <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '>
-                    <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width={120} height={300} style={{ filter: 'contrast(1.1) saturate(1.1)' }} />
-                  </div>
-                </Box>
+                <Link key={index} href="/dashboard/ootd">
+                  <Box
+
+                    boxSize="14vh" // Fixed width for the container
+                    height="21vh"
+                    overflow="clip"  // Clip overflowing content
+                    borderRadius="2xl"  // Apply border radius to the container
+                    position="relative"
+                    border="2px"
+
+                    zIndex={images.length - index}
+                    ml={index === 0 ? 0 : -5}
+                    bgColor="#E8D2F6"
+                    alignItems="center"
+                    justifyItems="center"
+                    className=' ring-1 ring-inset '
+                  >
+                    <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '>
+                      <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width={120} height={300} style={{ filter: 'contrast(1.1) saturate(1.1)' }} />
+                    </div>
+                  </Box>
                 </Link>
               ))}
             </HStack>

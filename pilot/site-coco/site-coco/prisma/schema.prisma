@@ -38,6 +38,8 @@ model User_Meta {
   ethnicity     String? //done
   bodyType      String? //done
   genderFemale  Boolean? //done
+  lat           Float?
+  long          Float?
 
   user User?
 }

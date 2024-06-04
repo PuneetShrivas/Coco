@@ -14,6 +14,12 @@ import { cn } from "@nextui-org/react";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { Lexend, Manrope } from "next/font/google";
 import { PiNumberCircleThree } from "react-icons/pi";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
+import { setKey } from "react-geocode";
+setKey("AIzaSyCwgXZ19vgx-182jLwxvEft8rzwX2yTdmY");
 
 const lexendFont = Lexend({ weight: '400', subsets: ["latin"] });
 const manrope = Manrope({ weight: '700', subsets: ["latin"] });
@@ -23,6 +29,8 @@ type OnbBodytypeProps = {
     bodyType: string | null;
     skinTone: string | null;
     ethnicity: string | null;
+    lat: number | null;
+    long: number | null;
   }) => void;
   dbUser: any;
   user: KindeUser | null;
@@ -34,6 +42,32 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
   const [skinTone, setSkinTone] = useState<string | null>("#F5E9DE"); // Lightest skin tone by default
   const [ethnicity, setEthnicity] = useState<string | null>("India"); // Default country
   const [isLoading, setIsLoading] = useState(false);
+  const [city, setCity] = useState("");
+  const [coordinates, setCoordinates] = useState<{ lat: number | null; lng: number | null }>({
+    lat: null,
+    lng: null
+  });
+  
+  const handleSelect = async (value: string) => {
+    setCity(value);
+  
+    try {
+      const results = await geocodeByAddress(value);
+      const latLng = await getLatLng(results[0]);
+  
+      setCoordinates({ lat: latLng.lat, lng: latLng.lng }); // Set lat and lng explicitly
+    } catch (error) {
+      console.error("Error geocoding city:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(coordinates)
+  }, [coordinates])
+
+
+
+
   // Initialize states based on dbUser data (if available)
   useEffect(() => {
     if (dbUser && dbUser.metaId) { // Check if metaId exists
@@ -67,11 +101,11 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
 
   // Call onBodytypeData when data is ready
   useEffect(() => {
-    if (bodyType && skinTone && ethnicity) {
-      onBodytypeData({ bodyType, skinTone, ethnicity });
+    if (bodyType && skinTone && ethnicity && coordinates.lat && coordinates.lng) {
+      onBodytypeData({ bodyType, skinTone, ethnicity, lat: coordinates.lat, long: coordinates.lng });
       setNextEnabled(true);
     }
-  }, [bodyType, skinTone, ethnicity]);
+  }, [bodyType, skinTone, ethnicity, coordinates]);
 
   const skinToneColors = ["#F5E9DE", "#F0D5BE", "#D1A885", "#B88A68", "#9B7855", "#73553C"];
   const handleSkinToneClick = (color: string) => {
@@ -101,27 +135,27 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
             <Flex flexDir="column" className="w-[55vw]" position="relative">
               {/* Loading Overlay */}
               {isLoading && (
-                            <Box
-                                position="absolute"
-                                top={0}
-                                left={0}
-                                right={0}
-                                bottom={0}
-                                bg="rgba(0, 0, 0, 0.5)"
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
-                                zIndex={1}
-                            >
-                                <Spinner
-                                    thickness="4px"
-                                    speed="0.65s"
-                                    emptyColor="gray.200"
-                                    color="purple.500"
-                                    size="xl"
-                                />
-                            </Box>
-                        )}
+                <Box
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  right={0}
+                  bottom={0}
+                  bg="rgba(0, 0, 0, 0.5)"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  zIndex={1}
+                >
+                  <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="purple.500"
+                    size="xl"
+                  />
+                </Box>
+              )}
               {/* Body Type */}
               <Flex flexDir="column" mt="2vh" className="mb-4 px-4 w-auto">
                 <Text className={cn("text-[13px] leading-[20px]", manrope.className)}>Body Type</Text>
@@ -161,6 +195,57 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
                   onChange={(e) => setEthnicity(e.target.value)}
                 />
               </Flex>
+
+              {/* City */}
+              <PlacesAutocomplete
+                value={city}
+                onChange={setCity}
+                onSelect={handleSelect}
+              >
+                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                  <Flex flexDir="column" className="mb-4 px-4 w-auto relative">
+                    <Text className={cn("text-[13px] leading-[20px]", manrope.className)}>
+                      City
+                    </Text>
+                    <Input
+                      {...getInputProps({
+                        placeholder: "Your City Here",
+                        className: "location-search-input",
+                      })}
+                    />
+                    {/* Dropdown Container */}
+                    {suggestions.length > 0 && (
+                      <div className="absolute z-10 mt-2 w-full shadow-lg rounded-xl bg-white overflow-y-auto max-h-48">
+                        {loading ? (
+                          <Spinner size="sm" />
+                        ) : (
+                          suggestions.map((suggestion: any) => {
+                            const className = suggestion.active
+                              ? "suggestion-item--active"
+                              : "suggestion-item";
+                            return (
+                              <div
+                                {...getSuggestionItemProps(suggestion, {
+                                  className: `p-2 cursor-pointer ${suggestion.active
+                                      ? "bg-gray-100 text-gray-900" // Active item style
+                                      : "text-gray-700" // Normal item style
+                                    }`,
+                                  style: {
+                                    borderBottom: "1px solid #eee", // Divider between items
+                                  },
+                                })}
+                                key={suggestion.placeId}
+                              >
+                                <span>{suggestion.description}</span>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    )}
+                  </Flex>
+                )}
+              </PlacesAutocomplete>
 
               {/* Skin Tone */}
               <Flex flexDir="column" className="px-4 w-auto">

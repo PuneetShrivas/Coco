@@ -2,8 +2,6 @@ from langchain.prompts import (
     ChatPromptTemplate,
     FewShotChatMessagePromptTemplate,
 )
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.callbacks import get_openai_callback
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
@@ -60,7 +58,7 @@ class RouteQuery(BaseModel):
 
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 
-vectorstore = Chroma(persist_directory="chromadb",
+vectorstore = Chroma(persist_directory="data\chromadb",
                      embedding_function=OpenAIEmbeddings())
 
 retriever = vectorstore.as_retriever()
@@ -136,7 +134,6 @@ def format_json_as_paragraph(data, depth=0):
 
     return paragraph.strip()  # Remove trailing newline
 
-
 def format_preferences_to_text(preferences_data):
     formatted_text = ""
     
@@ -189,7 +186,6 @@ def get_user_docstrings(user_id):
         return get_user_metas(metas_id)+get_user_prefs(prefs_id)
     else:
         return ""
-
 
 def generate_recommendation(query, chat_history, user_id):
     recommendation_prompt = ChatPromptTemplate.from_messages([
