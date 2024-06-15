@@ -98,3 +98,15 @@
   display: inline-flex;
   align-items: center;
 }
+
+.shake-animation{
+  animation: tilt-shake 0.3s
+}
+
+@keyframes tilt-shake{
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0eg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}

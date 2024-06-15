@@ -21,8 +21,8 @@ export default function Home() {
     <>
       <div className="mt-[90px]">
         <div className="sm:flex lg:flex lg:flex-row sm:flex-col">
-          <div className="lg:w-1/2 sm:w-full lg:h-[875px] h-[400px] overflow-hidden">
-            <img src="/banner_hero.jpeg" alt="hero" width="100%" style={{}} />
+          <div className="lg:w-1/2 sm:w-full lg:h-[875px] h-[400px] ">
+            <img src="/banner_hero.jpeg" alt="hero" className=" w-full h-full object-cover" />
           </div>
           <div className="bg-[#7E43AB] lg:w-1/2 lg:h-[875px] sm:w-full sm:h-[400px] md:p-40 p-[20px] items-center align-middle justify-center ">
             <Flex flexDir="column" gap="20px">

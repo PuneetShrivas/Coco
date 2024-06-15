@@ -16,7 +16,7 @@ const CircularImageWithRing: React.FC<CircularImageWithRingProps> = ({
   const ringInnerColor = useColorModeValue("white", "gray.800");
 
   return (
-    <Box position="relative" w="128px" h="128px" borderRadius="full" overflow="hidden">
+    <Box position="relative" w="128px" h="128px" borderRadius="full" overflow="hidden" shadow="lg">
       {/* Image */}
       <Image
         src={src}

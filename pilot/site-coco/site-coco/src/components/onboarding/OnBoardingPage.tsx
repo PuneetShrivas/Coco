@@ -159,7 +159,8 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({ isOnboarded: true }),
-                });
+                }
+              );
       
                 setApiStatus("success");
                 toast({

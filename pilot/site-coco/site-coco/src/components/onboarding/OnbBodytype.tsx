@@ -163,7 +163,7 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
                   {["apple", "pear", "hourglass", "rectangle", "triangle"].map((type) => (
                     <VStack key={type} spacing={0} alignItems="center"> {/* VStack for image and text */}
                       <Center
-                        w="48px"
+                        w="12vw"
                         h="52px"
                         borderRadius="md"
                         bgColor="#EFF6E1"
@@ -175,7 +175,7 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
                         <Image
                           src={`/bodytypes/${type}.png`}
                           alt={type}
-                          w="41px"
+                          w="10vw"
                           h="37px"
                         />
                       </Center>
@@ -215,7 +215,7 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
                     />
                     {/* Dropdown Container */}
                     {suggestions.length > 0 && (
-                      <div className="absolute z-10 mt-2 w-full shadow-lg rounded-xl bg-white overflow-y-auto max-h-48">
+                      <div className="absolute z-10 mt-[8vh] w-full shadow-lg rounded-xl bg-white overflow-y-auto max-h-48">
                         {loading ? (
                           <Spinner size="sm" />
                         ) : (

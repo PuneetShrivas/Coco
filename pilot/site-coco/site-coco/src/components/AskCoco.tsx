@@ -1,6 +1,6 @@
 
 // import { Card, CardHeader, CardBody, CardFooter, Image } from '@nextui-org/react';
-import { Box, Flex, Text, Heading, Button, InputGroup, InputLeftElement, Input, IconButton, HStack, Textarea, Icon, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerBody } from '@chakra-ui/react'; // Import from Chakra UI
+import { Box, Flex, Text, Heading, Button, InputGroup, InputLeftElement, Input, IconButton, HStack, Textarea, Icon, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerBody, Spinner } from '@chakra-ui/react'; // Import from Chakra UI
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
 import { Upload, Sparkles, Star, Search, Camera, ChevronRight, CircleArrowRight, ArrowRight, CheckCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -10,9 +10,12 @@ import MaxWidthWrapper from './MaxWidthWrapper';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation'
 import { CldUploadWidget } from "next-cloudinary"
 import { cn } from '@/lib/utils';
 import FileUpload from './FileUpload';
+import React from 'react';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 const glassAntiquaFont = Glass_Antiqua({ weight: '400', subsets: ['latin'] })
 const workSansFont = Work_Sans({ weight: '600', subsets: ['latin'] })
 const manrope = Manrope({ weight: '400', subsets: ["latin"] });
@@ -40,18 +43,23 @@ const images = [
 const AskCoco = ({
   user, dbUser
 }: {
-  user: KindeUser | null, dbUser:any;
+  user: KindeUser | null, dbUser: any;
 }) => {
   const router = useRouter();
   const currentTime = new Date();
   const currentHour = currentTime.getHours();
   var greeting = currentHour < 12 ? "Good Morning" : (currentHour < 17 ? "Good Afternoon" : "Good Evening");
   const randomEvent = events[Math.floor(Math.random() * events.length)];
+  const boxRef = React.useRef<HTMLButtonElement>(null);
+  const textboxRef = React.useRef<HTMLDivElement>(null);
   const [placeholderText, setPlaceholderText] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [currentEvent, setCurrentEvent] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState('');
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const pathname = usePathname()
+  const [isLoading, setIsLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [imageSrc, setImageSrc] = useState<string | StaticImport>("");
 
   useEffect(() => {
     const randomEvent = events[Math.floor(Math.random() * events.length)];
@@ -83,22 +91,69 @@ const AskCoco = ({
     onClose();
   };
 
-  const handleAsk = async () => {
+  const handleAsk = async (queryText: string) => {
     if (uploadedImage) {
+      if (queryText.length >= 5){
       const imageDataUrl = URL.createObjectURL(uploadedImage);
       // Pass the image data URL and the input value as query parameters
       const response = await fetch(`/api/user/metas/${dbUser.metaId}`);
-      var lat =0
-      var long =0
-      if (response.ok){
+      var lat = 0
+      var long = 0
+      if (response.ok) {
         const meta = await response.json();
-        lat=meta.lat
-        long=meta.long
+        lat = meta.lat
+        long = meta.long
       }
+      setIsLoading(true);
       router.push(
-        `/dashboard/outfit_review?imageDataUrl=${encodeURIComponent(imageDataUrl)}&queryText=${encodeURIComponent(inputValue)}&metaId=${encodeURIComponent(dbUser.metaId)}&lat=${encodeURIComponent(lat)}&long=${encodeURIComponent(long)}`
+        `/dashboard/outfit_review?imageDataUrl=${encodeURIComponent(imageDataUrl)}&queryText=${encodeURIComponent(queryText)}&metaId=${encodeURIComponent(dbUser.metaId)}&lat=${encodeURIComponent(lat)}&long=${encodeURIComponent(long)}`
       );
+    } else {
+      triggerShakeTextBox();
+      }
+    } else {
+      console.log("shaking upload image box")
+      triggerShakeAnimation();
     }
+  };
+
+  const triggerShakeTextBox = () => {
+    if (textboxRef.current) {
+      textboxRef.current.classList.add('shake-animation');
+      setTimeout(() => {
+        textboxRef.current?.classList.remove('shake-animation');
+      }, 500);
+    }
+  }
+  useEffect(() => {
+    if (uploadedImage) {
+      const url = URL.createObjectURL(uploadedImage);
+      setImageSrc(url);
+      return () => URL.revokeObjectURL(url); // Clean up when component unmounts
+    } else {
+      setImageSrc(""); // Clear the image source when there's no image
+    }
+  }, [uploadedImage]);
+
+  const triggerShakeAnimation = () => {
+    if (boxRef.current) {
+      boxRef.current.classList.add('shake-animation');
+      setTimeout(() => {
+        boxRef.current?.classList.remove('shake-animation');
+      }, 500);
+    }
+  };
+
+  const handleAccesorize = async () => {
+    handleAsk("What accessories will go well with this outfit?");
+  };
+
+  const handlePressAsk = async () => {
+    handleAsk(inputValue)
+  }
+ 
+  const handleReadyToGo =  async () => {
+    handleAsk("I am wearing this outdoors today. How can I improve this outfit?");
   };
 
   return (
@@ -113,16 +168,22 @@ const AskCoco = ({
             Ask Coco?
           </h2>
         </div>
+        {isLoading && (
+          <div className="absolute inset-0 flex bg-[#dedede0f] backdrop-blur justify-center z-50">
+            <Spinner className='mt-[30vh]' size='xl' color='purple.500' />
+          </div>
+        )}
         <Box className="relative w-full card-shadow bg-white " px={3} borderRadius="20px" mx="auto" maxW="container.lg" >
           <Flex gap={4}>
             <Flex flexDir="row" className="h-[30vh]">
-              <Button onClick={onOpen} height="30vh" bgColor="#EAECEF">
+
+              <Button ref={boxRef} onClick={onOpen} height="30vh" bgColor="#EAECEF">
                 <Box width="1/3" justifyContent="center" ml="5px" alignItems="center" display="flex" flexDir="column" rounded={"10px"} >
                   {/* Background Div for the Upload Icon */}
                   {uploadedImage ? (
                     <div className=" my-2 h-full  w-[36vw] rounded-lg items-center justify-center object-cover overflow-hidden" >
                       {/* <img src={URL.createObjectURL(uploadedImage)} alt="Uploaded" className='h-full w-full' /> */}
-                      <Image src={URL.createObjectURL(uploadedImage)} alt="Uploaded" className='h-full w-full object-cover overflow-hidden' layout="fill" objectFit="cover" />
+                      <Image src={imageSrc} alt="Uploaded" className='h-full  rounded-lg w-full overflow-hidden' style={{objectFit:"cover"}} layout="fill" objectFit="cover" />
                     </div>
                   ) : (
                     <div className=" my-2 bg-[#EAECEF] h-full  w-[36vw] rounded-lg flex flex-col ">
@@ -135,7 +196,6 @@ const AskCoco = ({
                         </Text>
                       </div>
                     </div>)}
-
                 </Box>
               </Button>
 
@@ -152,11 +212,11 @@ const AskCoco = ({
 
               <Flex ml={4} flexDir="column" alignItems="left" justifyContent="space-between" width="1/2">
                 <Flex flexDir="column">
-                  <InputGroup my={2} mb={1} borderRadius="xl" height="11vh" backgroundColor="#EDF2F7">
+                  <InputGroup ref={textboxRef} my={2} mb={1} borderRadius="xl" height="11vh" backgroundColor="#EDF2F7">
                     <InputLeftElement pointerEvents='none'>
                       <Search color='black' size={18} strokeWidth="1.1" />
                     </InputLeftElement>
-                    <Textarea
+                    <Textarea 
                       placeholder={placeholderText}
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
@@ -181,20 +241,22 @@ const AskCoco = ({
                 </Flex>
                 <div className={cn(workSansFont.className, 'mt-2 mb-2 ml-1 h-full flex flex-row justify-between items-end text-base font-bold')}>
                   <span className={cn(LexendFont.className, 'text-sm')}>Suggestions</span>
-                  <Button width="fit-content" height="26px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handleAsk} borderRadius="xl" > Ask </Button>
-
+                  <Button width="fit-content" height="26px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handlePressAsk} borderRadius="xl" > Ask </Button>
                 </div>
+
                 <Flex flexDir="column" gap={2} alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="1vh" >
-                  {[{ icon: PiQuestionMark, text: "Accessorize this" }, { icon: PiCheckCircleLight, text: "Am I ready to go?" }].map((suggestion) => (
+                  {[{ icon: PiQuestionMark, text: "Accessorize this", func: handleAccesorize }, { icon: PiCheckCircleLight, text: "Am I ready to go?", func: handleReadyToGo }].map((suggestion) => (
                     <Button
                       key={suggestion.text}
                       size="small"
                       width="fit-content"
-                      height="26px"
+                      onClick={suggestion.func}
+                      height="30px"
                       justifyContent="flex-start"
                       variant="outline"
                       borderRadius="2xl"
-                      fontSize="12px"
+                      fontSize="14px"
+                      pr="10px"
                       bgColor="#F3F4F6"
                       borderColor="#FFFFFF"
                       _hover={{ bg: "gray.500", textColor: "white" }}
@@ -261,3 +323,5 @@ const AskCoco = ({
 };
 
 export default AskCoco;
+
+

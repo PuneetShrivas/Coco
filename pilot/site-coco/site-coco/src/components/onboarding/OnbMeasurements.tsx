@@ -132,8 +132,8 @@ const OnbMeasurements = ({ onMeasurementsData, dbUser, user, setNextEnabled }: O
                         <p className="mx-[2vw] text-[20px]">Give COCO your Measurements</p>
                     </Flex>
                     <Flex flexDir="row">
-                        <Box className="rounded-md overflow-hidden p-3">
-                            <img src="/image1.jpg" alt="" className="h-[54vh] w-[45vw] rounded-md object-cover" />
+                        <Box className="flex rounded-md overflow-hidden p-3">
+                            <img src="/image1.jpg" alt="" className="h-[54vh] w-[45vw] rounded-md object-cover m-auto object-right"/>
                         </Box>
                         <Flex flexDir="column" className="w-[55vw]" position="relative">
                             
