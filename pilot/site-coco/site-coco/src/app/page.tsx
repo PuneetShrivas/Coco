@@ -2,11 +2,17 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { redirect } from "next/navigation";
 import { Glass_Antiqua, Work_Sans, Inter, Montserrat } from "next/font/google";
 import { buttonVariants } from "@/components/ui/button";
 import WhyAIStyling from "@/components/WhyAIStyling";
 import { Box, Flex } from "@chakra-ui/react";
 import { cn } from "@/lib/utils";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { usePathname } from "next/navigation";
+import { headers } from "next/headers";
+
+
 const glassAntiquaFont = Glass_Antiqua({ weight: '400', subsets: ['latin'] })
 const interFontBold = Inter({ weight: '700', subsets: ['latin'] })
 const interFont = Inter({ weight: '500', subsets: ['latin'] })
@@ -16,7 +22,13 @@ const monsterratFont = Montserrat({ weight: '700', subsets: ['latin'] })
 const workSansFont = Work_Sans({ weight: '400', subsets: ['latin'] })
 var htmlcontent = '<form action="https://submit-form.com/EXPDo1BX9"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="Email" required="" /></textarea><button type="submit">Send</button></form>';
 
-export default function Home() {
+export default async function Home() {
+  const { getUser } = getKindeServerSession()
+    const user = await getUser();
+    const header = headers();
+    if(user){
+      redirect("/dashboard")
+    }
   return (
     <>
       <div className="mt-[90px]">

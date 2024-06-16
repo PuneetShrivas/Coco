@@ -1,6 +1,7 @@
 import Link from "next/link"
 import MaxWidthWrapper from "./MaxWidthWrapper"
 import { buttonVariants } from "./ui/button"
+import { headers } from 'next/headers';
 import localFont from 'next/font/local'
 import { Young_Serif } from 'next/font/google'
 import { LoginLink, RegisterLink, } from "@kinde-oss/kinde-auth-nextjs/components"
@@ -9,11 +10,18 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 // import UserAccountNav from "./UserAccountNav"
 import MobileNav from "./MobileNav"
 import { cn } from "@/lib/utils"
+import { redirect } from "next/navigation";
 const ahsingFont = localFont({ src: '../fonts/Ahsing-Regular.otf' })
 const youngSerifFont = Young_Serif({ weight: '400', subsets: ['latin'] })
 const Navbar = async () => {
 const { getUser } = getKindeServerSession()
 const user = await getUser()
+const headersList = headers();
+const pathname = headersList.get('x-invoke-path') ?? '/';
+console.log(pathname)
+// if(user && pathname === "/"){
+//     redirect("/dashboard")
+// }
     return (
         <nav className="absolute h-14 inset-x-0 top-0 z-30 w-full  transition-all pt-2">
             <MaxWidthWrapper className="fixed">

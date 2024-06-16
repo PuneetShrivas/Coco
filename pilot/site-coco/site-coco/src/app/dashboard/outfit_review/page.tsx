@@ -28,6 +28,7 @@ import { Manrope, Lexend } from "next/font/google";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { db } from "@/db";
 import FileUpload from "@/components/FileUpload";
 
 const lexendFontSeven = Lexend({ weight: "700", subsets: ["latin"] });
@@ -42,7 +43,7 @@ interface ChatMessage {
 
 function OutfitReviewPage() {
     const searchParams = useSearchParams();
-    const imageDataUrl = searchParams.get("imageDataUrl");
+    var imageDataUrl = searchParams.get("imageDataUrl");
     const queryText = searchParams.get("queryText");
     const metaId = searchParams.get("metaId");
     const lat = Number(searchParams.get("lat"));
@@ -55,7 +56,7 @@ function OutfitReviewPage() {
     const [newQuery, setNewQuery] = useState("");
     const [showChat, setShowChat] = useState(false);
     const [activeResponseIndex, setActiveResponseIndex] = useState<number | null>(
-        null
+        0
     );
     const [isLoading, setIsLoading] = useState(false);
     const [apiCalled, setApiCalled] = useState(false);
@@ -65,6 +66,8 @@ function OutfitReviewPage() {
 
     const toggleResponse = (index: number) => {
         setActiveResponseIndex(activeResponseIndex === index ? null : index);
+        console.log("index",index);
+        console.log("active index",activeResponseIndex);
     };
 
     const handleContinueChat = () => {
@@ -173,6 +176,10 @@ function OutfitReviewPage() {
                       ...prev.slice(0, -1), // Remove the last loading message
                       { role: "assistant", content: data.response.answer, isLoading: false },
                     ]);
+                    console.log("prev:",activeResponseIndex)
+                    setActiveResponseIndex(chatHistory.length+1);
+                    console.log("setting to:",chatHistory.length+1)
+                    console.log("now:",activeResponseIndex)
                   } else {
                     setChatHistory(prev => {
                         // Find the last assistant message and update it with the error
@@ -225,6 +232,8 @@ function OutfitReviewPage() {
 
     const handleImageUpload = (file: File | null) => {
         setImageBlob(file);
+        if(imageBlob){
+        imageDataUrl=URL.createObjectURL(imageBlob)}
         onClose();
         setApiCalled(false);
         setCanGetCocoResponse(true);
@@ -245,6 +254,8 @@ function OutfitReviewPage() {
         }
     }, [imageBlob]); // Run whenever imageBlob changes (upload or delete)
 
+    
+
     return (
         <div className="bg-white h-[100vh] flex flex-col">
             <p className="bg-white mb-[8vh] text-white">-</p>
@@ -253,19 +264,18 @@ function OutfitReviewPage() {
                     <IconButton aria-label="Go back" icon={<ArrowLeft />} rounded="full" mx="5vw" />
                 </Link>
 
-
-
                 {/* Image Thumbnail and Buttons */}
                 <Flex mt={4} alignItems="center" gap={4} ml="6vw" mb={5} >
-                    <Button onClick={onOpen} bgColor="#FAFBFB" >
+                    <Button px="0" boxSize="12.5vh" onClick={onOpen} bgColor="#FAFBFB" >
                         <Box
-                            className="bg-[#EAECEF] rounded-md  mx-4 h-[15vh] w-[30vw] flex items-center justify-center"
+                            className="bg-[#EAECEF] rounded-md flex items-center justify-center"
                             onClick={onOpen} // Open drawer on image click
                             cursor={imageBlob ? "pointer" : "default"} // Change cursor on hover if image is present
+                           
                         >
                             {imageBlob ? (
                                 <Image
-                                    src={URL.createObjectURL(imageBlob)}
+                                    src={imageDataUrl??""}
                                     alt="Outfit"
                                     boxSize="12.5vh"
                                     borderRadius="md"
@@ -304,8 +314,8 @@ function OutfitReviewPage() {
 
                 {/* Dress Description */}
                 {!isLoading && dressDescription && (
-                    <div className="mx-4 mt-4 overflow-x-auto scrollbar-hide">
-                        <Flex className="mb-1 whitespace-nowrap " gap={2}>
+                    <div className="mx-4 h-[6vh] overflow-x-auto scrollbar-hide">
+                        <Flex className="mb-1 mx-1 whitespace-nowrap " gap={2}>
                             {dressDescription
                                 .split(/[,.;]\s*/)
                                 .filter((desc) => desc.trim() !== "")
@@ -330,11 +340,11 @@ function OutfitReviewPage() {
 
                 {/* Chat History (with Flex for scrolling) */}
                 <div className="flex-grow mx-4 overflow-y-auto">
-                    <Flex flexDir="column" gap={4} mb={20}>
+                    <Flex flexDir="column" gap={1} mb="10vh">
                         {chatHistory.map((item, index) => (
                             <Flex
                                 key={index}
-                                mt={index === 0 ? 4 : 0}
+                                mt={index === 0 ? 4 : 2}
                                 direction={item.role === "user" ? "row-reverse" : "row"}
                                 align="flex-start"
                             >
@@ -442,7 +452,7 @@ function OutfitReviewPage() {
                                     mr={16}
                                 />
                                 <InputRightElement width="4.5rem" h="100%" display="flex" alignItems="center" justifyContent="center">
-                                    <IconButton aria-label="Send message" icon={<ArrowUpIcon />} onClick={handleSend} borderRadius="full" colorScheme="teal" />
+                                    <IconButton aria-label="Send message" icon={<ArrowUpIcon />} onClick={handleSend} borderRadius="full" bgColor="#C4EB5F" color="#485F0C" />
                                 </InputRightElement>
                             </InputGroup>
                         ) : (
