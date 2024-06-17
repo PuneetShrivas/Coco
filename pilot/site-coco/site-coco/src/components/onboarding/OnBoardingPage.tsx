@@ -8,12 +8,21 @@ import { Box, Button, Progress, Link, useToast } from "@chakra-ui/react"; // Add
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { v4 as uuidv4 } from 'uuid';
+import mixpanel from "mixpanel-browser";
 
 const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null }) => {
     // State for current step and button enablement
     const [currentStep, setCurrentStep] = useState(0);
     const [nextEnabled, setNextEnabled] = useState(false);
-
+    useEffect(() => {
+      mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
+      mixpanel.track('onboarding_view');
+      mixpanel.identify(user?.id);
+      mixpanel.people.set({
+          '$name':user?.given_name?.concat(" ",user?.family_name||""),
+          '$email':user?.email,
+      });
+    });
     // State to store values from child components
     const [formData, setFormData] = useState<{
         height: string | null;

@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { db } from "@/db";
 import FileUpload from "@/components/FileUpload";
+import mixpanel from "mixpanel-browser";
 
 const lexendFontSeven = Lexend({ weight: "700", subsets: ["latin"] });
 const lexendFont = Lexend({ weight: "400", subsets: ["latin"] });
@@ -87,7 +88,10 @@ function OutfitReviewPage() {
             await getOutfitReview(newQuery); // Fetch the review
         }
     };
-
+    useEffect(() => {
+        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
+        mixpanel.track('outfit_review');
+      });
     useEffect(() => {
         // Add initial query to chatHistory when page loads and set isLoading for it
         if (queryText && imageDataUrl) {

@@ -143,6 +143,7 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
                   bottom={0}
                   bg="rgba(0, 0, 0, 0.5)"
                   display="flex"
+                  rounded="lg"
                   alignItems="center"
                   justifyContent="center"
                   zIndex={1}
@@ -158,12 +159,12 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
               )}
               {/* Body Type */}
               <Flex flexDir="column" mt="2vh" className="mb-4 px-4 w-auto">
-                <Text className={cn("text-[13px] leading-[20px]", manrope.className)}>Body Type</Text>
-                <Flex flexWrap="wrap" justifyContent="center" gap={4}>
+                <Text className={cn("text-[13px] leading-[20px] mb-[5px]", manrope.className)}>Body Type</Text>
+                <Flex flexWrap="wrap" justifyContent="center" gap={2}>
                   {["apple", "pear", "hourglass", "rectangle", "triangle"].map((type) => (
                     <VStack key={type} spacing={0} alignItems="center"> {/* VStack for image and text */}
                       <Center
-                        w="12vw"
+                        w="10vw"
                         h="52px"
                         borderRadius="md"
                         bgColor="#EFF6E1"
@@ -175,7 +176,6 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
                         <Image
                           src={`/bodytypes/${type}.png`}
                           alt={type}
-                          w="10vw"
                           h="37px"
                         />
                       </Center>
@@ -248,7 +248,7 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
               </PlacesAutocomplete>
 
               {/* Skin Tone */}
-              <Flex flexDir="column" className="px-4 w-auto">
+              {/* <Flex flexDir="column" className="px-4 w-auto">
                 <Text className={cn("text-[13px] leading-[20px]", manrope.className)}>Skin Tone</Text>
                 <HStack spacing={2}>
                   {skinToneColors.map((color) => (
@@ -265,7 +265,7 @@ const OnbBodytype = ({ onBodytypeData, dbUser, user, setNextEnabled }: OnbBodyty
                     />
                   ))}
                 </HStack>
-              </Flex>
+              </Flex> */}
             </Flex>
           </Flex>
         </Box>

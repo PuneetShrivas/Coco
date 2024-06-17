@@ -1,6 +1,9 @@
+"use client"
 import { Box, Flex, Text, Heading, Link, IconButton, Icon, Button } from "@chakra-ui/react";
 import { Inter, Lexend, Manrope } from "next/font/google";
 import { Shirt, BotMessageSquare, Backpack, ArrowDownWideNarrow, ChevronRight } from 'lucide-react';
+import mixpanel from 'mixpanel-browser';
+import {  useEffect } from 'react';
 
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { cn } from "@/lib/utils";
@@ -10,6 +13,10 @@ const manrope = Manrope({ weight: '400', subsets: ["latin"] });
 
 
 const ComingSoon: React.FC = () => {
+    useEffect(() => {
+        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
+        mixpanel.track('coming_soon');
+      });
 const features = [
     { image: "/tryon.png", title: "Virtual Try Ons", iconcolor: "#7E43AB", strokecolor: "#FFFFFF", icon: Shirt, bgcolor: "#EEDEF6", description: "See how it looks before you buy! Experiment with styles and find your perfect fit." },
     { image: "/shoppingassistant.png", title: "Shopping Assistant", iconcolor: "#CDEB80", strokecolor: "#000000", icon: BotMessageSquare, bgcolor: "#C9E3E1", description: "Your personal AI shopper. Tailored recommendations to grow your wardrobe easily." },

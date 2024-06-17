@@ -5,6 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, ChevronDownIcon, Cale
 import { useRouter } from "next/navigation";
 import { Lexend, Manrope } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import mixpanel from 'mixpanel-browser';
 const lexendFont= Lexend({ weight: '700', subsets: ['latin'] })
 const manropeFont= Manrope({ weight: '200', subsets: ['latin'] })
 export default function Calendar() {
@@ -37,7 +38,10 @@ export default function Calendar() {
     setSelectedDate(date); // Set selectedDate when a date is clicked
     onOpen();
   };
-
+  useEffect(() => {
+    mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
+    mixpanel.track('outfit_calendar');
+  });
   const getMonthDays = (date = new Date()) => {
     const year = date.getFullYear();
     const month = date.getMonth();

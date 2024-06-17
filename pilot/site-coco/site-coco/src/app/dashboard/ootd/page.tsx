@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, ChevronLeftIcon, ChevronRightIcon, ImagePlus } fro
 import Link from 'next/link';
 import { Lexend, Manrope } from 'next/font/google';
 import { useState, useEffect } from 'react';
+import mixpanel from 'mixpanel-browser';
 const lexendFont= Lexend({ weight: '700', subsets: ['latin'] })
 const manropeFont= Manrope({ weight: '400', subsets: ['latin'] })
 
@@ -16,7 +17,10 @@ export default function OOTD() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(currentDate); // Start with current date selected
   const [ootdImage, setOOTDImage] = useState<string | null>(null);
-  
+  useEffect(() => {
+    mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
+    mixpanel.track('ootd_page');
+  });
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const currentWeekDates = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(currentDate);

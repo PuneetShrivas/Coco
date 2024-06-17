@@ -23,9 +23,9 @@ console.log(pathname)
 //     redirect("/dashboard")
 // }
     return (
-        <nav className="absolute h-14 inset-x-0 top-0 z-30 w-full  transition-all pt-2">
-            <MaxWidthWrapper className="fixed">
-                <div className="flex h-14 mt-[2vh] items-center justify-between ">
+        <nav className="absolute h-[10vh] inset-x-0 top-0 z-30 bg-white w-full transition-all ">
+            <MaxWidthWrapper className="fixed bg-white">
+                <div className="flex h-[10vh] items-center justify-between ">
                     <Link href='/' className="flex z-40 text-[12px] w-12 h-12 rounded-full border-white border-1 ml-2 items-center tracking-wider justify-center bg-[#7E43AB] text-center">
                         <span className={cn(ahsingFont.className, "text-white")}>
                             COCO

@@ -26,9 +26,9 @@ const OnbMeasurements = ({ onMeasurementsData, dbUser, user, setNextEnabled }: O
     const [feet, setFeet] = useState(5); // Initial feet value
     const [inches, setInches] = useState(7); // Initial inches value
     const [dressRegion, setDressRegion] = useState("US"); // State for US/UK selection
-    const [dressSize, setDressSize] = useState(0); // State for dress size
+    const [dressSize, setDressSize] = useState(8); // State for dress size
     const [age, setAge] = useState(25); // Default age
-    const [gender, setGender] = useState("female"); // Default gender
+    const [gender, setGender] = useState("male"); // Default gender
 
     useEffect(() => {
         const totalInches = height / 2.54;
@@ -133,7 +133,7 @@ const OnbMeasurements = ({ onMeasurementsData, dbUser, user, setNextEnabled }: O
                     </Flex>
                     <Flex flexDir="row">
                         <Box className="flex rounded-md overflow-hidden p-3">
-                            <img src="/image1.jpg" alt="" className="h-[54vh] w-[45vw] rounded-md object-cover m-auto object-right"/>
+                            <img src="/image1.jpg" alt="" className="h-[54vh] w-[45vw] rounded-md object-cover m-auto"/>
                         </Box>
                         <Flex flexDir="column" className="w-[55vw]" position="relative">
                             
@@ -147,6 +147,7 @@ const OnbMeasurements = ({ onMeasurementsData, dbUser, user, setNextEnabled }: O
                                         bg="rgba(0, 0, 0, 0.5)" // Semi-transparent gray
                                         display="flex"
                                         alignItems="center"
+                                        rounded="lg"
                                         justifyContent="center"
                                         zIndex={1} // Ensure the overlay is above other content
                                     >

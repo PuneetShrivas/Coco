@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import FileUpload from './FileUpload';
 import React from 'react';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import mixpanel from 'mixpanel-browser';
 const glassAntiquaFont = Glass_Antiqua({ weight: '400', subsets: ['latin'] })
 const workSansFont = Work_Sans({ weight: '600', subsets: ['latin'] })
 const manrope = Manrope({ weight: '400', subsets: ["latin"] });
@@ -29,9 +30,9 @@ const questions = [
 ];
 
 const images = [
+  '/image1.jpg',
   '/image2.jpg',
   '/image3.jpg',
-  '/image1.jpg',
   '/placeholder.jpg',
   '/placeholder.jpg',
   '/placeholder.jpg',
@@ -79,6 +80,16 @@ const AskCoco = ({
 
     return () => clearInterval(intervalId);
   }, []);
+
+  useEffect(() => {
+    mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
+    mixpanel.track('dashboard_view');
+    mixpanel.identify(user?.id);
+    mixpanel.people.set({
+      '$name':user?.given_name?.concat(" ",user?.family_name||""),
+        '$email':user?.email,
+    });
+  });
 
   const handleFocus = () => {
     // setInputValue(placeholderText);
@@ -186,7 +197,7 @@ const AskCoco = ({
                       <Image src={imageSrc} alt="Uploaded" className='h-full  rounded-lg w-full overflow-hidden' style={{ objectFit: "cover" }} layout="fill" objectFit="cover" />
                     </div>
                   ) : (
-                    <div className=" my-2 bg-[#EAECEF] h-full  w-[36vw] rounded-lg flex flex-col ">
+                    <div className=" my-2 bg-[#EAECEF] h-full  w-[36vw] rounded-[10px] flex flex-col ">
                       {/* Upload Icon */}
                       <div className='items-center justify-center flex flex-col h-full'>
                         <Camera height={25} width={25} color="gray" />
@@ -210,70 +221,70 @@ const AskCoco = ({
                 </DrawerOverlay>
               </Drawer>
 
-              <Flex ml={4} flexDir="column" alignItems="left" justifyContent="space-between" width="1/2">
+              <Flex ml={4} flexDir="column" alignItems="left" justifyContent="space-between" width="8/12">
                 <Flex flexDir="column">
-                  <InputGroup ref={textboxRef} my={2} mb={1} borderRadius="xl" height="16.5vh" backgroundColor="#EDF2F7">
+                  <InputGroup ref={textboxRef} mb={1} borderRadius="10px" height="30vh" backgroundColor="#EDF2F7">
                     <InputLeftElement pointerEvents='none'>
                       <Search color='black' size={18} strokeWidth="1.1" />
                     </InputLeftElement>
                     <Textarea
                       placeholder={placeholderText}
+                      
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       onFocus={handleFocus}
                       bgColor="#D2BEE0"
                       resize="none"
                       className={manrope.className}
-                      height="16.5vh"
+                      height="30vh"
                       // pt="1vh"
                       fontSize="16px"
                       lineHeight="20px"
                       overflowWrap="break-word"
                       textColor="black"
                       _placeholder={{ color: 'black' }}
-                      borderRadius="xl"
+                      borderRadius="10px"
                       pl="9vw">
                       {/* <span className={cn(LexendFont.className, 'text-sm')}>Suggestions</span> */}
                     </Textarea>
-                    <InputRightElement width="fit-content">
-                      <Button top="11vh" mr="4vw" width="fit-content" height="26px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handlePressAsk} borderRadius="xl" >
+                    
+                    <InputLeftElement ml="0" top="24vh" width="fit-content">
+                    <Flex flexDir="column" ml="2vw" gap={2} width="fit-content" alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="1vh" >
+                    <Button  ml="1vw" width="fit-content" height="26px" py="4px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handlePressAsk} borderRadius="xl" >
                         <span className="px-[10px]">
                           Ask
                         </span>
                       </Button>
-                    </InputRightElement>
-
-                  </InputGroup>
-                  <Flex flexDir="row" justify="end">
-                    {/* <Button width="fit-content" height="26px" backgroundColor="#7E43AB" textColor="#FFFFFF" borderRadius="xl" > Ask </Button> */}
-                  </Flex>
-                </Flex>
-
-                <Flex flexDir="column" gap={2} alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="1vh" >
                   {[{ icon: PiQuestionMark, text: "Accessorize this", func: handleAccesorize }, { icon: PiCheckCircleLight, text: "Am I ready to go?", func: handleReadyToGo }].map((suggestion) => (
                     <Button
                       key={suggestion.text}
-                      size="small"
+                      size="sm"
                       width="fit-content"
                       onClick={suggestion.func}
                       height="30px"
                       justifyContent="flex-start"
                       variant="outline"
                       borderRadius="2xl"
-                      fontSize="14px"
+                      fontSize="15px"
                       pr="10px"
-                      bgColor="#F3F4F6"
+                      pl="6px"
+                      bgColor="#F3F4F6" 
                       borderColor="#FFFFFF"
                       _hover={{ bg: "gray.500", textColor: "white" }}
                       textColor="gray.800"
                       whiteSpace="normal"
-                      className="text-[14px] px-2 py-4 rounded-full flex items-center gap-1 border border-gray-800 dark:border-gray-600" // Key changes here
+                      className="text-[14px] py-[2px] rounded-full flex items-center gap-1 border border-gray-800 dark:border-gray-600" // Key changes here
                     >
-                      <Icon as={suggestion.icon} boxSize={6} />
+                      <Icon as={suggestion.icon} boxSize={4} />
                       <span className="flex-1 text-left font-normal text-gray-700">{suggestion.text}</span> {/* Key change here */}
                     </Button>
                   ))}
                 </Flex>
+                    </InputLeftElement>
+                  </InputGroup>
+                </Flex>
+
+                
               </Flex>
             </Flex>
           </Flex>
@@ -314,7 +325,7 @@ const AskCoco = ({
                     className=' ring-1 ring-inset '
                   >
                     <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '>
-                      <Image className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width={120} height={300} style={{ filter: 'contrast(1.1) saturate(1.1)' }} />
+                      <img className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width="full"  height="full" style={{ filter: 'contrast(1.1) saturate(1.1)' }} />
                     </div>
                   </Box>
                 </Link>

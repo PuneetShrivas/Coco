@@ -14,6 +14,7 @@ import CircularImageWithRing from './CircularImageWithRing';
 import { PiPencilSimpleLineLight } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import mixpanel from "mixpanel-browser";
 
 const interFont = Inter({ subsets: ['latin'] });
 const LexendFont = Lexend({ weight: '700', subsets: ['latin'] })
@@ -35,7 +36,7 @@ function ColorPalette({ colors }: { colors: string[] }) {
                     <Box
                         key={color}
                         bg={color}
-                        width="25px" /* Adjust for desired width of each color swatch */
+                        width="6.3vw" /* Adjust for desired width of each color swatch */
                         height="25px"  /* Adjust for desired height of the palette */
                     > 
                     </Box>
@@ -84,6 +85,16 @@ const Profile = ({
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    useEffect(() => {
+        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
+        mixpanel.track('profile_view');
+        mixpanel.identify(user?.id);
+        mixpanel.people.set({
+            '$name':user?.given_name?.concat(" ",user?.family_name||""),
+            '$email':user?.email,
+        });
+      });
+      
     const handleEditProfile = () => {
         onOpen();
     };
