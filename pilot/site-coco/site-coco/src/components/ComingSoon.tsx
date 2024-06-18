@@ -3,7 +3,7 @@ import { Box, Flex, Text, Heading, Link, IconButton, Icon, Button } from "@chakr
 import { Inter, Lexend, Manrope } from "next/font/google";
 import { Shirt, BotMessageSquare, Backpack, ArrowDownWideNarrow, ChevronRight } from 'lucide-react';
 import mixpanel from 'mixpanel-browser';
-import {  useEffect } from 'react';
+import {  useEffect, useState } from 'react';
 
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { cn } from "@/lib/utils";
@@ -13,9 +13,25 @@ const manrope = Manrope({ weight: '400', subsets: ["latin"] });
 
 
 const ComingSoon: React.FC = () => {
+
+    const [ipAddress, setIpAddress] = useState<string | null>(null); 
+
     useEffect(() => {
+        const fetchIpAddress = async () => {
+            try {
+              const response = await fetch('https://api.ipify.org?format=json');
+              const data = await response.json();
+              setIpAddress(data.ip);
+            } catch (error) {
+              console.error("Error fetching IP address:", error);
+            }
+          };
+      
+          fetchIpAddress();
+
+
         mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-        mixpanel.track('coming_soon');
+        mixpanel.track('coming_soon',{ $ip: ipAddress });
       });
 const features = [
     { image: "/tryon.png", title: "Virtual Try Ons", iconcolor: "#7E43AB", strokecolor: "#FFFFFF", icon: Shirt, bgcolor: "#EEDEF6", description: "See how it looks before you buy! Experiment with styles and find your perfect fit." },

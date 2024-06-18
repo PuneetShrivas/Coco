@@ -17,9 +17,22 @@ export default function OOTD() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(currentDate); // Start with current date selected
   const [ootdImage, setOOTDImage] = useState<string | null>(null);
-  useEffect(() => {
+  const [ipAddress, setIpAddress] = useState<string | null>(null); 
+
+    useEffect(() => {
+        const fetchIpAddress = async () => {
+            try {
+              const response = await fetch('https://api.ipify.org?format=json');
+              const data = await response.json();
+              setIpAddress(data.ip);
+            } catch (error) {
+              console.error("Error fetching IP address:", error);
+            }
+          };
+      
+          fetchIpAddress();
     mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-    mixpanel.track('ootd_page');
+    mixpanel.track('ootd_page',{ $ip: ipAddress });
   });
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const currentWeekDates = Array.from({ length: 7 }, (_, i) => {

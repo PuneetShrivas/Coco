@@ -14,9 +14,22 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
     // State for current step and button enablement
     const [currentStep, setCurrentStep] = useState(0);
     const [nextEnabled, setNextEnabled] = useState(false);
+    const [ipAddress, setIpAddress] = useState<string | null>(null); 
+
     useEffect(() => {
+        const fetchIpAddress = async () => {
+            try {
+              const response = await fetch('https://api.ipify.org?format=json');
+              const data = await response.json();
+              setIpAddress(data.ip);
+            } catch (error) {
+              console.error("Error fetching IP address:", error);
+            }
+          };
+      
+          fetchIpAddress();
       mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-      mixpanel.track('onboarding_view');
+      mixpanel.track('onboarding_view',{ $ip: ipAddress });
       mixpanel.identify(user?.id);
       mixpanel.people.set({
           '$name':user?.given_name?.concat(" ",user?.family_name||""),

@@ -88,9 +88,22 @@ function OutfitReviewPage() {
             await getOutfitReview(newQuery); // Fetch the review
         }
     };
+    const [ipAddress, setIpAddress] = useState<string | null>(null); 
+
     useEffect(() => {
+        const fetchIpAddress = async () => {
+            try {
+              const response = await fetch('https://api.ipify.org?format=json');
+              const data = await response.json();
+              setIpAddress(data.ip);
+            } catch (error) {
+              console.error("Error fetching IP address:", error);
+            }
+          };
+      
+          fetchIpAddress();
         mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-        mixpanel.track('outfit_review');
+        mixpanel.track('outfit_review',{ $ip: ipAddress });
       });
     useEffect(() => {
         // Add initial query to chatHistory when page loads and set isLoading for it
