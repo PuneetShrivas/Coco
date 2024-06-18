@@ -17,25 +17,38 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
     const [ipAddress, setIpAddress] = useState<string | null>(null); 
 
     useEffect(() => {
-        const fetchIpAddress = async () => {
-            try {
-              const response = await fetch('https://api.ipify.org?format=json');
-              const data = await response.json();
-              setIpAddress(data.ip);
-            } catch (error) {
-              console.error("Error fetching IP address:", error);
-            }
-          };
-      
-          fetchIpAddress();
-      mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-      mixpanel.track('onboarding_view',{ $ip: ipAddress });
-      mixpanel.identify(user?.id);
-      mixpanel.people.set({
-          '$name':user?.given_name?.concat(" ",user?.family_name||""),
-          '$email':user?.email,
-      });
+    const fetchIpAddress = async () => {
+      try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        setIpAddress(data.ip);
+      } catch (error) {
+        console.error("Error fetching IP address:", error);
+      }
+    };
+
+    // Only fetch the IP address if it's not already set
+    if (!ipAddress) {
+      fetchIpAddress();
+    }
+
+    // Initialize Mixpanel (moved outside the if condition)
+    mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", {
+      debug: true,
+      track_pageview: true,
+      persistence: "localStorage",
     });
+
+    // Track the event after the IP address is fetched and Mixpanel is initialized
+    if (ipAddress) {
+      mixpanel.track("onboarding_view", { $ip: ipAddress });
+      mixpanel.identify(user?.id);
+    mixpanel.people.set({
+      '$name': user?.given_name?.concat(" ", user?.family_name || ""),
+      '$email': user?.email,
+    });
+    }
+  }, [ipAddress]);
     // State to store values from child components
     const [formData, setFormData] = useState<{
         height: string | null;

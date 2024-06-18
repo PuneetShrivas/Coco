@@ -18,21 +18,32 @@ const ComingSoon: React.FC = () => {
 
     useEffect(() => {
         const fetchIpAddress = async () => {
-            try {
-              const response = await fetch('https://api.ipify.org?format=json');
-              const data = await response.json();
-              setIpAddress(data.ip);
-            } catch (error) {
-              console.error("Error fetching IP address:", error);
-            }
-          };
-      
+          try {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            setIpAddress(data.ip);
+          } catch (error) {
+            console.error("Error fetching IP address:", error);
+          }
+        };
+    
+        // Only fetch the IP address if it's not already set
+        if (!ipAddress) {
           fetchIpAddress();
-
-
-        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-        mixpanel.track('coming_soon',{ $ip: ipAddress });
-      });
+        }
+    
+        // Initialize Mixpanel (moved outside the if condition)
+        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", {
+          debug: true,
+          track_pageview: true,
+          persistence: "localStorage",
+        });
+    
+        // Track the event after the IP address is fetched and Mixpanel is initialized
+        if (ipAddress) {
+          mixpanel.track("coming_soon", { $ip: ipAddress });
+        }
+      }, [ipAddress]);
 const features = [
     { image: "/tryon.png", title: "Virtual Try Ons", iconcolor: "#7E43AB", strokecolor: "#FFFFFF", icon: Shirt, bgcolor: "#EEDEF6", description: "See how it looks before you buy! Experiment with styles and find your perfect fit." },
     { image: "/shoppingassistant.png", title: "Shopping Assistant", iconcolor: "#CDEB80", strokecolor: "#000000", icon: BotMessageSquare, bgcolor: "#C9E3E1", description: "Your personal AI shopper. Tailored recommendations to grow your wardrobe easily." },

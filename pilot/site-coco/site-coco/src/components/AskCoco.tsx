@@ -79,31 +79,44 @@ const AskCoco = ({
     }, 50);
 
     return () => clearInterval(intervalId);
-  }, []); 
+  }, []);
 
 
-  const [ipAddress, setIpAddress] = useState<string | null>(null); 
+  const [ipAddress, setIpAddress] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchIpAddress = async () => {
-            try {
-              const response = await fetch('https://api.ipify.org?format=json');
-              const data = await response.json();
-              setIpAddress(data.ip);
-            } catch (error) {
-              console.error("Error fetching IP address:", error);
-            }
-          };
-      
-          fetchIpAddress();
-    mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-    mixpanel.track('dashboard_view',{ $ip: ipAddress });
-    mixpanel.identify(user?.id);
-    mixpanel.people.set({
-      '$name':user?.given_name?.concat(" ",user?.family_name||""),
-        '$email':user?.email,
+  useEffect(() => {
+    const fetchIpAddress = async () => {
+      try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        setIpAddress(data.ip);
+      } catch (error) {
+        console.error("Error fetching IP address:", error);
+      }
+    };
+
+    // Only fetch the IP address if it's not already set
+    if (!ipAddress) {
+      fetchIpAddress();
+    }
+
+    // Initialize Mixpanel (moved outside the if condition)
+    mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", {
+      debug: true,
+      track_pageview: true,
+      persistence: "localStorage",
     });
-  });
+
+    // Track the event after the IP address is fetched and Mixpanel is initialized
+    if (ipAddress) {
+      mixpanel.track("dashboard_view", { $ip: ipAddress });
+      mixpanel.identify(user?.id);
+    mixpanel.people.set({
+      '$name': user?.given_name?.concat(" ", user?.family_name || ""),
+      '$email': user?.email,
+    });
+    }
+  }, [ipAddress]);
 
   const handleFocus = () => {
     // setInputValue(placeholderText);
@@ -243,7 +256,7 @@ const AskCoco = ({
                     </InputLeftElement>
                     <Textarea
                       placeholder={placeholderText}
-                      
+
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       onFocus={handleFocus}
@@ -261,44 +274,44 @@ const AskCoco = ({
                       pl="9vw">
                       {/* <span className={cn(LexendFont.className, 'text-sm')}>Suggestions</span> */}
                     </Textarea>
-                    
+
                     <InputLeftElement ml="0" top="24vh" width="fit-content">
-                    <Flex flexDir="column" ml="2vw" gap={2} width="fit-content" alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="1vh" >
-                    <Button  ml="1vw" width="fit-content" height="26px" py="4px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handlePressAsk} borderRadius="xl" >
-                        <span className="px-[10px]">
-                          Ask
-                        </span>
-                      </Button>
-                  {[{ icon: PiQuestionMark, text: "Accessorize this", func: handleAccesorize }, { icon: PiCheckCircleLight, text: "Am I ready to go?", func: handleReadyToGo }].map((suggestion) => (
-                    <Button
-                      key={suggestion.text}
-                      size="sm"
-                      width="fit-content"
-                      onClick={suggestion.func}
-                      height="30px"
-                      justifyContent="flex-start"
-                      variant="outline"
-                      borderRadius="2xl"
-                      fontSize="15px"
-                      pr="10px"
-                      pl="6px"
-                      bgColor="#F3F4F6" 
-                      borderColor="#FFFFFF"
-                      _hover={{ bg: "gray.500", textColor: "white" }}
-                      textColor="gray.800"
-                      whiteSpace="normal"
-                      className="text-[14px] py-[2px] rounded-full flex items-center gap-1 border border-gray-800 dark:border-gray-600" // Key changes here
-                    >
-                      <Icon as={suggestion.icon} boxSize={4} />
-                      <span className="flex-1 text-left font-normal text-gray-700">{suggestion.text}</span> {/* Key change here */}
-                    </Button>
-                  ))}
-                </Flex>
+                      <Flex flexDir="column" ml="2vw" gap={2} width="fit-content" alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="1vh" >
+                        <Button ml="1vw" width="fit-content" height="26px" py="4px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handlePressAsk} borderRadius="xl" >
+                          <span className="px-[10px]">
+                            Ask
+                          </span>
+                        </Button>
+                        {[{ icon: PiQuestionMark, text: "Accessorize this", func: handleAccesorize }, { icon: PiCheckCircleLight, text: "Am I ready to go?", func: handleReadyToGo }].map((suggestion) => (
+                          <Button
+                            key={suggestion.text}
+                            size="sm"
+                            width="fit-content"
+                            onClick={suggestion.func}
+                            height="30px"
+                            justifyContent="flex-start"
+                            variant="outline"
+                            borderRadius="2xl"
+                            fontSize="15px"
+                            pr="10px"
+                            pl="6px"
+                            bgColor="#F3F4F6"
+                            borderColor="#FFFFFF"
+                            _hover={{ bg: "gray.500", textColor: "white" }}
+                            textColor="gray.800"
+                            whiteSpace="normal"
+                            className="text-[14px] py-[2px] rounded-full flex items-center gap-1 border border-gray-800 dark:border-gray-600" // Key changes here
+                          >
+                            <Icon as={suggestion.icon} boxSize={4} />
+                            <span className="flex-1 text-left font-normal text-gray-700">{suggestion.text}</span> {/* Key change here */}
+                          </Button>
+                        ))}
+                      </Flex>
                     </InputLeftElement>
                   </InputGroup>
                 </Flex>
 
-                
+
               </Flex>
             </Flex>
           </Flex>
@@ -339,7 +352,7 @@ const AskCoco = ({
                     className=' ring-1 ring-inset '
                   >
                     <div className='h-full ring-1 ring-insetitems-center justify-center align-middle '>
-                      <img className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width="full"  height="full" style={{ filter: 'contrast(1.1) saturate(1.1)' }} />
+                      <img className='ring-1 ring-gray-900/10 rounded-2xl ' src={image} alt="" width="full" height="full" style={{ filter: 'contrast(1.1) saturate(1.1)' }} />
                     </div>
                   </Box>
                 </Link>

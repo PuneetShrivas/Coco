@@ -92,19 +92,32 @@ function OutfitReviewPage() {
 
     useEffect(() => {
         const fetchIpAddress = async () => {
-            try {
-              const response = await fetch('https://api.ipify.org?format=json');
-              const data = await response.json();
-              setIpAddress(data.ip);
-            } catch (error) {
-              console.error("Error fetching IP address:", error);
-            }
-          };
-      
+          try {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            setIpAddress(data.ip);
+          } catch (error) {
+            console.error("Error fetching IP address:", error);
+          }
+        };
+    
+        // Only fetch the IP address if it's not already set
+        if (!ipAddress) {
           fetchIpAddress();
-        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", { debug: true, track_pageview: true, persistence: 'localStorage' });
-        mixpanel.track('outfit_review',{ $ip: ipAddress });
-      });
+        }
+    
+        // Initialize Mixpanel (moved outside the if condition)
+        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", {
+          debug: true,
+          track_pageview: true,
+          persistence: "localStorage",
+        });
+    
+        // Track the event after the IP address is fetched and Mixpanel is initialized
+        if (ipAddress) {
+          mixpanel.track("outfit_review", { $ip: ipAddress });
+        }
+      }, [ipAddress]);
     useEffect(() => {
         // Add initial query to chatHistory when page loads and set isLoading for it
         if (queryText && imageDataUrl) {
@@ -197,6 +210,8 @@ function OutfitReviewPage() {
                     setActiveResponseIndex(chatHistory.length+1);
                     console.log("setting to:",chatHistory.length+1)
                     console.log("now:",activeResponseIndex)
+                    mixpanel.track('outfit_review_questions',{ $ip: ipAddress, query: query, dressDescription: dressDescription, cocoResponse: data.response.answer});
+
                   } else {
                     setChatHistory(prev => {
                         // Find the last assistant message and update it with the error
