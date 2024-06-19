@@ -11,6 +11,7 @@ const PageContent = () => {
   const origin = searchParams.get('origin');
 
   trpc.authCallback.useQuery(undefined, {
+    
     onSuccess: ({ success }) => {
       if (success) {
         console.log("pushing from useQuery")
@@ -19,6 +20,7 @@ const PageContent = () => {
     },
     onError: (err) => {
       if (err.data?.code === 'UNAUTHORIZED') {
+        console.log("pushing to sign in");
         router.push('/sign-in');
       }
     },

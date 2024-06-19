@@ -27,6 +27,12 @@ function capitalizeWord(word: string) {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+interface DashboardProps {
+    user: KindeUser | null;
+    dbUser: any;
+    isLoggedIn: boolean;
+    onRequireLogin: (loggedInAction?: () => void) => void; // Modified
+  }
 
 function ColorPalette({ colors }: { colors: string[] }) {
     return (
@@ -46,15 +52,26 @@ function ColorPalette({ colors }: { colors: string[] }) {
     );
 }
 
-const Profile = ({
-    user, dbUser
-}: {
-    user: KindeUser | null,
-    dbUser: any
-}) => {
+const Profile: React.FC<DashboardProps> = ({
+    user,
+    dbUser,
+    isLoggedIn,
+    onRequireLogin
+  }) => {
     const router = useRouter();
     const imageUrl = user?.picture
-    var [meta, setMeta] = useState({ age: "23", genderFemale: true, ethnicity: "Indian", bodyType: "hourglass", stylingSeason: "Warm Autumn", seasonColors: ["#87CEEB", "#ADD8E6", "#87CEFA", "#B0E0E6"], hairColor: "Black", irisColor: "Gray", skinTone: "#B0E0E6", dressingSize: "UK 14", height: "165 cm" });
+    var [meta, setMeta] = useState({ age: "23", genderFemale: false, ethnicity: "Indian", bodyType: "hourglass", stylingSeason: "Warm Autumn", seasonColors:  [
+        "#E0BBE4",  // Light Lavender
+        "#D291BC",  // Dusty Rose
+        "#FEC8D8",  // Soft Pink
+        "#FFDFD3",  // Peach
+        "#957DAD",  // Mauve
+        "#D8B4A0",  // Sand
+        "#B2EBF2",  // Light Blue
+        "#C7E9B0",  // Pistachio
+        "#FFF1E6",  // Cream
+        "#E8F6EF",  // Mint Green
+      ], hairColor: "Black", irisColor: "Gray", skinTone: "#B0E0E6", dressingSize: "UK 14", height: "165 cm" });
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
@@ -79,6 +96,7 @@ const Profile = ({
 
             fetchUserMeta();
         } else {
+            setIsLoading(false);
             console.log("no metas from dbUser");
         }
     }, [dbUser]);
@@ -123,6 +141,15 @@ const Profile = ({
     const handleEditProfile = () => {
         onOpen();
     };
+
+    const handleInteraction = () => {
+        if (!isLoggedIn) {
+            setIsLoading(true);
+            router.push("/sign-in")
+        } else {
+            handleEditProfile();
+        }
+      };
 
     const handleConfirmRestartOnboarding = async () => {
         setIsLoading(true);
@@ -169,7 +196,7 @@ const Profile = ({
                     <Spinner className='mt-[30vh]' size="xl" color="purple.500" />
                 </Box>
             )}
-            <h1 className={cn(LexendFont.className, "text-[28px] font-bold text-left text-[#7e43ab] ml-[5vw] mt-[12vh]")}>Hey, {user?.given_name}</h1>
+            <h1 className={cn(LexendFont.className, "text-[28px] font-bold text-left text-[#7e43ab] ml-[5vw] mt-[12vh]")}>Hey, {user?.given_name||"User"}</h1>
             <h2 className={cn(LexendFont.className, "text-[20px] font-bold text-left text-[#171A1F] ml-[5vw] mt-[5px] tracking-tight")}>Welcome to your personal profile</h2>
             <Flex flexDir="row">
                 <div className="ml-[8.5vw] mt-[4.4vh]">
@@ -178,8 +205,8 @@ const Profile = ({
                 <div>
                     <Flex flexDir="column" className="ml-[6.4vw] mt-[7.1vh]">
                         <Flex flexDir="row">
-                            <span className={cn(LexendFont.className, "font-bold text-[20px]")}>{user?.given_name}</span>
-                            <PiPencilSimpleLineLight className="ml-[6.4vw] size-5" strokeWidth={2} color="#171A1FFF" onClick={handleEditProfile} />
+                            <span className={cn(LexendFont.className, "font-bold text-[20px]")}>{user?.given_name||"User"}</span>
+                            <PiPencilSimpleLineLight className="ml-[6.4vw] size-5" strokeWidth={2} color="#171A1FFF" onClick={handleInteraction} />
                         </Flex>
                         <div className="flex flex-col">
                             <span className={cn(manrope.className, "font-thin text-[16px] text-[#7D5F95]")}>{meta?.age}, {meta?.genderFemale ? <span>Female</span> : <span>Male</span>}</span>
@@ -193,7 +220,7 @@ const Profile = ({
                 <Flex flexDir="column" >
                     <Flex flexDir="row" className="ml-[5.3vw] mr-[10.5vw] mt-[1.7vh]" justify="space-between" alignItems="baseline">
                         <span className={cn(LexendFont.className, "font-bold text-[18px]")}>Season Profile</span>
-                        <PiPencilSimpleLineLight className="ml-[6.4vw]" size={22} strokeWidth={2} color="#171A1FFF" onClick={handleEditProfile} />
+                        <PiPencilSimpleLineLight className="ml-[6.4vw]" size={22} strokeWidth={2} color="#171A1FFF" onClick={handleInteraction} />
                     </Flex>
                     <Flex flexDir="row" justify="space-between" mx="5.8vw" mt="2.5vh" alignContent="center" alignItems="center">
                         <span className={cn(MonsterratFont.className, " text-[16px] text-[#171A1FFF] h-[22px]")}>Your Season</span>

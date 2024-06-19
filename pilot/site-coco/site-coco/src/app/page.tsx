@@ -28,6 +28,8 @@ export default async function Home() {
     const header = headers();
     if(user){
       redirect("/dashboard")
+    } else {
+      redirect("/dashboard")
     }
   return (
     <>

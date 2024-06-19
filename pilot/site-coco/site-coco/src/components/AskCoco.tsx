@@ -41,10 +41,19 @@ const images = [
   // ... more images
 ];
 
-const AskCoco = ({
-  user, dbUser
-}: {
-  user: KindeUser | null, dbUser: any;
+interface DashboardProps {
+  user: KindeUser | null;
+  dbUser: any;
+  isLoggedIn: boolean;
+  onRequireLogin: () => void;
+}
+
+
+const AskCoco: React.FC<DashboardProps> = ({
+  user,
+  dbUser,
+  isLoggedIn,
+  onRequireLogin,
 }) => {
   const router = useRouter();
   const currentTime = new Date();
@@ -82,6 +91,15 @@ const AskCoco = ({
   }, []);
 
 
+  const handleInteraction = (loggedInAction: () => void) => {
+    if (!isLoggedIn) {
+      setIsLoading(true);
+      router.push("/sign-in")
+    } else {
+      loggedInAction(); // Execute the provided function if logged in
+    }
+  };
+
   const [ipAddress, setIpAddress] = useState<string | null>(null);
 
   useEffect(() => {
@@ -94,6 +112,8 @@ const AskCoco = ({
         console.error("Error fetching IP address:", error);
       }
     };
+
+    
 
     // Only fetch the IP address if it's not already set
     if (!ipAddress) {
@@ -181,7 +201,9 @@ const AskCoco = ({
       }, 500);
     }
   };
-
+  const nullfunction = async() =>{
+    console.log("nullfunction pressed");
+  }
   const handleAccesorize = async () => {
     handleAsk("What accessories will go well with this outfit?");
   };
@@ -277,7 +299,7 @@ const AskCoco = ({
 
                     <InputLeftElement ml="0" top="24vh" width="fit-content">
                       <Flex flexDir="column" ml="2vw" gap={2} width="fit-content" alignItems="flex-start" justifyContent="flex-end" height="100%" marginBottom="1vh" >
-                        <Button ml="1vw" width="fit-content" height="26px" py="4px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={handlePressAsk} borderRadius="xl" >
+                        <Button ml="1vw" width="fit-content" height="26px" py="4px" backgroundColor="#7E43AB" textColor="#FFFFFF" onClick={() => handleInteraction(handlePressAsk)} borderRadius="xl" >
                           <span className="px-[10px]">
                             Ask
                           </span>
@@ -287,7 +309,7 @@ const AskCoco = ({
                             key={suggestion.text}
                             size="sm"
                             width="fit-content"
-                            onClick={suggestion.func}
+                            onClick={() => handleInteraction(suggestion.func)}
                             height="30px"
                             justifyContent="flex-start"
                             variant="outline"
@@ -320,7 +342,7 @@ const AskCoco = ({
           <p className={cn('text-[20px]', LexendFont.className)}>
             Outfit Calendar
           </p>
-          <Link href="/dashboard/ootd/calendar">
+          <Link href={isLoggedIn?"/dashboard/ootd/calendar":"/sign-in"}>
             <Button variant="ghost">
               <PiArrowRight strokeWidth="1.3" size="24px" height="20px" />
             </Button>
@@ -334,7 +356,7 @@ const AskCoco = ({
             overflowX="auto" overflowY="hidden" >
             <HStack spacing={-5} shouldWrapChildren={true} mx={1} height="full">
               {images.map((image, index) => (
-                <Link key={index} href="/dashboard/ootd">
+                <Link key={index} href={isLoggedIn?"/dashboard/ootd":"/sign-in"}>
                   <Box
 
                     boxSize="14vh" // Fixed width for the container
