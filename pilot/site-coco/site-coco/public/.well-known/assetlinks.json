@@ -3,8 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "xyz.appmaker.hbvcox",
-      "sha256_cert_fingerprints": ["FE:6F:0F:C2:44:0F:83:23:97:26:2A:E8:CA:8F:9E:DE:1E:30:EE:46:B7:11:D2:1F:57:0E:87:9D:A0:F4:C8:1F"]
+      "package_name": "org.iosphere.coco.twa",
+      "sha256_cert_fingerprints":
+        ["86:2D:04:FD:84:F9:8F:AF:C8:60:FC:76:3C:8F:4A:5F:B9:79:A3:D2:EC:B4:E3:C9:EF:76:C8:F3:04:1F:E5:85"]
     }
   }
 ]
