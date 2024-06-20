@@ -288,7 +288,7 @@ const OOTD = () => {
               <Image
                 src={imageSrc}
                 alt="OOTD"
-                className="max-h-[400px] mx-auto mt-[2vh] rounded-lg shadow-lg"
+                className="max-h-[350px] mx-auto mt-[2vh] rounded-lg shadow-lg"
                 width={0}
                 height={0}
                 sizes="100vh"
