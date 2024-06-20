@@ -92,7 +92,7 @@ const AskCoco: React.FC<DashboardProps> = ({
   const handleInteraction = (loggedInAction: () => void) => {
     if (!isLoggedIn) {
       setIsLoading(true);
-      router.push("/sign-in")
+      router.push("/sign-up")
     } else {
       loggedInAction(); // Execute the provided function if logged in
     }

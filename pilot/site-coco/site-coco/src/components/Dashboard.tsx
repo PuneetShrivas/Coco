@@ -25,7 +25,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   const handleInteraction = (loggedInAction?: () => void) => { // loggedInAction is now optional
     if (!isLoggedIn) {
-      router.push("/sign-in");
+      router.push("/sign-up");
     } else if (loggedInAction) { // Only call loggedInAction if it's provided
       loggedInAction();
     }
