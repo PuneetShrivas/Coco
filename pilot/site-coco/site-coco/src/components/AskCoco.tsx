@@ -278,7 +278,7 @@ const AskCoco: React.FC<DashboardProps> = ({
                       <Image src={imageSrc} alt="Uploaded" className='h-full  rounded-lg w-full overflow-hidden' style={{ objectFit: "cover" }} layout="fill" objectFit="cover" />
                     </div>
                   ) : (
-                    <div className=" my-2 bg-[#EAECEF] h-full  w-[36vw] rounded-[10px] flex flex-col ">
+                    <div className=" my-2 bg-[#EAECEF] h-full w-[30vw] rounded-[10px] flex flex-col ">
                       {/* Upload Icon */}
                       <div className='items-center justify-center flex flex-col h-full'>
                         <Camera height={25} width={25} color="gray" />
