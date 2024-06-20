@@ -260,7 +260,7 @@ const AskCoco: React.FC<DashboardProps> = ({
           <h2 className={cn('text-[20px] mt-[1vh]', LexendFont.className)}>
             Ask Coco?
           </h2>
-          <History className="" onClick={()=>{router.push("/dashboard/outfit_review/history")}}/>
+          {/* <History className="" onClick={()=>{router.push("/dashboard/outfit_review/history")}}/> */}
           </Flex>
         </div>
         {isLoading && (
