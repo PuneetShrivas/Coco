@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import {
     Image,
     Text,
@@ -75,6 +76,9 @@ function OutfitReviewPage() {
     const handleContinueChat = () => {
         setShowChat(true); // Show the chat input area
     };
+
+    const initialChatSessionId = uuidv4();
+    const [chatSessionId, setChatSessionId] = useState<string>(initialChatSessionId);
 
     const handleSend = async () => {
         if (newQuery.trim() !== "") {
@@ -186,7 +190,7 @@ function OutfitReviewPage() {
                 const response = await fetch(
                     `https://iosphere.org/app/outfit_review/get_review/?dress_description=${encodeURIComponent(
                         dressDescription
-                    )}&query=${encodeURIComponent(query)}&user_id=${encodeURIComponent(metaId??"")}&lat=${encodeURIComponent(lat)}&long=${encodeURIComponent(long)}`,
+                    )}&query=${encodeURIComponent(query)}&user_id=${encodeURIComponent(metaId ?? "")}&lat=${encodeURIComponent(lat)}&long=${encodeURIComponent(long)}`,
                     {
                         method: "POST",
                         body: JSON.stringify({
@@ -198,15 +202,32 @@ function OutfitReviewPage() {
                         },
                     }
                 );
-
+    
                 if (response.ok) {
                     const data = await response.json();
-                    
+    
                     // Update chat history with user query and assistant response
                     setChatHistory((prev) => [
-                      ...prev.slice(0, -1), // Remove the last loading message
-                      { role: "assistant", content: data.response.answer, isLoading: false },
+                        ...prev.slice(0, -1), // Remove the last loading message
+                        { role: "assistant", content: data.response.answer, isLoading: false },
                     ]);
+    
+                    // // Save chat history to backend
+                    // const saveChatResponse = await fetch("/api/user/save_chat_session", {
+                    //     method: "POST",
+                    //     headers: {
+                    //         "Content-Type": "application/json",
+                    //     },
+                    //     body: JSON.stringify({
+                    //         chat_session_id: chatSessionId, // Send the chat session ID
+                    //         chat_history: chatHistory, // Send the full chat history
+                    //         query: query,
+                    //     }),
+                    // });
+    
+                    // if (!saveChatResponse.ok) {
+                    //     throw new Error("Failed to save chat session");
+                    // }
                     if(firstResponse){
                         setActiveResponseIndex(chatHistory.length-1);
                         console.log(chatHistory.length)
@@ -217,45 +238,30 @@ function OutfitReviewPage() {
                         console.log("now:",activeResponseIndex)
                     }
                     
-                    mixpanel.track('outfit_review_questions',{ $ip: ipAddress, query: query, dressDescription: dressDescription, cocoResponse: data.response.answer});
-                    setFirstResponse(false);
-                  } else {
-                    setChatHistory(prev => {
-                        // Find the last assistant message and update it with the error
-                        const updatedHistory = [...prev];
-                        for (let i = updatedHistory.length - 1; i >= 0; i--) {
-                            if (updatedHistory[i].role === "assistant") {
-                                updatedHistory[i] = {
-                                    role: "assistant",
-                                    content: "There was an error processing the request",
-                                    isLoading: false,
-                                };
-                                break;
-                            }
-                        }
-                        return updatedHistory;
+                    mixpanel.track('outfit_review_questions', {
+                        $ip: ipAddress,
+                        query: query,
+                        dressDescription: dressDescription,
+                        cocoResponse: data.response.answer
                     });
+    
+                } else {
+                    throw new Error("Failed to get outfit review");
                 }
             } catch (error) {
-                console.error("Error getting outfit review:", error);
-                setChatHistory(prev => {
-                    // Find the last assistant message and update it with the error
-                    const updatedHistory = [...prev];
-                    for (let i = updatedHistory.length - 1; i >= 0; i--) {
-                        if (updatedHistory[i].role === "assistant") {
-                            updatedHistory[i] = {
-                                role: "assistant",
-                                content: "There was an error processing the request",
-                                isLoading: false,
-                            };
-                            break;
-                        }
-                    }
-                    return updatedHistory;
-                });
+                console.error("Error getting or saving outfit review:", error);
+                setChatHistory((prev) => [
+                    ...prev,
+                    {
+                        role: "assistant",
+                        content: "There was an error processing the request",
+                        isLoading: false,
+                    },
+                ]);
             }
         }
     };
+    
 
     useEffect(() => {
         if (dressDescription && !showChat) {

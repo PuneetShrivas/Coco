@@ -145,7 +145,7 @@ const Profile: React.FC<DashboardProps> = ({
     const handleInteraction = () => {
         if (!isLoggedIn) {
             setIsLoading(true);
-            router.push("/sign-in")
+            router.push("/sign-up")
         } else {
             handleEditProfile();
         }

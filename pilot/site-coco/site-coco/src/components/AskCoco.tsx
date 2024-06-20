@@ -2,7 +2,7 @@
 // import { Card, CardHeader, CardBody, CardFooter, Image } from '@nextui-org/react';
 import { Box, Flex, Text, Heading, Button, InputGroup, InputLeftElement, Input, IconButton, HStack, Textarea, Icon, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerBody, Spinner, InputRightElement } from '@chakra-ui/react'; // Import from Chakra UI
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
-import { Upload, Sparkles, Star, Search, Camera, ChevronRight, CircleArrowRight, ArrowRight, CheckCircle } from 'lucide-react';
+import { Upload, Sparkles, Star, Search, Camera, ChevronRight, CircleArrowRight, ArrowRight, CheckCircle, History } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { Inter, Glass_Antiqua, Work_Sans, Lexend, Manrope } from 'next/font/google';
 import { PiQuestionMark, PiCheckCircleLight, PiArrowRight } from "react-icons/pi";
@@ -256,9 +256,12 @@ const AskCoco: React.FC<DashboardProps> = ({
             {/* {greeting}, <span className='font-bold'>{user?.given_name}!</span> */}
             Hey, {user?.given_name}
           </h1>
+          <Flex flexDir="row" justifyContent="space-between">
           <h2 className={cn('text-[20px] mt-[1vh]', LexendFont.className)}>
             Ask Coco?
           </h2>
+          <History className="" onClick={()=>{router.push("/dashboard/outfit_review/history")}}/>
+          </Flex>
         </div>
         {isLoading && (
           <div className="absolute inset-0 flex bg-[#dedede0f] backdrop-blur justify-center z-50">
@@ -374,7 +377,7 @@ const AskCoco: React.FC<DashboardProps> = ({
           <p className={cn('text-[20px]', LexendFont.className)}>
             Outfit Calendar
           </p>
-          <Link href={isLoggedIn ? "/dashboard/ootd/calendar" : "/sign-in"} onClick={() => { setIsLoading(true) }} >
+          <Link href={isLoggedIn ? "/dashboard/ootd/calendar" : "/sign-up"} onClick={() => { setIsLoading(true) }} >
             <Button variant="ghost">
               <PiArrowRight strokeWidth="1.3" size="24px" height="20px" />
             </Button>

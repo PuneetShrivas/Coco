@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Spinner, useToast } from "@chakra-ui/react";
+import mixpanel from 'mixpanel-browser';
 import {
     Box,
     Flex,
@@ -53,6 +54,36 @@ const AddEvent = () => {
     const [imageSrc, setImageSrc] = useState<string | StaticImport>("");
     const user = JSON.parse(localStorage.getItem("user") ?? "");
     const userId = user.id; // Replace with your method of getting userId
+    const [ipAddress, setIpAddress] = useState<string | null>(null); 
+
+    useEffect(() => {
+        const fetchIpAddress = async () => {
+          try {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            setIpAddress(data.ip);
+          } catch (error) {
+            console.error("Error fetching IP address:", error);
+          }
+        };
+    
+        // Only fetch the IP address if it's not already set
+        if (!ipAddress) {
+          fetchIpAddress();
+        }
+    
+        // Initialize Mixpanel (moved outside the if condition)
+        mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_ID || "", {
+          debug: true,
+          track_pageview: true,
+          persistence: "localStorage",
+        });
+    
+        // Track the event after the IP address is fetched and Mixpanel is initialized
+        if (ipAddress) {
+          mixpanel.track("outfit_calendar_page", { $ip: ipAddress });
+        }
+      }, [ipAddress]);
 
     useEffect(() => {
         const fetchData = async () => {
