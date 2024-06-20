@@ -1,6 +1,7 @@
 import Dashboard from "@/components/Dashboard";
 import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { redirect } from 'next/navigation';
 
 async function Page() {
     const { getUser } = getKindeServerSession();
@@ -11,9 +12,13 @@ async function Page() {
         ? await db.user.findFirst({ where: { id: user?.id } })
         : null;
 
-    if (isLoggedIn && (!dbUser || !dbUser.isOnboarded)) {
-        return Response.redirect(dbUser ? "/dashboard/onboarding" : "/auth-callback?origin=dashboard");
-    }
+        if (isLoggedIn && (!dbUser || !dbUser.isOnboarded)) {
+            if (dbUser) {
+                redirect('/dashboard/onboarding');
+            } else {
+                redirect('/auth-callback?origin=dashboard');
+            }
+        }
 
     return (
         <div aria-hidden="true" style={{ minHeight: "100vh" }}>

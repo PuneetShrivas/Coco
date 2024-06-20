@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest, { params }: { params: { year: number; month: number } }) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  }
+
   const { year, month } = params;
   try {
     const startDate = new Date(Number(year), Number(month) - 1, 1);
@@ -11,6 +19,7 @@ export async function GET(request: NextRequest, { params }: { params: { year: nu
 
     const events = await prisma.event.findMany({
       where: {
+        userId: user.id, // Filter by current user's ID
         date: {
           gte: startDate,
           lt: endDate,

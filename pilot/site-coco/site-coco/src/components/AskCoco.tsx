@@ -226,10 +226,14 @@ const AskCoco: React.FC<DashboardProps> = ({
             const data = await response.json();
             let filledImages = [...data]; // Copy fetched images
             // Fill with placeholders if less than 6 images are returned
+          if(filledImages.length==0){
+            setImages(DefaultImages.slice(0, 6));
+          } else {
             while (filledImages.length < 6) {
-              filledImages.push('/placeholder.jpg');
-            }
-            setImages(filledImages.slice(0, 6)); // Set exactly 6 images
+            filledImages.push('/placeholder.jpg');
+            setImages(filledImages.slice(0, 6));}
+          }
+           // Set exactly 6 images
           } else {
             console.error('Failed to fetch images:', await response.json());
             // Fill with placeholders on failure
