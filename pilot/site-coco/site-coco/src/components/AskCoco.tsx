@@ -130,10 +130,10 @@ const AskCoco: React.FC<DashboardProps> = ({
     if (ipAddress) {
       mixpanel.track("dashboard_view", { $ip: ipAddress });
       mixpanel.identify(user?.id);
-    mixpanel.people.set({
-      '$name': user?.given_name?.concat(" ", user?.family_name || ""),
-      '$email': user?.email,
-    });
+      mixpanel.people.set({
+        '$name': user?.given_name?.concat(" ", user?.family_name || ""),
+        '$email': user?.email,
+      });
     }
   }, [ipAddress]);
 
@@ -173,7 +173,7 @@ const AskCoco: React.FC<DashboardProps> = ({
       triggerShakeAnimation();
     }
   };
-  
+
   const triggerShakeTextBox = () => {
     if (textboxRef.current) {
       textboxRef.current.classList.add('shake-animation');
@@ -200,7 +200,7 @@ const AskCoco: React.FC<DashboardProps> = ({
       }, 500);
     }
   };
-  const nullfunction = async() =>{
+  const nullfunction = async () => {
     console.log("nullfunction pressed");
   }
   const handleAccesorize = async () => {
@@ -214,38 +214,38 @@ const AskCoco: React.FC<DashboardProps> = ({
   const handleReadyToGo = async () => {
     handleAsk("I am wearing this outdoors today. How can I improve this outfit?");
   };
-  const [images, setImages] = useState<string[]>([]);
-  const [imagesLoading,setImagesLoading] = useState<boolean>(false);
+  const [images, setImages] = useState<string[]>(DefaultImages);
+  const [imagesLoading, setImagesLoading] = useState<boolean>(false);
   useEffect(() => {
-    if(isLoggedIn){
-    setImagesLoading(true);
-    const fetchImages = async () => {
-      try {
-        const response = await fetch('/api/user/get_images');
-        if (response.ok) {
-          const data = await response.json();
-          let filledImages = [...data]; // Copy fetched images
-          // Fill with placeholders if less than 6 images are returned
-          while (filledImages.length < 6) {
-            filledImages.push('/placeholder.jpg');
+    if (isLoggedIn) {
+      setImagesLoading(true);
+      const fetchImages = async () => {
+        try {
+          const response = await fetch('/api/user/get_images');
+          if (response.ok) {
+            const data = await response.json();
+            let filledImages = [...data]; // Copy fetched images
+            // Fill with placeholders if less than 6 images are returned
+            while (filledImages.length < 6) {
+              filledImages.push('/placeholder.jpg');
+            }
+            setImages(filledImages.slice(0, 6)); // Set exactly 6 images
+          } else {
+            console.error('Failed to fetch images:', await response.json());
+            // Fill with placeholders on failure
+            let filledImages = [...DefaultImages];
+            setImages(filledImages.slice(0, 6));
           }
-          setImages(filledImages.slice(0, 6)); // Set exactly 6 images
-        } else {
-          console.error('Failed to fetch images:', await response.json());
-          // Fill with placeholders on failure
-          let filledImages = [...DefaultImages];
-          setImages(filledImages.slice(0, 6));
+        } catch (error) {
+          console.error('Error fetching images:', error);
+          setImages(DefaultImages.slice(0, 6)); // Set default images on error
+        } finally {
+          setImagesLoading(false)
         }
-      } catch (error) {
-        console.error('Error fetching images:', error);
-        setImages(DefaultImages.slice(0, 6)); // Set default images on error
-      } finally {
-        setImagesLoading(false)
-      }
-    };
+      };
 
-    fetchImages();
-  }
+      fetchImages();
+    }
   }, []);
 
   return (
@@ -374,7 +374,7 @@ const AskCoco: React.FC<DashboardProps> = ({
           <p className={cn('text-[20px]', LexendFont.className)}>
             Outfit Calendar
           </p>
-          <Link href={isLoggedIn?"/dashboard/ootd/calendar":"/sign-in"} onClick={()=>{setIsLoading(true)}} >
+          <Link href={isLoggedIn ? "/dashboard/ootd/calendar" : "/sign-in"} onClick={() => { setIsLoading(true) }} >
             <Button variant="ghost">
               <PiArrowRight strokeWidth="1.3" size="24px" height="20px" />
             </Button>
@@ -384,52 +384,52 @@ const AskCoco: React.FC<DashboardProps> = ({
           className="w-full card-shadow bg-[#FFFFFF] h-[27vh] relative" mx="auto" maxW="container.lg"
           overflowX="auto"
         >
-          {imagesLoading? (
-          <Box className="w-full card-shadow bg-[#FFFFFF] noscrollbar" mt={0} p={3} mx="auto" maxW="container.lg"
-          overflowX="auto" overflowY="hidden" >
-          <Spinner className='mt-[30vh]' size='md' color='purple.500' />
-        </Box>
-        ):
-        (
-          <Box className="w-full card-shadow bg-[#FFFFFF] noscrollbar" mt={0} p={3} mx="auto" maxW="container.lg"
-            overflowX="auto" overflowY="hidden" >
-            <HStack spacing={-5} shouldWrapChildren={true} mx={1} height="full" >
-            
-            {images.map((image, index) => (
-  <Link key={index} href={isLoggedIn ? "/dashboard/ootd" : "/sign-in"} onClick={() => setIsLoading(true)}>
-    <Box
-      key={index}
-      boxSize="14vh" // Fixed width for the container
-      height="21vh"
-      overflow="clip" // Clip overflowing content
-      borderRadius="2xl" // Apply border radius to the container
-      position="relative"
-      border="2px"
-      zIndex={images.length - index}
-      ml={index === 0 ? 0 : -5}
-      bgColor="gray.200"
-      alignItems="center"
-      justifyItems="center"
-      className="ring-1 ring-inset"
-    >
-      <div className="h-full flex items-center justify-center">
-        <img
-          className="ring-1 ring-gray-900/10 rounded-2xl max-w-[150%]"
-          src={image}
-          alt=""
-          width="200%" // Ensure the image fills the container width
-          height="21vh" // Ensure the image fills the container height
-          style={{ objectFit: 'cover', filter: 'contrast(1.1) saturate(1.1)' }}
-        />
-      </div>
-    </Box>
-  </Link>
-))}
+          {imagesLoading && isLoggedIn ? (
+            <Box className="w-full card-shadow bg-[#FFFFFF] noscrollbar" mt={0} p={3} mx="auto" maxW="container.lg"
+              overflowX="auto" overflowY="hidden" >
+              <Spinner mx="auto" size='md' color='purple.500' />
+            </Box>
+          ) :
+            (
+              <Box className="w-full card-shadow bg-[#FFFFFF] noscrollbar" mt={0} p={3} mx="auto" maxW="container.lg"
+                overflowX="auto" overflowY="hidden" >
+                <HStack spacing={-5} shouldWrapChildren={true} mx={1} height="full" >
 
-            </HStack>
-          </Box>
-          )
-        }
+                  {images.map((image, index) => (
+                    <Link key={index} href={isLoggedIn ? "/dashboard/ootd" : "/sign-in"} onClick={() => setIsLoading(true)}>
+                      <Box
+                        key={index}
+                        boxSize="14vh" // Fixed width for the container
+                        height="21vh"
+                        overflow="clip" // Clip overflowing content
+                        borderRadius="2xl" // Apply border radius to the container
+                        position="relative"
+                        border="2px"
+                        zIndex={images.length - index}
+                        ml={index === 0 ? 0 : -5}
+                        bgColor="gray.200"
+                        alignItems="center"
+                        justifyItems="center"
+                        className="ring-1 ring-inset"
+                      >
+                        <div className="h-full flex items-center justify-center">
+                          <img
+                            className="ring-1 ring-gray-900/10 rounded-2xl max-w-[150%]"
+                            src={image}
+                            alt=""
+                            width="200%" // Ensure the image fills the container width
+                            height="21vh" // Ensure the image fills the container height
+                            style={{ objectFit: 'cover', filter: 'contrast(1.1) saturate(1.1)' }}
+                          />
+                        </div>
+                      </Box>
+                    </Link>
+                  ))}
+
+                </HStack>
+              </Box>
+            )
+          }
         </Box>
       </div >
     </MaxWidthWrapper>
