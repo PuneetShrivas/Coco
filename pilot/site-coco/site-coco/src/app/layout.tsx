@@ -48,6 +48,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
 
         <meta name="twitter:card" content="Your personal AI stylist" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="twitter:url" content="https://coco.iosphere.org" />
         <meta name="twitter:title" content="Coco AI" />
         <meta name="twitter:description" content="Your Personal Styling Assistant" />

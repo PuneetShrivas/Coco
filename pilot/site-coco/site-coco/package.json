@@ -51,6 +51,7 @@
     "opencage-api-client": "^1.0.7",
     "react": "^18",
     "react-bootstrap-country-select": "^1.0.0",
+    "react-datepicker": "^7.1.0",
     "react-device-frameset": "^1.3.4",
     "react-dom": "^18",
     "react-geocode": "1.0.0-alpha.1",

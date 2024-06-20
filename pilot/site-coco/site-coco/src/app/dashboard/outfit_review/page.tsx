@@ -60,6 +60,7 @@ function OutfitReviewPage() {
         0
     );
     const [isLoading, setIsLoading] = useState(false);
+    const [firstResponse, setFirstResponse] = useState(true);
     const [apiCalled, setApiCalled] = useState(false);
     const [cocoResponse, setCocoResponse] = useState("Coco is looking at your outfit 🔎"); // Initial Coco response
     const router = useRouter();
@@ -206,12 +207,18 @@ function OutfitReviewPage() {
                       ...prev.slice(0, -1), // Remove the last loading message
                       { role: "assistant", content: data.response.answer, isLoading: false },
                     ]);
-                    console.log("prev:",activeResponseIndex)
-                    setActiveResponseIndex(chatHistory.length+1);
-                    console.log("setting to:",chatHistory.length+1)
-                    console.log("now:",activeResponseIndex)
+                    if(firstResponse){
+                        setActiveResponseIndex(chatHistory.length-1);
+                        console.log(chatHistory.length)
+                    } else {
+                        console.log("prev:",activeResponseIndex)
+                        setActiveResponseIndex(chatHistory.length+1);
+                        console.log("setting to:",chatHistory.length+1)
+                        console.log("now:",activeResponseIndex)
+                    }
+                    
                     mixpanel.track('outfit_review_questions',{ $ip: ipAddress, query: query, dressDescription: dressDescription, cocoResponse: data.response.answer});
-
+                    setFirstResponse(false);
                   } else {
                     setChatHistory(prev => {
                         // Find the last assistant message and update it with the error
