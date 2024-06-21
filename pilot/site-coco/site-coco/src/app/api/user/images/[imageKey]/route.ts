@@ -19,6 +19,7 @@ const {
 
 export async function GET(request: NextRequest, { params }: { params: { imageKey: string } }) {
     const { imageKey } = params;
+    console.log(imageKey)
     try {
       const command = new GetObjectCommand({
         Bucket: S3_BUCKET_NAME, // Replace with your S3 bucket name

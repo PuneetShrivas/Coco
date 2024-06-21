@@ -1,0 +1,44 @@
+/* mobile-frame.css */
+.mobile-frame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f8f8f8;
+  }
+  
+  .mobile-frame__device {
+    position: relative;
+    width: 375px; /* Width of the mobile device */
+    height: 812px; /* Height of the mobile device */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+    border-radius: 30px;
+  }
+  
+  .mobile-frame__screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .mobile-frame {
+      justify-content: flex-start;
+      align-items: flex-start;
+      height: auto;
+      padding: 20px;
+    }
+  
+    .mobile-frame__device {
+      width: 100%;
+      height: auto;
+    }
+  }
+  

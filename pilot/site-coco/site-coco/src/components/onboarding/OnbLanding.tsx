@@ -55,6 +55,9 @@ const OnbLanding = ({ dbUser, user, setNextEnabled }: { dbUser: any; user: Kinde
                     // Image uploaded successfully, you can update the user object here if needed
                     setNextEnabled(true);
                     console.log("Image uploaded successfully.");
+                    const data = await response.json();
+                    console.log(data.fileName)
+                    localStorage.setItem("baseImageURL", JSON.stringify(data.fileName));
                 } else {
                     console.error("Error uploading image:", response.statusText);
                     setPreviewUrl(dbUser?.baseImageURL ?? null);

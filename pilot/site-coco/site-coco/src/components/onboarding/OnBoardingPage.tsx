@@ -15,7 +15,7 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
     const [currentStep, setCurrentStep] = useState(0);
     const [nextEnabled, setNextEnabled] = useState(false);
     const [ipAddress, setIpAddress] = useState<string | null>(null); 
-
+    console.log(dbUser);
     useEffect(() => {
     const fetchIpAddress = async () => {
       try {
@@ -132,12 +132,16 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
       
             try {
               // Fetch image from backend
-              const imageResponse = await fetch(
-                `/api/user/images/${encodeURIComponent(
-                  dbUser?.baseImageURL.split("/").pop() ?? ""
-                )}`
-              );
-      
+              const bucketName = "coco-ai-images.s3.amazonaws.com/";
+              const apiEndpoint = "/api/user/images/";
+              const fullUrl = `https:/`.concat('/',bucketName);
+              const imageURL = JSON.parse(localStorage.getItem("baseImageURL")??"");
+              const fullerURL = fullUrl.concat(imageURL);
+              const joinedUrl = `${apiEndpoint}${encodeURIComponent(imageURL)}`;
+              
+              
+              console.log(joinedUrl);
+              const imageResponse = await fetch(joinedUrl);
               if (!imageResponse.ok) {
                 throw new Error("Failed to fetch user image.");
               }
@@ -175,6 +179,8 @@ const OnboardingPage = ({ dbUser, user }: { dbUser: any, user: KindeUser | null 
                 ...formData,
                 ...convertedData, // Include the converted data
               };
+              
+              localStorage.setItem("metas",JSON.stringify(dataToSend))
       
               // Submit user meta (including image analysis data)
               const metaResponse = await fetch("/api/user/metas", {

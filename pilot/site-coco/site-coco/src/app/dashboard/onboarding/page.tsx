@@ -12,6 +12,8 @@ const Page = async () => {
   const dbUser = await db.user.findFirst({
     where: { id: user?.id },
   });
+  console.log(dbUser);
+  
 
   if (dbUser?.isOnboarded) {
     console.log("user is already onboarded");

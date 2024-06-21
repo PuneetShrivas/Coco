@@ -68,6 +68,8 @@ const OnbConfirmation = ({ apiStatus, dbUser }: { apiStatus: 'idle' | 'loading' 
       fetchUserMeta();
     } else {
       console.log("no metas from dbUser");
+      // const localMetas = JSON.parse(localStorage.getItem("metas")??"");
+      // setMeta(localMetas)
     }
   }, [dbUser]);
 
