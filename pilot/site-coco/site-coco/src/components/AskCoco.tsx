@@ -1,6 +1,6 @@
 
 // import { Card, CardHeader, CardBody, CardFooter, Image } from '@nextui-org/react';
-import { Box, Flex, Text, Heading, Button, InputGroup, InputLeftElement, Input, IconButton, HStack, Textarea, Icon, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerBody, Spinner, InputRightElement } from '@chakra-ui/react'; // Import from Chakra UI
+import { Box, Flex, Text, Heading, Button, InputGroup, InputLeftElement, Input, IconButton, HStack, Textarea, Icon, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerBody, Spinner, InputRightElement, Skeleton } from '@chakra-ui/react'; // Import from Chakra UI
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
 import { Upload, Sparkles, Star, Search, Camera, ChevronRight, CircleArrowRight, ArrowRight, CheckCircle, History } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -264,7 +264,7 @@ const AskCoco: React.FC<DashboardProps> = ({
           <h2 className={cn('text-[20px] mt-[1vh]', LexendFont.className)}>
             Ask Coco?
           </h2>
-          {/* <History className="" onClick={()=>{router.push("/dashboard/outfit_review/history")}}/> */}
+          <History className="" onClick={()=>{router.push(`/dashboard/outfit_review/history/${dbUser.id}`)}}/>
           </Flex>
         </div>
         {isLoading && (
@@ -377,6 +377,7 @@ const AskCoco: React.FC<DashboardProps> = ({
             </Flex>
           </Flex>
         </Box>
+        {/* <Skeleton height='20px'></Skeleton> */}
         <Flex flexDir="row" justifyContent="space-between" className="mx-4 mt-[2vh]" alignItems="baseline">
           <p className={cn('text-[20px]', LexendFont.className)}>
             Outfit Calendar

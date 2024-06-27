@@ -50,6 +50,9 @@ export async function POST(request: NextRequest) {
             sessionId: chatSession!.id,
             sender: item.role,
             content: item.content,
+            productQuestions: item.questionsAndProducts 
+            ? JSON.stringify(item.questionsAndProducts) // Serialize if present
+            : null,
         }));
 
         await prisma.chatMessage.createMany({

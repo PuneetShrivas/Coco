@@ -28,15 +28,15 @@ const OnbLanding = ({ dbUser, user, setNextEnabled }: { dbUser: any; user: Kinde
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(dbUser?.baseImageURL ?? null); // New state to store preview URL
     
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-          if (previewUrl || dbUser?.baseImageURL) {
-            setNextEnabled(true);
-          }
-        }, 100); // Adjust the timeout value as needed
+    // useEffect(() => {
+    //     const timeoutId = setTimeout(() => {
+    //       if (previewUrl || dbUser?.baseImageURL) {
+    //         setNextEnabled(true);
+    //       }
+    //     }, 100); // Adjust the timeout value as needed
       
-        return () => clearTimeout(timeoutId); // Clean up the timeout on unmount
-      }, [previewUrl, dbUser?.baseImageURL]); 
+    //     return () => clearTimeout(timeoutId); // Clean up the timeout on unmount
+    //   }, [previewUrl, dbUser?.baseImageURL]); 
     
     const handleImageUpload = async (file: File | null) => {
         if (file) {

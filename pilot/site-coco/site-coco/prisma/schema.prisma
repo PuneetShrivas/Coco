@@ -86,5 +86,6 @@ model ChatMessage {
   sessionId String
   sender    String // "user" or "assistant"
   content   String
+  productQuestions Json?
   timestamp DateTime        @default(now())
 }
