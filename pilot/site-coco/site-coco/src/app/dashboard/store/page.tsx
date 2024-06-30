@@ -135,7 +135,7 @@ const Customer = () => {
             </Button>
             </>)}
 
-            {showQROnly && (
+            {/* {showQROnly && (
                 <>
                 <div className="qr-only">
                     <p className="price-display" style={{ color: 'green.800', fontSize: '24px' }}>₹{price}</p>
@@ -174,7 +174,7 @@ const Customer = () => {
                             </button>
                         </div>
                 </>
-            )}
+            )} */}
 
                 <Modal isOpen={isOpen} onClose={onClose}>   
                 <ModalOverlay />
@@ -208,7 +208,7 @@ const Customer = () => {
                                 </div>
                             </Center>
 
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <input 
                                 type="tel"
                                 value={phoneNumber} 
@@ -239,9 +239,9 @@ const Customer = () => {
                             >
                                 {isPaid ? 'Paid' : 'Pay'}
                             </button>
-                        </div>
+                        </div> */}
                         <Center>
-                        <img src="/QR_code.png" alt="" />
+                        {/* <img src="/QR_code.png" alt="" /> */}
                         </Center>
                         <p className="subtext" style={{ fontSize: '0.9em', color: '#666' }}>(Wallet Never Expires, redeem anytime.)</p>
                         </Box>
