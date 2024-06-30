@@ -198,7 +198,7 @@ const Customer = () => {
                                 <p className="text-gray-700 text-[18px]"> Effective Price : <span className="text-green-800 text-[18px]" >₹{parseFloat(price)>25? parseFloat(price)+10-predictedValue:parseFloat(price)+5-predictedValue}</span></p>
                                 </Center> */}
                                 {/* Your pre-written question goes here */}
-                                <p className="mt-[2vh] text-[20px]">Will Virat Kohli announce his retirement after the world cup is over?</p>
+                                <p className="mt-[2vh] text-[20px]">Will RCB qualify for playoffs in IPL 2025</p>
 
                                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '10px', marginBottom: '10px' }}>
                                     <Button 
