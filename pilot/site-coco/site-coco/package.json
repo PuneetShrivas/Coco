@@ -21,6 +21,7 @@
     "@kinde-oss/kinde-auth-nextjs": "^2.2.8",
     "@nextui-org/react": "^2.3.6",
     "@nextui-org/spinner": "^2.0.29",
+    "@opensearch-project/opensearch": "^2.10.0",
     "@phosphor-icons/core": "^2.1.1",
     "@prisma/client": "5.14.0",
     "@radix-ui/react-avatar": "^1.0.4",

@@ -11,7 +11,8 @@ import {
     ModalFooter,
     useDisclosure,
     Center,
-    Box
+    Box,
+    useToast
 } from '@chakra-ui/react';
 
 const Customer = () => {
@@ -23,6 +24,7 @@ const Customer = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const toast = useToast();
     const handlePayClick = () => {
         setTotalValue(Math.ceil(parseFloat(price) * 1.5 / 10) * 10);
         setPredictedValue(Math.round(parseFloat(price) * 0.5 / 10) * 10); 
@@ -38,6 +40,7 @@ const Customer = () => {
         setIsYesSelected(true);
         setIsNoSelected(false);
     };
+    
 
     const handleNoClick = () => {
         setIsNoSelected(true);
@@ -48,20 +51,58 @@ const Customer = () => {
     const [selectedPrice, setSelectedPrice] = useState(0);
     const [isPaid, setIsPaid] = useState(false); 
 
-    const handlePayQRClick = () => {
+    const handlePayQRClick = async () => {
         setIsPaid(true)
+        await saveTransaction(isYesSelected ? 2 : 1);
     };
 
-    const handlePayNormal = () => {
+    const handlePayNormal = async () => {
         onClose();
         setSelectedPrice(parseFloat(price));
         setShowQRCode(true);
+        await saveTransaction(0);
     };
 
-    const handlePayExtra = () => {
+    const saveTransaction = async (gamified: number) => {
+        const transactionData = {
+            vendor_number: '0',
+            phone_number: phoneNumber,
+            price: parseFloat(price), // Original price
+            gamified:gamified,
+        };
+
+        try {
+            const response = await fetch('/api/os/transactions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(transactionData)
+            });
+
+            if (response.ok) {
+                console.log('Transaction saved successfully');
+                toast({
+                    title: "Transaction Saved",
+                    description: "Your transaction has been saved successfully!",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } else {
+                console.error('Error saving transaction:', response.statusText);
+                // Show error toast
+            }
+        } catch (error) {
+            console.error('Error saving transaction:', error);
+            // Show error toast
+        }
+    };
+
+
+    const handlePayExtra = async () => {
         onClose();
         setSelectedPrice(totalValue);
         setShowQRCode(true);
+        await saveTransaction(2);
     };
 
     return (
@@ -91,13 +132,13 @@ const Customer = () => {
                     width: '200px' 
                 }}
             />
-            
+            <Button onClick={handlePayClick} className="pay-button">
+                Pay
+            </Button>
+
             </>)}
 
-            <button onClick={handlePayClick} className="pay-button">
-                Pay
-            </button>
-
+            
             {showQRCode && (
                 <>
                 <div className="qr-only">
@@ -201,3 +242,4 @@ const Customer = () => {
 };
 
 export default Customer;
+

@@ -41,6 +41,9 @@ importers:
       '@nextui-org/spinner':
         specifier: ^2.0.29
         version: 2.0.29(@nextui-org/theme@2.2.3(tailwindcss@3.4.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@opensearch-project/opensearch':
+        specifier: ^2.10.0
+        version: 2.10.0
       '@phosphor-icons/core':
         specifier: ^2.1.1
         version: 2.1.1
@@ -2270,6 +2273,10 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
+  '@opensearch-project/opensearch@2.10.0':
+    resolution: {integrity: sha512-I3Ko09HvA50zyDi92fgEZfFFaNHhpvXcYLImdKTSL6eEwKqQmszqkLF2g5NTgEyb4Jh9uD2RGX8EYr9PO9zenQ==}
+    engines: {node: '>=10', yarn: ^1.22.10}
+
   '@phosphor-icons/core@2.1.1':
     resolution: {integrity: sha512-v4ARvrip4qBCImOE5rmPUylOEK4iiED9ZyKjcvzuezqMaiRASCHKcRIuvvxL/twvLpkfnEODCOJp5dM4eZilxQ==}
 
@@ -3641,6 +3648,9 @@ packages:
     resolution: {integrity: sha512-fxhru9iLRqwsYK9BJgawomKAyxpsWVP5Unwa//rnQXCeX5pfYCaixKyV/B6U1x4LMcz3uN83tYvVah8uHxhTqA==}
     engines: {node: '>= 10.0.0'}
 
+  aws4@1.13.0:
+    resolution: {integrity: sha512-3AungXC4I8kKsS9PuS4JH2nc+0bVY/mjgrephHTIi8fpEeGsTHBUJeosp0Wc1myYMElmD0B3Oc4XL/HVJ4PV2g==}
+
   axe-core@4.7.0:
     resolution: {integrity: sha512-M0JtH+hlOL5pLQwHOLNYZaXuhqmvS8oExsqB1SBYgA4Dk7u/xx+YdGHXaK5pyUfed5mYXdlYiphWq3G8cRi5JQ==}
     engines: {node: '>=4'}
@@ -4485,6 +4495,10 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
+  hpagent@1.2.0:
+    resolution: {integrity: sha512-A91dYTeIB6NoXG+PxTQpCCDDnfHsW9kc06Lvpu1TEe9gnd6ZFeiBoRO9JvzEv6xK7EX97/dUE8g/vBMTqTS3CA==}
+    engines: {node: '>=14'}
+
   http-errors@1.7.3:
     resolution: {integrity: sha512-ZTTX0MWrsQ2ZAhA1cejAwDLycFsd7I7nVtnkT3Ol0aqodaKW+0CTZDQ1uBv5whptCnc8e8HeRRJxRs0kmm/Qfw==}
     engines: {node: '>= 0.6'}
@@ -4766,6 +4780,10 @@ packages:
 
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
+
+  json11@1.1.2:
+    resolution: {integrity: sha512-5r1RHT1/Gr/jsI/XZZj/P6F11BKM8xvTaftRuiLkQI9Z2PFDukM82Ysxw8yDszb3NJP/NKnRlSGmhUdG99rlBw==}
+    hasBin: true
 
   json5@1.0.2:
     resolution: {integrity: sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==}
@@ -5618,6 +5636,9 @@ packages:
 
   scroll-into-view-if-needed@3.0.10:
     resolution: {integrity: sha512-t44QCeDKAPf1mtQH3fYpWz8IM/DyvHLjs8wUvvwMYxk5moOqCzrMSxK6HQVD0QVmVjXFavoFIPRVrMuJPKAvtg==}
+
+  secure-json-parse@2.7.0:
+    resolution: {integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -9603,6 +9624,17 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
+  '@opensearch-project/opensearch@2.10.0':
+    dependencies:
+      aws4: 1.13.0
+      debug: 4.3.4
+      hpagent: 1.2.0
+      json11: 1.1.2
+      ms: 2.1.3
+      secure-json-parse: 2.7.0
+    transitivePeerDependencies:
+      - supports-color
+
   '@phosphor-icons/core@2.1.1': {}
 
   '@pkgjs/parseargs@0.11.0':
@@ -11464,6 +11496,8 @@ snapshots:
       uuid: 8.0.0
       xml2js: 0.6.2
 
+  aws4@1.13.0: {}
+
   axe-core@4.7.0: {}
 
   axobject-query@3.2.1:
@@ -12464,6 +12498,8 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
+  hpagent@1.2.0: {}
+
   http-errors@1.7.3:
     dependencies:
       depd: 1.1.2
@@ -12723,6 +12759,8 @@ snapshots:
   json-schema@0.4.0: {}
 
   json-stable-stringify-without-jsonify@1.0.1: {}
+
+  json11@1.1.2: {}
 
   json5@1.0.2:
     dependencies:
@@ -13654,6 +13692,8 @@ snapshots:
   scroll-into-view-if-needed@3.0.10:
     dependencies:
       compute-scroll-into-view: 3.1.0
+
+  secure-json-parse@2.7.0: {}
 
   semver@6.3.1: {}
 

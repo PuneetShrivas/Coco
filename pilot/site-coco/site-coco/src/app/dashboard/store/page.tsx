@@ -11,16 +11,20 @@ import {
     ModalFooter,
     useDisclosure,
     Box,
-    Center
+    Center,
+    useToast
 } from '@chakra-ui/react';
+
 
 const Customer = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [price, setPrice] = useState('');
     const [totalValue, setTotalValue] = useState(0);
     const [cashback, setCashback] = useState(0);
+    const [gamified, setGamified] = useState(1);
     const [walletBack, setWalletBack] = useState(0);
     const [phoneNumber, setPhoneNumber] = useState('');
+    const toast = useToast();
 
     const calculateValues = () => {
         const priceWithAddon = parseFloat(price) * 1.5;
@@ -47,13 +51,53 @@ const Customer = () => {
     const [showModal, setShowModal] = useState(false);
     const [showQROnly, setShowQROnly] = useState(false);
     
-    const handlePayClick = () => {
-        calculateValues();
-        setIsPaid(true)
+    const handleInitPayClick = () => {
         onOpen(); // Use onOpen to open the modal
+        
+    };
+    const handlePayClick = async () => {
+        calculateValues();
+        setIsPaid(true);
+
+        // Transaction Data to Save
+        const transactionData: any = { // Use `any` type for now due to lack of precise type definition from API
+            vendor_number: '0',
+            phone_number: phoneNumber, 
+            price: parseFloat(price), // Original price
+            gamified: gamified, // 1 for gamified (increased price), 0 for original
+        };
+
+        try {
+            // Save Transaction (API Call)
+            const response = await fetch('/api/os/transactions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(transactionData)
+            });
+
+            if (response.ok) {
+                console.log('Transaction saved successfully');
+                // Additional actions after successful save (e.g., update UI)
+                toast({
+                    title: "Transaction Saved",
+                    description: "Your transaction has been saved successfully!",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } else {
+                console.error('Error saving transaction:', response.statusText);
+                // Error handling in UI
+            }
+        } catch (error) {
+            console.error('Error saving transaction:', error);
+            // Error handling in UI
+        }
+
     };
 
     const handleSkipClick = () => {
+        setGamified(0);
         onClose(); // Use onClose to close the modal
         setShowQROnly(true);
     };
@@ -67,6 +111,7 @@ const Customer = () => {
             minHeight: '100vh',
             textAlign: 'center'
         }}>
+            {!showQROnly && (<>
             <h2 className="title" style={{ marginBottom: '20px', color: 'green.800', fontSize: '24px' }}>Get more every time!</h2>
 
             <input 
@@ -85,15 +130,50 @@ const Customer = () => {
                 onBlur={calculateValues}
             />
 
-            <Button onClick={handlePayClick} className="pay-button">
+            <Button onClick={handleInitPayClick} className="pay-button">
                 Pay
             </Button>
+            </>)}
 
             {showQROnly && (
+                <>
                 <div className="qr-only">
                     <p className="price-display" style={{ color: 'green.800', fontSize: '24px' }}>₹{price}</p>
                     <img src="/QR_code.png"></img>
                 </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <input 
+                                type="tel"
+                                value={phoneNumber} 
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                placeholder="Phone Number"
+                                className="phone-input"
+                                style={{
+                                    padding: '10px',
+                                    margin: '10px 5px', 
+                                    border: '1px solid #ccc',
+                                    borderRadius: '5px',
+                                    width: '200px' 
+                                }}
+                            />
+                            <button 
+                                onClick={handlePayClick} 
+                                className="pay-button"
+                                style={{ 
+                                    padding: '10px 15px', 
+                                    backgroundColor: isPaid ? '#ccc' : '#4CAF50', 
+                                    color: 'white', 
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    marginLeft: '10px',
+                                }}
+                                disabled={isPaid}
+                            >
+                                {isPaid ? 'Paid' : 'Pay'}
+                            </button>
+                        </div>
+                </>
             )}
 
                 <Modal isOpen={isOpen} onClose={onClose}>   
