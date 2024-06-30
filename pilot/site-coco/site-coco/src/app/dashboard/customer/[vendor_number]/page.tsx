@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Center, Spinner, Text } from '@chakra-ui/react'; // Import Chakra UI components
 import CustomerCredits from '@/components/CustomerCredits'; // Import your Credits component
-// import CustomerPrediction from '@/components/CustomerPrediction'; // Import your Prediction component
+import CustomerPrediction from '@/components/CustomerPrediction'; // Import your Prediction component
 
 const CustomerVendorPage  = () =>  {
   const router = useRouter();
@@ -68,8 +68,8 @@ const CustomerVendorPage  = () =>  {
         {priceData.game === 0 ? (
             <CustomerCredits initialPrice={priceData.price} number={priceData.number} vendorNumber={vendorNumber} />
         ) : (
-          <div></div>
-            // <CustomerPrediction initialPrice={priceData.price} number={priceData.number} vendorNumber={vendorNumber} />
+          // <div></div>
+            <CustomerPrediction initialPrice={priceData.price} number={priceData.number} vendorNumber={vendorNumber} />
         )}
     </div>
   );
