@@ -192,7 +192,7 @@ const Customer = () => {
                                 <p className="text-gray-700 text-[18px]" style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>Total Price: ₹{price}</p>
                                 </Center>
                             <Center>
-                                <p className="text-gray-700 text-[18px]"> 🎁 Predict and <span className="text-green-800 text-[24px]" >win back: ₹{predictedValue}</span></p>
+                                <p className="text-gray-700 text-[18px]"> 🎁 Pay ₹10 to Predict and <span className="text-green-800 text-[24px]" >win back: ₹{predictedValue}</span> credits</p>
                                 </Center>
                                 {/* <Center>
                                 <p className="text-gray-700 text-[18px]"> Effective Price : <span className="text-green-800 text-[18px]" >₹{parseFloat(price)>25? parseFloat(price)+10-predictedValue:parseFloat(price)+5-predictedValue}</span></p>
