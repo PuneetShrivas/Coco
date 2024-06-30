@@ -109,7 +109,7 @@ const Customer = () => {
                                     style={{ margin: '5px 0', color: 'green.800', fontSize: '24px' }}>
                                     Pay <span className="value text-green-800">₹{totalValue}</span>
                                 </p>
-                            </Center>
+                            </Center>total
 
                             <Center> {/* Center the second line */}
                                 <p className="result-line mx-auto w-fit" 
