@@ -194,9 +194,9 @@ const Customer = () => {
                             <Center>
                                 <p className="text-gray-700 text-[18px]"> 🎁 Predict and <span className="text-green-800 text-[24px]" >win back: ₹{predictedValue}</span></p>
                                 </Center>
-                                <Center>
+                                {/* <Center>
                                 <p className="text-gray-700 text-[18px]"> Effective Price : <span className="text-green-800 text-[18px]" >₹{parseFloat(price)>25? parseFloat(price)+10-predictedValue:parseFloat(price)+5-predictedValue}</span></p>
-                                </Center>
+                                </Center> */}
                                 {/* Your pre-written question goes here */}
                                 <p className="mt-[2vh] text-[20px]">Will Virat Kohli announce his retirement after the world cup is over?</p>
 
